@@ -1,7 +1,7 @@
 import session from "express-session"
 
 export default session({
-  name:'limsRsl',
+  name:'limsRaddl',
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,

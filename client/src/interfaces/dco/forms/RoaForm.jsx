@@ -19,7 +19,7 @@ function RoaForm() {
     const numberSeries = '0000';
     return `${year}-${month}-${rfcal}-${roa}-${numberSeries}`
   }
-  
+
   const report = {
     customerName: "",
     customerAddress: "",
@@ -178,7 +178,7 @@ function RoaForm() {
   }
 
   const physicalInputHandler = (name, value, parent) => {
-    if(parent){
+    if (parent) {
       setPhysicalDetails(prev => ({
         ...prev,
         [parent]: {
@@ -221,7 +221,7 @@ function RoaForm() {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    const form = { ...result, roaDetails: roaReport, physicalDetails: physicalReport  };
+    const form = { ...result, roaDetails: roaReport, physicalDetails: physicalReport };
     await axios.post("http://localhost:8003/api/report/newReport", form, {
       withCredentials: true,
     })

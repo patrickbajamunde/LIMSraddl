@@ -62,7 +62,7 @@ function Sidebar() {
                                         <Link className='nav-link text-white mt-2 sidebar-link' to='Arf/'> General </Link>
                                     </li>
                                     <li>
-                                        <Link className='nav-link text-white mt-2 sidebar-link' to=''> Rabies </Link>
+                                        <Link className='nav-link text-white mt-2 sidebar-link' to='Rabies/'> Rabies </Link>
                                     </li>
                                 </ul>
                             </div>
