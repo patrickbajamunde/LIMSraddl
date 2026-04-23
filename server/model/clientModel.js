@@ -1,60 +1,68 @@
 import mongoose from "mongoose";
 
-const sampleModel = new mongoose.Schema({
-    
-    sampleDescription: {
+const speciesSchema = new mongoose.Schema({
+    Bovine:{
         type: String,
     },
-    methodReq:{
+    Bubaline:{
         type: String,
     },
-    customerCode: {
-        type: String,
-    }, 
-    labCode:{
+    Swine:{
         type: String,
     },
-    noOfSample:{
-        type: Number,
+    Caprine:{
+        type: String,
     },
-    unitCost:{
-        type: Number,
+    Ovine:{
+        type: String,
     },
-    totalCost:{
-        type: Number,
+    Feline:{
+        type: String,
+    },
+    Equine:{
+        type: String,
+    },
+    Canine:{
+        type: String,
+    },
+    Avian:{
+        type: String,
+    },
+    Others:{
+        type: String,
     }
-});
+})
 
-const coordinatesModel = new mongoose.Schema({
-    latitude: {
-        type: String,
-    },
-    longitude: {
-        type: String,
-    }
-});
+const clientSchema = new mongoose.Schema({
 
-
-const clientSchema = new mongoose.Schema ({
-
-    requestId:{
+    requestId: {
         type: String,
         required: true,
         unique: true,
     },
+
+    recordId:{
+        type: String,
+    },
+
+    labAccessionNumber: {
+        type: String,
+    },
+
     clientType: {
         type: String,
-       
     },
 
     clientName: {
         type: String,
-        
+    },
+
+    clientAge: {
+        type: Number
     },
 
     clientAddress: {
         type: String,
-        
     },
 
     clientEmail: {
@@ -67,20 +75,22 @@ const clientSchema = new mongoose.Schema ({
 
     clientGender: {
         type: String,
-        
     },
 
-    sampleDisposal: {
+    sampleDisposalDate: {
         type: Date,
     },
 
-    sampleDisposedBy:{
+    sampleStorageLocation:{
         type: String,
     },
 
-    reportDue :{
+    sampleRetentionDate: {
+        type: String,
+    },
+
+    reportDue: {
         type: Date,
-        
     },
 
     transactionDate: {
@@ -88,33 +98,42 @@ const clientSchema = new mongoose.Schema ({
         default: Date.now,
     },
 
-    receivedBy:{
-        type: String,
-        
-    },
-
-    status:{
+    receivedBy: {
         type: String,
     },
 
-    sampleDetails: [sampleModel],
-
-    coordinates: [coordinatesModel],
+    status: {
+        type: String,
+    },
 
     locOfFarm: {
         type: String,
     },
 
-    topography:{
+    barangay: {
+        type: String
+    },
+    municipality: {
+        type: String,
+    },
+    province: {
         type: String,
     },
 
-    cropsPlanted:{
+    contactNo :{
         type: String,
     },
 
-    area:{
-        type: String,       
+    email:{
+        type: String
+    },
+
+    dateSubmitted: {
+        type: Date,
+    },
+
+    dateCollected: {
+        type: Date,
     },
 
     samplingDate: {
@@ -123,17 +142,40 @@ const clientSchema = new mongoose.Schema ({
     samplingTime: {
         type: String,
     },
-    sampleCondition: {
-        type: String
+
+    specimenAge:{
+        type: String,
     },
-    otherMatters:{
-        type: String
-    },
+
+    specimen: [String],
+    wholeAnimal: [String],
+    specimenPart: [String],
+    pathologyList: [String],
+    rapidPlateTest: [String],
+    isoAndIdenList: [String],
+    bloodParasiteExam: [String],
+    fecalysis:[String],
+    parasiteIden: [String],
+    virologyList: [String],
+    elisaList: [String],
+    pcrList: [String],
+    purposeList: [String],
+    sampleLabel: [String],
+    quantityOfSample: [String],
+    preservationUsed: [String],
+    transport: [String],
+    stateOfSample: [String],
+    rejectionOfSamples: [String],
+    sampleStorage: [String],
+    sex: [String],
 
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    userName: {
+        type: String,
     },
 
 })

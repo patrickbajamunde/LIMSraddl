@@ -51,11 +51,78 @@ function UpdateRequest() {
 
   const testMethodPrice = (methodReq) => {
     const methodPriceMap = {
-      "Method 1": 100,
-      "Method 2": 200
+      "pH": 50.00,
+      "OM": 150.00,
+      "NPK": 300.00,
+      "EC": 100.00,
+      "SOIL TEXTURE": 200.00,
+      "WATER HOLDING CAPACITY": 100.00,
+      "Moisture Content": 50.00,
+      "pH, NPK": 100.00,
+      "Copper": 100.00,
+      "Iron": 100.00,
+      "Zinc": 100.00,
+      "Manganese": 100.00,
+      "NITRATE": 100.00,
+      "PHOSPHATE": 100.00,
+      "pH EC OM NPK": 350.00,
+      "pH EC OM NPK TEXTURE": 550.00,
+      "pH EC OM NPK TEXTURE WHC MC": 700.00
     }
 
     return methodPriceMap[methodReq] || 0;
+  }
+
+  const testMethodTable = (methodReq) => {
+    const methodTable = {
+      "pH": "pH - Potentiometric Method",
+      "OM": "OC/OM/N - Walkley and Black Mmethod",
+      "NPK": " N- Walkley-Black Method, P- Olsen Method, K- STK Method",
+      "EC": "EC- Conductimetric Method",
+      "SOIL TEXTURE": "TEXTURE - Hydrometer Method",
+      "WATER HOLDING CAPACITY": "%WHC-Tapping Method",
+      "Moisture Content": "%MC - Gravimetric Method",
+      "pH, Npk": " STK Method",
+      "Copper": "DTPA Method using AAS",
+      "Iron": "DTPA Method using AAS",
+      "Zinc": "DTPA Method using AAS",
+      "Manganese": "DTPA Method using AAS",
+      "NITRATE": "NO3-N Kjeldhal Method",
+      "PHOSPHATE": "PO4 - Vanadomolybdate Method",
+      "pH EC OM NPK": "pH - Potentiometric Method, EC- Conductimetric Method, OC/OM/N - Walkley and Black Mmethod, P - Olsen Method, K - STK method",
+      "pH EC OM NPK TEXTURE": "pH - Potentiometric Method, EC- Conductimetric Method, OC/OM/N - Walkley and Black Method, P - Olsen Method, K - STK method, TEXTURE - Hydrometer Method",
+      "pH EC OM NPK TEXTURE WHC MC": "pH - Potentiometric Method, EC- Conductimetric Method, OC/OM/N - Walkley and Black Method, P - Olsen Method, K - STK method, TEXTURE - Hydrometer Method, %WHC-Tapping Method, %MC-Gravimetric Method"
+
+    }
+    return methodTable[methodReq] || "";
+  }
+
+  const requestIdGenerator = (clientType) => {
+    const getCategoryId = customerCategory(clientType)
+    if (!getCategoryId) return '';
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+
+    const rfcal = 'RSL';
+    const ar = 'AR';
+
+    const defaultSequence = '0000';
+    return `${year}-${month}-${rfcal}-${ar}-${defaultSequence}-${getCategoryId}`;
+  }
+
+  const recordIdGenerator = (clientType) => {
+    const now = new Date();
+    const year = now.getFullYear();
+
+    const rsl = 'RSL';
+    const fr = 'FR';
+
+    const formCode = '001'
+    const defaultSequence = '0000';
+
+    return `${year}-${rsl}-${fr}-${formCode}-${defaultSequence}`;
   }
 
   const navigate = useNavigate();
@@ -70,9 +137,23 @@ function UpdateRequest() {
     customerCode: "",
     noOfSample: "",
     unitCost: "",
-    totalCost: ""
+    totalCost: "",
+    method: "",
   });// State to hold current state of sample details in the modal
   const [successMessage, setSuccessMessage] = useState("")
+  const [textField, setTextField] = useState([{ id: 1, methodReq: '', unitCost: '', totalCost: '' }]);
+  const [nextInput, setNextInput] = useState(2);
+
+  const addTextField = () => {
+    setTextField([...textField, { id: nextInput, methodReq: '', unitCost: '', totalCost: '' }]);
+    setNextInput(nextInput + 1);
+  }
+
+  const deleteTextField = (id) => {
+    if (textField.length > 1) {
+      setTextField(textField.filter((itemField) => itemField.id !== id));
+    }
+  }
   const [editingIndex, setEditingIndex] = useState(null); // Track which sample is being edited
   const [isEditing, setIsEditing] = useState(false); // Track if we're in edit mode
   const { id } = useParams();
@@ -89,6 +170,28 @@ function UpdateRequest() {
     return totalCost;
   }
 
+  useEffect(() => {
+
+    if (!request.sampleDetails) return;
+    const total = request.sampleDetails && request.sampleDetails.map(index => parseFloat(index.totalCost || 0)).reduce((startingValue, item) => startingValue + item, 0);
+
+    const discountedTotal = request.discount
+      ? computeDiscount(total, request.discount)
+      : total;
+
+    setRequest(prevRequest => ({
+      ...prevRequest,
+      totalPhp: discountedTotal.toFixed(2)
+    }));
+  }, [request.sampleDetails, request.discount]);
+
+
+  const computeDiscount = (totalCost, discount) => {
+    if (discount === "20%") {
+      return totalCost - (totalCost * 0.2);
+    }
+    return totalCost;
+  }
   const inputHandler = (e) => {
     const { name, value, dataset } = e.target;
 
@@ -103,10 +206,12 @@ function UpdateRequest() {
       });
     } else if (name === 'clientType') {
       const categoryId = requestIdGenerator(value);
+      const recordId = recordIdGenerator(value);
       setRequest({
         ...request,
         clientType: value,
         requestId: categoryId,
+        recordId: recordId
       });
 
     } else {
@@ -115,16 +220,62 @@ function UpdateRequest() {
   };
 
 
-  const sampleInputHandler = (e) => {
+  const sampleInputHandler = (e, fieldId) => {
     const { name, value } = e.target;
-    if (name === 'methodReq') {
-      setSampleDetail({
-        ...sampleDetail,
-        methodReq: value,
-        unitCost: testMethodPrice(value),
-        totalCost: computeCost(value, sampleDetail.noOfSample)
-      });
-    } else {
+
+    // FOR TEST METHOD FIELDS
+    if (name === 'methodReq' && fieldId) {
+      const unitPrice = testMethodPrice(value);  // Get price
+      const method = testMethodTable(value);
+      const numSamples = parseInt(sampleDetail.noOfSample) || 0;
+      const total = unitPrice * numSamples;  // Calculate total
+
+      setTextField(
+        textField.map((field) =>
+          field.id === fieldId
+            ? {
+              ...field,
+              methodReq: value,
+              unitCost: unitPrice,
+              totalCost: total,
+              method: method
+            }
+            : field
+        )
+      );
+    }
+    else if (name === 'unitCost' && fieldId) {
+      const numSamples = parseInt(sampleDetail.noOfSample) || 0;
+      const total = parseFloat(value) * numSamples;
+
+      setTextField(
+        textField.map((field) =>
+          field.id === fieldId
+            ? {
+              ...field,
+              unitCost: value,
+              totalCost: total
+            }
+            : field
+        )
+      );
+    }
+    // ✅ When noOfSample changes, recalculate all test method totals
+    else if (name === 'noOfSample') {
+      const numSamples = parseInt(value) || 0;
+
+      setSampleDetail({ ...sampleDetail, noOfSample: value });
+
+      // Recalculate totals for all test methods
+      setTextField(
+        textField.map((field) => ({
+          ...field,
+          totalCost: (parseFloat(field.unitCost) || 0) * numSamples
+        }))
+      );
+    }
+    // FOR OTHER FIELDS
+    else {
       setSampleDetail({ ...sampleDetail, [name]: value });
     }
   }
@@ -143,9 +294,30 @@ function UpdateRequest() {
     setShowModal(true);
   };
 
+
+
   // Handler for opening modal to edit existing sample
   const openEditModal = (index) => {
     const sampleToEdit = request.sampleDetails[index];
+
+    // Parse the existing methodReq and unitCost strings back into textField array
+    const methods = sampleToEdit.methodReq ? sampleToEdit.methodReq.split(', ') : [''];
+    const unitCosts = sampleToEdit.unitCost ? sampleToEdit.unitCost.split(', ') : [''];
+
+    // Calculate individual totalCosts
+    const numSamples = parseInt(sampleToEdit.noOfSample) || 0;
+    const reconstructedFields = methods.map((method, idx) => ({
+      id: idx + 1,
+      methodReq: method,
+      unitCost: unitCosts[idx] || '',
+      totalCost: (parseFloat(unitCosts[idx] || 0) * numSamples).toString(),
+      method: testMethodTable(method)
+    }));
+
+    // Set the textField state with reconstructed data
+    setTextField(reconstructedFields.length > 0 ? reconstructedFields : [{ id: 1, methodReq: '', unitCost: '', totalCost: '' }]);
+    setNextInput(reconstructedFields.length + 1);
+
     setSampleDetail({
       sampleDescription: sampleToEdit.sampleDescription,
       methodReq: sampleToEdit.methodReq,
@@ -154,7 +326,9 @@ function UpdateRequest() {
       noOfSample: sampleToEdit.noOfSample,
       unitCost: sampleToEdit.unitCost,
       totalCost: sampleToEdit.totalCost,
+      method: sampleToEdit.method
     });
+
     setEditingIndex(index);
     setIsEditing(true);
     setShowModal(true);
@@ -175,31 +349,69 @@ function UpdateRequest() {
   const sampleSubmit = (e) => {
     e.preventDefault();
 
+    const methodList = textField.map(field => field.method).join(', ');
+
+    // Aggregate test method data from textField array
+    const methodsString = textField
+      .map(field => field.methodReq)
+      .filter(method => method) // Filter out empty methods
+      .join(', ');
+
+    const unitCostsString = textField
+      .map(field => field.unitCost)
+      .filter(cost => cost) // Filter out empty costs
+      .join(', ');
+
+    // Calculate grand total
+    const grandTotal = textField.reduce((sum, field) => {
+      return sum + (parseFloat(field.totalCost) || 0);
+    }, 0);
+
+    // Create the sample object
+    const sampleData = {
+      noOfSample: sampleDetail.noOfSample,
+      customerCode: sampleDetail.customerCode,
+      labCode: sampleDetail.labCode,
+      sampleDescription: sampleDetail.sampleDescription,
+      methodReq: methodsString,
+      unitCost: unitCostsString,
+      totalCost: grandTotal.toString(),
+      method: methodList
+    };
+
     if (isEditing && editingIndex !== null) {
-      // Update existing sample
+      // Update existing sample in request.sampleDetails
       const updatedSamples = [...request.sampleDetails];
-      updatedSamples[editingIndex] = sampleDetail;
+      updatedSamples[editingIndex] = sampleData;
       setRequest({
         ...request,
         sampleDetails: updatedSamples
       });
     } else {
-      // Add new sample
-      const updatedSamples = request.sampleDetails ? [...request.sampleDetails, sampleDetail] : [sampleDetail];
+      // Add new sample to request.sampleDetails
+      const updatedSamples = request.sampleDetails ? [...request.sampleDetails, sampleData] : [sampleData];
       setRequest({
         ...request,
         sampleDetails: updatedSamples
       });
+
+      // Also add to the sample state array (if you're using it elsewhere)
+      setSample([...sample, sampleData]);
     }
 
     // Reset and close modal
     setSampleDetail({
       sampleDescription: "",
-      parameterReq: "",
       methodReq: "",
       labCode: "",
-      sampleCode: "",
+      customerCode: "",
+      noOfSample: "",
+      unitCost: "",
+      totalCost: "",
+      method: "",
     });
+    setTextField([{ id: 1, methodReq: '', unitCost: '', totalCost: '' }]);
+    setNextInput(2);
     setShowModal(false);
     setIsEditing(false);
     setEditingIndex(null);
@@ -264,12 +476,11 @@ function UpdateRequest() {
             {/*Reques Details*/}
             <div className='card p-4 mb-3 shadow-sm border'>
               <h5 className='mb-4 text-primary fw-bold'>Request Details</h5>
-              <div className="row g-4">
-
-                <div className="col-md-6">
-                  <label className='form-label '>Type Of Client: </label>
-                  <select id='clientType' name="clientType" onChange={inputHandler} value={request.clientType} className='form-select border border-dark'>
-                    <option selected>Choose...</option>
+              <div className="row g-4 mb-4">
+                <div className='col-md-6'>
+                  <label className='form-label'>Type Of Customer</label>
+                  <select id='clientType' name="clientType" onChange={inputHandler} value={request.clientType} className='form-select border-dark'>
+                    <option value="">Choose...</option>
                     <option value="Regulatory">Regulatory</option>
                     <option value="Corn Program">Corn Program</option>
                     <option value="Rice Program">Rice Program</option>
@@ -283,9 +494,16 @@ function UpdateRequest() {
                   </select>
                 </div>
 
+              </div>
+              <div className="row g-4">
+
                 <div className="col-md-6">
-                  <label className='form-label'>Request ID: </label>
-                  <input type="text" className="form-control border border-dark" id="requestId" name="requestId" onChange={inputHandler} value={request.requestId} placeholder="" />
+                  <label className='form-label'>Record ID</label>
+                  <input type="text" className="form-control border border-dark" id="recordId" name="recordId" onChange={inputHandler} value={request.recordId} placeholder="Auto-generated" />
+                </div>
+                <div className='col-md-6'>
+                  <label className='form-label'>Request ID</label>
+                  <input type="text" className="form-control border border-dark" id="requestId" name="requestId" onChange={inputHandler} value={request.requestId} placeholder="Auto-generated" />
                 </div>
 
                 <div className='col-md-6'>
@@ -296,8 +514,8 @@ function UpdateRequest() {
                   <label className='form-label'>Received By</label>
                   <select id='receivedBy' name='receivedBy' onChange={inputHandler} value={request.receivedBy} className='form-select border-dark'>
                     <option value="">Choose...</option>
-                    <option value="Susan P. Bergantin">Susan P. Bergantin</option>
-                    <option value="Jessa Mae M. Luces">Jessa Mae M. Luces</option>
+                    <option value="Marife D. Valenciano">Marife D. Valenciano</option>
+                    <option value="Jessabel A. Llagas">Jessabel A. Llagas</option>
                   </select>
                 </div>
                 <div className='col-md-6'>
@@ -408,19 +626,45 @@ function UpdateRequest() {
             <div className='card p-4 mb-3 mt-3 shadow-sm border'>
               <h5 className='mb-4 text-primary fw-bold'>Laboratory Services</h5>
               <div className="row g-4">
-                <div className='col-md-6'>
-                  <label className='form-label'>Date of Sample Disposal:</label>
-                  <input type="date" className="form-control border border-dark" id="sampleDisposal" name='sampleDisposal' value={formatDateForInput(request.sampleDisposal)} onChange={inputHandler} placeholder="" />
-                </div>
 
                 <div className='col-md-6'>
                   <label className='form-label'>Report Due Date:</label>
                   <input type="date" className="form-control border border-dark" id="reportDue" name='reportDue' value={formatDateForInput(request.reportDue)} onChange={inputHandler} placeholder="" />
                 </div>
 
-                <div className='col-md-6'>
-                  <label className='form-label'>Sample Disposed By:</label>
-                  <input type="text" className="form-control border border-dark" id="sampleDisposedBy   " name='sampleDisposedBy' value={request.sampleDisposedBy} onChange={inputHandler} placeholder="" />
+                <div className="row g-4 mt-1">
+                  <div className="col-md-6">
+                    <label className='form-label'>OR No.:</label>
+                    <input type='text' className='form-control border border-dark' id="orNo" name='orNo' value={request.orNo} onChange={inputHandler}></input>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className='form-label'>Amount Paid:</label>
+                    <input type='text' className='form-control border border-dark' id="amountPaid" name='amountPaid' value={request.amountPaid} onChange={inputHandler}></input>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className='form-label'>Unpaid Balance:</label>
+                    <input type='text' className='form-control border border-dark' id="unPaidBalance" name='unPaidBalance' value={request.unPaidBalance} onChange={inputHandler}></input>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className='form-label'>Sub-Total:</label>
+                    <input type='text' className='form-control border border-dark' id="subTotal" name='subTotal' value={request.subTotal} onChange={inputHandler}></input>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className='form-label'>Discount:</label>
+                    <select type='text' className='form-select border border-dark' id="discount" name='discount' value={request.discount} onChange={inputHandler}>
+                      <option value="">Choose...</option>
+                      <option value="20%">20%</option>
+                    </select>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className='form-label'>Total Php:</label>
+                    <input type='text' className='form-control border border-dark' id="totalPhp" name='totalPhp' value={request.totalPhp} onChange={inputHandler} style={{ backgroundColor: '#e9ecef' }}></input>
+                  </div>
                 </div>
               </div>
 
@@ -442,7 +686,7 @@ function UpdateRequest() {
                         <th>Customer Code</th>
                         <th>Lab Code</th>
                         <th>Sample Description</th>
-                        <th>Test Requested - Test Method</th>
+                        <th colSpan="2">Test Requested - Test Method</th>
                         <th>Unit Cost</th>
                         <th>Total Cost</th>
                         <th>Actions</th>
@@ -456,14 +700,19 @@ function UpdateRequest() {
                             <td>{sampleItem.customerCode}</td>
                             <td>{sampleItem.labCode}</td>
                             <td>{sampleItem.sampleDescription}</td>
-                            <td>{sampleItem.methodReq}</td>
+                            <td className='text-center align-middle'>{sampleItem.methodReq}</td>
+                            <td className='methodReq'>
+                              {testMethodTable(sampleItem.methodReq).split(',').map((item, index) => (
+                                <div key={index}>{item.trim()}</div>
+                              ))}
+                            </td>
                             <td>{sampleItem.unitCost}</td>
                             <td>{sampleItem.totalCost}</td>
                             <td>
                               <button
                                 type="button"
                                 className="btn btn-sm btn-outline-primary me-2"
-                                onClick={() => openEditModal(index)}
+                                onClick={() => { openEditModal(index) }}
                                 title="Edit Sample"
                               >
                                 <i className="bi bi-pencil"></i>
@@ -481,7 +730,7 @@ function UpdateRequest() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="6" className="text-center">No samples added yet.</td>
+                          <td colSpan="8" className="text-center">No samples added yet.</td>
                         </tr>
                       )}
                     </tbody>
@@ -529,7 +778,7 @@ function UpdateRequest() {
       {/* Enhanced modal with dynamic title */}
       {showModal && (
         <div className="modal fade show" style={{ display: 'block', background: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
+          <div className="modal-dialog modal-lg">
             <div className="modal-content">
               <form onSubmit={sampleSubmit} method="post">
 
@@ -541,88 +790,110 @@ function UpdateRequest() {
                 </div>
 
                 <div className="modal-body">
+                  <div className='container-fluid'>
 
-                  <div>
-                    <label className='form-label'>No. of Samples</label>
-                    <input
-                      type='text'
-                      className='form-control border-dark'
-                      name='noOfSample'
-                      value={sampleDetail.noOfSample}
-                      onChange={sampleInputHandler}
-                    />
+                    <div className="row g-4">
+                      <div className="col-md-6">
+                        <label className='form-label'>No. of Samples:</label>
+                        <input type="text" className="form-control border-dark" id="noOfSample" name='noOfSample' value={sampleDetail.noOfSample} onChange={sampleInputHandler} placeholder="" />
+                      </div>
+
+                      <div className="col-md-6">
+                        <label className='form-label'> Customer Code:</label>
+                        <input type='text' className='form-control border-dark' name='customerCode' value={sampleDetail.customerCode} onChange={sampleInputHandler} />
+                      </div>
+
+                      <div className="col-md-6">
+                        <label className='form-label'>Lab Code</label>
+                        <input type='text' className='form-control border-dark' name='labCode' value={sampleDetail.labCode} onChange={sampleInputHandler} />
+                      </div>
+
+                      <div className="col-md-6">
+                        <label className="form-label">Sample Description</label>
+                        <input type="text" className="form-control border border-dark" name="sampleDescription" value={sampleDetail.sampleDescription} onChange={sampleInputHandler} />
+                      </div>
+
+                      <div className="col-md-6 d-flex align-items-center">
+                        <h5 className='fw-bold'>Test Methods</h5>
+                      </div>
+
+                      <div className="col-md-6 align-items-center d-flex justify-content-end">
+                        <button type='button' className="btn btn-primary" onClick={addTextField}>+ Add Method</button>
+                      </div>
+                    </div>
+
+                    <div className="col-md-12 mt-3">
+                      {textField.map((index) => (
+                        <div key={index.id} className="row g-6 mt-3">
+                          <div className='col-md-6'>
+                            <label className='form-label'> Test Method</label>
+                            <select id='methodReq' name='methodReq' onChange={(e) => sampleInputHandler(e, index.id)} value={index.methodReq} className='form-select border-dark'>
+                              <option value="">Choose...</option>
+                              <option value="pH">pH</option>
+                              <option value="OM">OM</option>
+                              <option value="NPK">NPK</option>
+                              <option value="EC">EC</option>
+                              <option value="SOIL TEXTURE">SOIL TEXTURE</option>
+                              <option value="WATER HOLDING CAPACITY">WATER HOLDING CAPACITY</option>
+                              <option value="Moisture Content">Moisture Content</option>
+                              <option value="pH, NPK">pH, NPK</option>
+                              <option value="Copper">Copper</option>
+                              <option value="Iron">Iron</option>
+                              <option value="Zinc">Zinc</option>
+                              <option value="Manganese">Manganese</option>
+                              <option value="NITRATE">NITRATE</option>
+                              <option value="PHOSPHATE">PHOSPHATE</option>
+                              <option value="pH EC OM NPK">pH, EC, OM, NPK</option>
+                              <option value="pH EC OM NPK TEXTURE">pH, EC, OM, NPK, TEXTURE</option>
+                              <option value="pH EC OM NPK TEXTURE WHC MC">pH, EC, OM, NPK, TEXTURE, WHC, MC</option>
+                            </select>
+                          </div>
+
+                          <div className="col-md-4">
+                            <label className="form-label">Unit Cost</label>
+                            <input type="text" className="form-control border border-dark" name="unitCost" value={index.unitCost} onChange={(e) => sampleInputHandler(e, index.id)} />
+                          </div>
+
+                          <div className="col-auto align-items-center d-flex mt-4">
+                            <button type='button' className='btn btn-danger' onClick={() => deleteTextField(index.id)} disabled={textField.length === 1}><i className='bi bi-trash-fill' /></button>
+                          </div>
+
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mb-3 mt-3">
+                      <label className="form-label">Total Cost</label>
+                      <input
+                        type="text"
+                        className="form-control border border-dark"
+                        name="totalCost"
+                        value={
+                          textField.reduce((sum, field) =>
+                            sum + (parseFloat(field.totalCost) || 0), 0
+                          ).toFixed(2)
+                        }
+                        readOnly  // ✅ Make it read-only
+                        style={{ backgroundColor: '#e9ecef' }}
+                      />
+                    </div>
+
                   </div>
-
-                  <div>
-                    <label className='form-label'>Customer Code</label>
-                    <input
-                      type='text'
-                      className='form-control border-dark'
-                      name='customerCode'
-                      value={sampleDetail.customerCode}
-                      onChange={sampleInputHandler}
-                    />
-                  </div>
-
-                  <div>
-                    <label className='form-label'>Lab Code</label>
-                    <input
-                      type='text'
-                      className='form-control border-dark'
-                      name='labCode'
-                      value={sampleDetail.labCode}
-                      onChange={sampleInputHandler}
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Sample Description</label>
-                    <input
-                      type="text"
-                      className="form-control border border-dark"
-                      name="sampleDescription"
-                      value={sampleDetail.sampleDescription}
-                      onChange={sampleInputHandler}
-                      required
-                    />
-                  </div>
-
-                  <div className='col-md-6'>
-                    <label className='form-label'>Test Requested - Test Method</label>
-                    <select id='methodReq' name='methodReq' onChange={sampleInputHandler} value={sampleDetail.methodReq} className='form-select border-dark'>
-                      <option value="">Choose...</option>
-                      <option value="Method 1">Method 1</option>
-                      <option value="Method 2">Method 2</option>
-                    </select>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Unit Cost</label>
-                    <input
-                      type="text"
-                      className="form-control border border-dark"
-                      name="unitCost"
-                      value={sampleDetail.unitCost}
-                      onChange={sampleInputHandler}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Total Cost</label>
-                    <input
-                      type="text"
-                      className="form-control border border-dark"
-                      name="totalCost"
-                      value={sampleDetail.totalCost}
-                      onChange={sampleInputHandler}
-                      required
-                    />
-                  </div>
-
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                  <button type="button" className="btn btn-secondary" onClick={() => {
+                    setShowModal(false)
+                    setSampleDetail({
+                      sampleDescription: "",
+                      labCode: "",
+                      customerCode: "",
+                      noOfSample: "",
+                      totalCost: "",
+                      unitCost: "",
+                      methodReq: "",
+                    });
+                    setTextField([{ id: 1, methodReq: '', unitCost: '', totalCost: '' }]);
+                    setNextInput(2);
+                  }}>
                     Cancel
                   </button>
                   <button type="submit" className="btn btn-primary">

@@ -29,7 +29,7 @@ import ForReleaseRoa from './interfaces/dco/pages/ForReleaseRoa';
 import HVCpage from './interfaces/dco/pages/HVCpage';
 import RicePage from './interfaces/dco/pages/RicePage';
 import GApage from './interfaces/dco/pages/GApage';
-import Rabies from './interfaces/dco/forms/Rabies';
+import GenerateReport from './interfaces/dco/forms/GenerateReport';
 
 const router = createBrowserRouter([
 
@@ -44,7 +44,6 @@ const router = createBrowserRouter([
       { path: "Home", element: <Home /> },
       { path: "RoaForm", element: <RoaForm /> },
       { path: "Arf", element: <Arf /> },
-      { path: "Rabies", element: <Rabies /> },
       { path: "Walkin", element: <WalkinPage /> },
       { path: "Regulatory", element: <RegulatoryPage /> },
       { path: "CornProgram", element: <CornPage /> },
@@ -60,6 +59,7 @@ const router = createBrowserRouter([
       { path: "HVCrops", element: <HVCpage /> },
       { path: "Rice Program", element: <RicePage /> },
       { path: "Government Agency", element: <GApage/> },
+      { path: "GenerateReport/:id", element : <GenerateReport/>}
     ],
   },
 

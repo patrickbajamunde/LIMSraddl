@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
 import './styles/sidebar.css';
-import image1 from '../Components/images/DA2.png';
+import image1 from '../components/images/DA2.png';
 
 function Sidebar() {
     const navigate = useNavigate();
@@ -44,39 +44,26 @@ function Sidebar() {
                     <ul className="nav flex-column">
                         <li className='nav-item'>
                             <Link to="Home" className='nav-link text-white sidebar-link'>
-                                <i className='bi bi-house-door-fill text-white fs-5 ms-1 me-2' />
+                                <i className='bi bi-house-door-fill text-white fs-5 ms-2 me-2' />
                                 <span className='ms-2'>Home</span>
                             </Link>
                         </li>
-
-                        
-                        <li className='nav-item mt-2'>
-                            <button className='btn btn-link sidebar-link text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#roaList' aria-expanded='false' aria-controls='roaList'>
+                        <li className='nav-item'>
+                            <Link to="Arf/" className='nav-link text-white sidebar-link'>
                                 <i className='bi bi-file-earmark-plus-fill text-white fs-5 ms-2 me-3' />
-                                <span className=''>ARF</span>
-                                <i className='bi bi-caret-down-fill float-end me-2 mt-1' />
-                            </button>
-                            <div className='collapse' id='roaList'>
-                                <ul className='list-unstyled ms-5'>
-                                    <li>
-                                        <Link className='nav-link text-white mt-2 sidebar-link' to='Arf/'> General </Link>
-                                    </li>
-                                    <li>
-                                        <Link className='nav-link text-white mt-2 sidebar-link' to='Rabies/'> Rabies </Link>
-                                    </li>
-                                </ul>
-                            </div>
+                                <span>Receiving Form</span>
+                            </Link>
                         </li>
                         <li className='nav-item'>
                             <Link to="RoaForm/" className='nav-link text-white sidebar-link'>
-                                <i className='bi bi-file-earmark-text-fill text-white fs-5 ms-1 me-2' />
-                                <span className='ms-2'>ROA Form</span>
+                                <i className='bi bi-file-earmark-text-fill text-white fs-5 ms-2 me-3' />
+                                <span>ROA Form</span>
                             </Link>
                         </li>
                         <li className='nav-item mt-2'>
                             <button className='btn btn-link sidebar-link ms-2 text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#homeSubmenu' aria-expanded='false' aria-controls='homeSubmenu'>
-                                <i className='bi bi-archive-fill text-white fs-5 me-3 ' />
-                                Reports
+                                <i className='bi bi-archive-fill text-white fs-5 me-3 ms-1' />
+                                ARF
                                 <i className='bi bi-caret-down-fill float-end me-3 mt-1' />
                             </button>
                             <div className='collapse' id='homeSubmenu'>
@@ -110,7 +97,7 @@ function Sidebar() {
                         </li>
                         <li className='nav-item mt-2'>
                             <button className='btn btn-link sidebar-link text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#roaList' aria-expanded='false' aria-controls='roaList'>
-                                <i className='bi bi-journal-text text-white fs-5 me-3 ms-2' />
+                                <i className='bi bi-journal-text text-white fs-5 me-3 ms-3' />
                                 ROA
                                 <i className='bi bi-caret-down-fill float-end me-2 mt-1' />
                             </button>

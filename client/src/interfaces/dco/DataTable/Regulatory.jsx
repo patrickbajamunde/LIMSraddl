@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
-import TestPdf from "../generatePdf/testPdf";
+import TestPdf from "../generatePdf/TestPdf";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,6 @@ export default function Regulatory() {
         const fetchData = async () => {
             try {
                 const response = await axios.get("http://localhost:8003/api/client/userRequest", {
-                    withCredentials: true,
                 });
 
                 const regOnly = response.data.filter(clientData => clientData.clientType === "Regulatory");
@@ -76,21 +75,13 @@ export default function Regulatory() {
             sortable: true,
         },
         {
-            name: "Sample Description",
-            cell: (row) => (
-                <div style={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap", // This is the key change: prevents text from wrapping
-                    maxWidth: "200px"
-                }}>
-                    {row.sampleDetails.map(s => s.sampleDescription)}
-                </div>
-            )
+            name: "Created By",
+            selector: (row) => row.userName,
+            sortable: true,
         },
         {
             name: "Test Method",
-            cell: (row) => (
+            /*cell: (row) => (
                 <div style={{
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -100,7 +91,7 @@ export default function Regulatory() {
                     {row.sampleDetails.map(s => s.methodReq)}
                 </div>
             ),
-            sortable: true,
+            sortable: true,*/
         },
         
         {
