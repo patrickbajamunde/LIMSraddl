@@ -80,7 +80,7 @@ export default function CornProgram() {
         
         {
             name: "Test Method",
-            cell: (row) => (
+            /*cell: (row) => (
                 <div style={{
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -90,7 +90,7 @@ export default function CornProgram() {
                     {row.sampleDetails.map(s => s.methodReq)}
                 </div>
             ),
-            sortable: true,
+            sortable: true,*/
         },
         {
             name: "Action",
