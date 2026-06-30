@@ -26,7 +26,7 @@ const Page3 = ({ request, }) => {
 
 
     const generatePdf = () => {
-        if (!request) return;
+        if (!request || !request.data) return;
 
 
         const normalize = (str) => str?.trim().replace(/\s+/g, ' ') ?? '';
@@ -76,7 +76,7 @@ const Page3 = ({ request, }) => {
                     </View>
                 </View>
 
-                <View style={[styles.table, { marginTop: 20 }]}>
+                <View style={[styles.table, { marginTop: 10 }]}>
                     <View style={[styles.row]}>
                         <View style={[styles.row, { width: '100%' }]}>
                             <View style={[styles.cellTwo, { width: '48%', borderLeftWidth: 0 }]}>
@@ -145,16 +145,97 @@ const Page3 = ({ request, }) => {
                             <Text>I agree with terms and conditions of DA RFO5 ILD-Regional Animal Disease Diagnostic Laboratory Disclaimer.</Text>
                         </View>
                     </View>
-                    <View style={[styles.row, {width: '100%'}]}>
-                        <View style={[styles.cellTwo, {width:'48%', borderLeftWidth: 0}]}>
-                            <Text>Receiving Staff</Text>
+                    <View style={[styles.row, { width: '100%' }]}>
+                        <View style={[styles.cellTwo, { width: '48%', borderLeftWidth: 0, alignItems: 'center', paddingTop: 7 }]}>
+                            {request && request.data.receivedBy !== '' ? (
+                                <Text style={{ borderBottomWidth: 0.5, width: '85%', fontSize: 10, textAlign: 'center' }}>{request.data.receivedBy}</Text>
+                            ) : (
+                                <Text>______________________________________________________________________</Text>
+                            )}
+                            <Text style={[styles.boldFont, { fontSize: 10 }]}>Receiving Staff</Text>
                         </View>
-                        <View style={[styles.cellTwo, {width:'52%', borderLeftWidth: 0}]}>
-                            <Text>Client Printed Name and Signature</Text>
+                        <View style={[styles.cellTwo, { width: '52%', borderLeftWidth: 0, alignItems: 'center', paddingTop: 7 }]}>
+                            {request && request.clientName !== '' ? (
+                                <Text style={{ borderBottomWidth: 0.5, width: '85%', fontSize: 10, textAlign: 'center' }}>{request.clientName}</Text>
+                            ) : (
+                                <Text>______________________________________________________________________</Text>
+                            )}
+                            <Text style={[styles.boldFont, { fontSize: 10 }]}>Client Printed Name and Signature</Text>
                         </View>
                     </View>
                 </View>
-            </Page>
+                <View style={[{ width: '100%', marginLeft: 15, marginTop: 5 }]}>
+                    <Text style={[styles.font]}>
+                        -----------------------------------------------------------------------------------------------------------------------------------------------------------
+                    </Text>
+                    <Text style={[styles.boldFont, { fontSize: 8, margin: 0 }]}>PRESENT THIS UPON CLAIMING THE REPORT OF ANALYSIS</Text>
+                </View>
+
+                <View style={[styles.table, { marginTop: 5, borderBottomWidth: 1, borderRightWidth: 1 }]}>
+                    <View style={[styles.row, { width: '100%', justifyContent: 'center', }]}>
+                        <Text style={[styles.boldFont, { fontSize: 8 }]}>CUSTOMER'S ACKNOWLEDGEMENT RECEIPT</Text>
+                    </View>
+                    <View style={[styles.row, styles.boldFont, { width: '100%', fontSize: 8, paddingLeft: 3, gap: 185, marginBottom: 6 }]}>
+                        <View style={styles.row}>
+                            <Text>Date of Transaction: </Text>
+                            <Text style={{ borderBottomWidth: 0.5 }}>{formatDate(request.data.transactionDate)}</Text>
+                        </View>
+                        <Text>Report available on: __________________</Text>
+                    </View>
+                    <View style={[styles.normalFont, { width: '100%', fontSize: 8, paddingLeft: 3, marginBottom: 3 }]}>
+                        {request && request.clientName !== '' ? (
+                            <View style={styles.row}>
+                                <Text>This is to acknowledge the laboratory services availed by </Text>
+                                <Text style={{ borderBottomWidth: 0.5, width: '35%', textAlign: 'center' }}>{request.clientName}</Text>
+                                <Text>from DA RFO 5 ILD-RADDL. This also serves as</Text>
+                            </View>
+                        ) : (
+                            <Text>This is to acknowledge the laboratory services availed by _________________________________________________________________ from DA RFO 5 ILD-RADDL. This also serves as</Text>
+                        )}
+
+                        <Text>authorization for _______________________________________________ to claim the test report for the requested analysis. </Text>
+                    </View>
+                    <View style={[styles.row, { width: '100%', justifyContent: 'center', }]}>
+                        <View style={[styles.normalFont, styles.row, { fontSize: 8 }]}>
+                            <Text>Entered with the request ID no. </Text>
+                            <Text style={[styles.boldFont, { borderBottomWidth: 0.5, width: '30%', paddingLeft: 13, fontSize: 8 }]}>{request.requestId}</Text>
+                            <Text>indicated in the analysis request form</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.row, { width: '100%', paddingLeft: 3, marginBottom: 5 }]}>
+                        <Text style={[styles.boldFont, { fontSize: 8 }]}>Claimed by:</Text>
+                    </View>
+                    <View style={[styles.row, { width: '100%', justifyContent: 'space-around' }]}>
+                        <View style={[styles.boldFont, { fontSize: 8, alignItems: 'center' }]}>
+                            <Text>____________________________________</Text>
+                            <Text>Signature over printed name</Text>
+                        </View>
+                        <View style={[styles.boldFont, { fontSize: 8, alignItems: 'center' }]}>
+                            <Text>____________________________________________</Text>
+                            <Text>Signature over printed name of authorized person</Text>
+                        </View>
+                        <View style={[styles.boldFont, { fontSize: 8, alignItems: 'center' }]}>
+                            <Text>______________________________</Text>
+                            <Text> Date and Time claimed</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.cellThree, { width: '100%' }]}>
+                        <View style={[styles.row, styles.boldFont, { justifyContent: 'center', fontSize: 8, borderTopWidth: 1 }]}>
+                            <Text>WAIVER/CONSENT FOR POSSIBLE DELAY ON THE ISSUANCE OF REPORT OF ANALYSIS</Text>
+                        </View>
+                        <View style={[styles.normalFont, { fontSize: 8, flexWrap: 'wrap', paddingHorizontal: 3 }]}>
+                            <Text>
+                                I (name) ______________________________ representative of (name of institution) ____________________________________, is willing to wait and consented the laboratory for the possible delay on the issuance of the Report of Analysis beyond the scheduled releasing date due to insufficient or lack of supplies, malfunction of equipment, {'\n'}power interruption and other uncontrollable event of circumstances.
+                            </Text>
+                        </View>
+                        <View style={[styles.boldFont, { alignItems: 'center', fontSize: 8, marginTop: 8 }]}>
+                            <Text>__________________________________________</Text>
+                            <Text>Signature over printed name</Text>
+                        </View>
+                    </View>
+
+                </View>
+            </Page >
 
         )
     }

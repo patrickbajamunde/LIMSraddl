@@ -10,59 +10,42 @@ const methodResults = new mongoose.Schema({
 })
 
 const roaModel = new mongoose.Schema({
-    labCode: {
+    itemNo: {
         type: String,
     },
 
-    customerCode: {
+    sampleNo: {
         type: String,
     },
 
-    sampleDescription: {
+    fieldSampleID: {
         type: String,
     },
 
+    nameOfOwner: {
+        type: String,
+    },
 
+    address: {
+        type: String,
+    },
+
+    species: {
+        type: String,
+    },
+
+    age: {
+        type: String
+    },
+
+    sex: {
+        type: String,
+    },
     result: {
         type: String
     },
-
-    results: methodResults,
-
-    testMethod: {
-        type: String
-    },
 })
 
-
-const physicResults = new mongoose.Schema({
-    physc1Result: { type: String },
-    physc2Result: { type: String },
-    physc3Result: { type: String },
-    physc4Result: { type: String },
-    physc5Result: { type: String },
-    physc6Result: { type: String },
-})
-
-const physicModel = new mongoose.Schema({
-    labCode: {
-        type: String,
-    },
-
-    customerCode: {
-        type: String,
-    },
-
-    sampleDescription: {
-        type: String,
-    },
-
-    results: physicResults,
-
-    testMethod: {
-        type: String
-    },
-})
 
 const methodology = new mongoose.Schema({
     method1: { type: String },
@@ -73,39 +56,6 @@ const methodology = new mongoose.Schema({
     method6: { type: String },
 })
 
-const phyMethodology = new mongoose.Schema({
-    physical1: { type: String },
-    physical2: { type: String },
-    physical3: { type: String },
-    physical4: { type: String },
-    physical5: { type: String },
-    physical6: { type: String },
-})
-
-const interpretationTable = new mongoose.Schema({
-    parameter1: { type: String },
-    parameter2: { type: String },
-    parameter3: { type: String },
-    parameter4: { type: String },
-    data1: { type: String },
-    data2: { type: String },
-    data3: { type: String },
-    data4: { type: String },
-    data5: { type: String },
-    data6: { type: String },
-    data7: { type: String },
-    data8: { type: String },
-    data9: { type: String },
-    data10: { type: String },
-    data11: { type: String },
-    data12: { type: String },
-    data13: { type: String },
-    data14: { type: String },
-    data15: { type: String },
-    data16: { type: String },
-    data17: { type: String },
-    data18: { type: String },
-})
 
 const reportSchema = new mongoose.Schema({
 
@@ -135,8 +85,13 @@ const reportSchema = new mongoose.Schema({
 
     reportId: {
         type: String,
+    },
+    
+    requestId: {
+        type: String,
         unique: true
     },
+
 
     analyzedBy: {
         type: String,
@@ -163,16 +118,29 @@ const reportSchema = new mongoose.Schema({
         type: String,
     },
 
-    sampleSource: {
+    purpose: {
+        type: String,
+    },
+
+    dateCollected: {
+        type: String,
+    },
+
+    labCode: {
+        type: String,
+    },
+
+    testMethod: {
+        type: String,
+    },
+
+    sampleType: {
         type: String,
     },
 
     method: methodology,
-    physicalMethod: phyMethodology,
-    interpretation: interpretationTable,
 
     roaDetails: [roaModel],
-    physicalDetails: [physicModel],
 
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -182,17 +150,14 @@ const reportSchema = new mongoose.Schema({
     userName: {
         type: String,
     },
-    url:{
+    url: {
         type: String,
     },
     qrCode: {
         type: String,
     },
 
-    PhysMethodSelected : {
-        type: String,
-    },
-    ChemSelectedMethod : {
+    ChemSelectedMethod: {
         type: String,
     },
 

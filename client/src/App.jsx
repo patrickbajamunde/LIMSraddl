@@ -4,6 +4,7 @@ import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dco from './interfaces/dco/Dco';
 import Arf from './interfaces/dco/forms/Arf';
+import Rabies from './interfaces/dco/forms/Rabies';
 import Login from './interfaces/login/Login';
 import RoaForm from './interfaces/dco/forms/RoaForm';
 import Home from './interfaces/dco/components/Home';
@@ -21,16 +22,15 @@ import LguPage from './interfaces/dco/pages/LguPage';
 import ResearchPage from './interfaces/dco/pages/ResearchPage';
 import ReportsPage from './interfaces/dco/pages/ReportsPage';
 import RoaData from './interfaces/dco/viewData/RoaData';
-import UpdateRequest from './interfaces/dco/pages/UpdateRequest';
 import UpdateReport from './interfaces/dco/pages/UpdateReport';
 import Released from './interfaces/dco/pages/Released';
-import ArfData from './interfaces/dco/viewData/ArfData';
 import ForReleaseRoa from './interfaces/dco/pages/ForReleaseRoa';
 import HVCpage from './interfaces/dco/pages/HVCpage';
 import RicePage from './interfaces/dco/pages/RicePage';
 import GApage from './interfaces/dco/pages/GApage';
 import GenerateReport from './interfaces/dco/forms/GenerateReport';
-
+import UpdateRequest from './interfaces/dco/pages/UpdateRequest';
+import RequestData from './interfaces/dco/viewData/RequestData';
 const router = createBrowserRouter([
 
   {
@@ -44,6 +44,7 @@ const router = createBrowserRouter([
       { path: "Home", element: <Home /> },
       { path: "RoaForm", element: <RoaForm /> },
       { path: "Arf", element: <Arf /> },
+      { path: "Rabies", element: <Rabies /> },
       { path: "Walkin", element: <WalkinPage /> },
       { path: "Regulatory", element: <RegulatoryPage /> },
       { path: "CornProgram", element: <CornPage /> },
@@ -51,15 +52,15 @@ const router = createBrowserRouter([
       { path: "Research", element: <ResearchPage /> },
       { path: "Reports", element: <ReportsPage /> },
       { path: "reportDetails/:id", element: <RoaData /> },
-      { path: "requestDetails/:id", element: <ArfData /> },
-      { path: "updateArf/:id", element: <UpdateRequest /> },
       { path: "updateRoa/:id", element: <UpdateReport /> },
       { path: "Released", element: <Released /> },
       { path: "ForRelease", element: <ForReleaseRoa /> },
       { path: "HVCrops", element: <HVCpage /> },
       { path: "Rice Program", element: <RicePage /> },
-      { path: "Government Agency", element: <GApage/> },
-      { path: "GenerateReport/:id", element : <GenerateReport/>}
+      { path: "Government Agency", element: <GApage /> },
+      { path: "GenerateReport/:id", element: <GenerateReport /> },
+      { path: "updateRequest/:id", element: <UpdateRequest/>},
+      { path: "requestData/:id", element: <RequestData/>},
     ],
   },
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate, useParams } from "react-router-dom";
-import TestPdf from "../generatePdf/TestPdf";
-import UpdateRequest from "../pages/UpdateRequest";
+import UpdateRequest from "../pages/UpdateRGeneral";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Arf from "../generatePdf/Arf";
 
 export default function Walkin() {
     const [search, setSearch] = useState("");
@@ -84,17 +84,8 @@ export default function Walkin() {
         },
 
         {
-            name: "Test Method",
-            cell: (row) => (
-                <div style={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    maxWidth: "200px"
-                }}>
-                    {row.sampleDetails.map(s => s.methodReq)}
-                </div>
-            ),
+            name: "Form",
+            selector: (row) => row.type,
             sortable: true,
         },
         
@@ -104,18 +95,18 @@ export default function Walkin() {
                 <div className="d-flex align-items-center gap-2">
                     <button type="button" className="btn p-0 border-0 " onClick={() => deletRequest(row._id)}><i className="bi bi-trash text-danger "></i></button>
                     <Link
-                        to={`/Dco/updateArf/${row._id}` }
+                        to={`/Dco/updateRequest/${row._id}` }
                         state={{from: '/Dco/Walkin/'}}
                         type="button"
                         className="btn p-0 border-0"><i className="bi bi-pencil-square text-success "></i></Link>
 
 
-                    <TestPdf
+                    <Arf
                         requestId={row._id}
                         icon={<i className="bi bi-box-arrow-down text-primary"></i>}
                         disabledIcon={<i className="bi bi-box-arrow-down text-secondary"></i>}
                     />
-                    <Link to={`/Dco/requestDetails/${row._id}`} state={{from: '/Dco/Walkin/'}} type="button" className="btn p-0 border-0"><i class="bi bi-eye"></i></Link>
+                    <Link to={`/Dco/requestData/${row._id}`} state={{from: '/Dco/Walkin/'}} type="button" className="btn p-0 border-0"><i class="bi bi-eye"></i></Link>
                 </div>
             ),
         },

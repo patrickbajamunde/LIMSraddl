@@ -1,0 +1,442 @@
+import axios from 'axios';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import styles from '../Styles';
+import image1 from '../../../analysts/components/images/DA5.jpg';
+import image2 from '../../../dco/components/images/unnamed.png'
+import RabiesTerms from '../data/RabiesTerms';
+import { useEffect, useState } from 'react';
+
+const Page3 = ({ request, }) => {
+
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    };
+
+    const numericDate = (dateStr) => {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    };
+
+    const sampleLabel = [
+        "Clear and properly labeled"
+    ]
+
+    const typeOfSample = [
+        "Head",
+        "Brain/Organ",
+        "Whole Body",
+        "Others"
+    ]
+
+
+    const transport = [
+        "Triple Packaging",
+        "Use of leak proof container",
+        "Use of proper storage (styrobox or cooler w/ iced gel pack or ice)",
+    ]
+
+    const stateOfSample = [
+        "All samples are sterile and free of contamination ",
+        "Burnt"
+    ]
+
+    const rejectionOfSamples = [
+        "Improper collection/transport/storage",
+        "Unlabeled/mislabeled",
+        "Insufficient samples for the test requested",
+        "Improper/incomplete information/no forms ",
+        "Decomposition state",
+        "Non-brain tissue, improperly fixed",
+        "Sample contamination"
+    ]
+
+    const sampleStorage = [
+        "Room temperature",
+        "Refrigerated",
+        "Frozen",
+    ]
+
+    const isChecked = (value, request) => {
+        return (request ?? []).includes(value) ? styles.checkedBox2 : styles.checkbox2;
+    }
+
+    const generatePdf = () => {
+        if (!request || !request.data) return;
+
+
+        const normalize = (str) => str?.trim().replace(/\s+/g, ' ') ?? '';
+
+        return (
+            <Page style={[styles.body, { marginTop: 10 }]} size="A4">
+                <View style={[styles.headerContainer3, styles.row, { marginLeft: 14, marginRight: 14 }]} fixed>
+                    <View style={[styles.headerCell, { justifyContent: 'center', paddingRight: 5 }]}>
+                        <Image style={styles.image} src={image1} />
+                    </View>
+
+                    <View style={[styles.headerOffice, styles.headerCell, { paddingRight: 8, paddingLeft: 2 }]}>
+                        <View style={{ lineHeight: 0.55 }}>
+                            <Text style={[styles.normalFont, { fontSize: 8 }]} >Republic of the Philippines</Text>
+                            <Text style={[styles.boldFont, { fontSize: 8 }]} >DEPARTMENT OF AGRICULTURE</Text>
+                            <Text style={[styles.boldFont, { fontSize: 8 }]} >REGIONAL FIELD OFFICE 5</Text>
+                            <Text style={[styles.boldFont, { fontSize: 8 }]} >INTEGRATED LABORATORIES DIVISION</Text>
+                            <Text style={[styles.normalFont, { fontSize: 8 }]} >San Agustin, Pili, Camarines Sur</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.formTitle, styles.headerCell, { alignItems: 'center' }]} >
+                        <Text style={[styles.titleBold, { fontSize: 12, paddingHorizontal: 25 }]}>ANALYSIS REQUEST FORM</Text>
+                        <Text style={[styles.titleBold, { fontSize: 12, }]}>(GENERAL SAMPLE)</Text>
+                    </View>
+
+                    <View style={[styles.headerCell, { flexDirection: 'column', }]}>
+                        <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3 }]}>Document Code</Text>
+                        <Text style={[styles.normalFont, { fontSize: 8, borderBottom: 1, paddingLeft: 3, paddingBottom: 3, paddingRight: 5 }]}>ILD5-RADDL-FR-001-0</Text>
+                        <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3, paddingTop: 3 }]}>Record ID</Text>
+                        <View style={[styles.normalFont, { fontSize: 8, paddingRight: 2, paddingLeft: 3 }]}>
+                            <Text>{request.recordId.substring(0, 18)}</Text>
+                            <Text>{request.recordId.substring(18)}</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.headerCell, { flexDirection: 'column', width: '13%', borderRightWidth: 0 }]}>
+                        <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3 }]}>Effectivity Date</Text>
+                        <View style={[styles.row, { borderBottom: 1, width: '100%' }]}>
+                            <Text style={[styles.normalFont, { fontSize: 8, paddingLeft: 3, paddingBottom: 3, }]}>March 17, 2026</Text>
+                        </View>
+                        <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3, paddingTop: 3 }]}>Page No.</Text>
+                        <Text
+                            style={[styles.testPdfpage]}
+                            render={({ pageNumber, totalPages }) => pageNumber <= 3 ? ` ${pageNumber}   of   3` : ''}
+                            fixed />
+                    </View>
+                </View>
+
+                <View style={[styles.table, { marginTop: 10 }]}>
+                    <View style={[styles.row]}>
+                        <View style={[styles.row, { width: '100%' }]}>
+                            <View style={[styles.cellTwo, { width: '39%', borderLeftWidth: 0 }]}>
+                                <View style={[styles.cellTwo, { width: '100%', borderRightWidth: 0, borderLeftWidth: 0 }]}>
+                                    <Text style={[styles.boldFont, { fontSize: 8, }]}>Filled out by the RADDL staff</Text>
+                                </View>
+                                <View style={[styles.cellFour, styles.boldFont, { textAlign: 'center', width: '100%', borderLeftWidth: 0 }]}>
+                                    <Text style={{ fontSize: 8 }}>ASSESSMENT</Text>
+                                </View>
+
+                                <View style={[styles.cellFour, { width: '100%', borderLeftWidth: 0 }]}>
+                                    {/*------------------Sample Labeling------------------- */}
+                                    <View style={[styles.boldFont, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>1. Sample Labeling</Text>
+                                    </View>
+                                    <View style={[styles.row, { alignItems: 'center', fontSize: 8, paddingLeft: 15 }]}>
+                                        <Text style={isChecked(sampleLabel[0], request.data.sampleLabel)} />
+                                        <Text>{sampleLabel[0]}</Text>
+                                    </View>
+                                    {/*------------------Type of Sample------------------- */}
+                                    <View style={[styles.boldFont, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>2. Type of Sample</Text>
+                                    </View>
+                                    {typeOfSample.map((type, index) => (
+                                        <View key={index} style={[styles.row, { alignItems: 'center', fontSize: 8, paddingLeft: 15,}]}>
+                                            <Text style={isChecked(type, request.data.typeOfSample)} />
+                                            <Text>{type}</Text>
+                                            {type === 'Others' && (
+                                                <Text style={[{ borderBottomWidth: 0.5, textAlign: 'center' }]}>{request.data.sampleQuantityOthers || ' '}</Text>
+                                            )}
+                                        </View>
+                                    ))}
+
+
+                                    {/*------------------Proper Transport------------------- */}
+                                    <View style={[styles.boldFont, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>3. Proper Transport</Text>
+                                    </View>
+                                    <View style={[styles.row, { alignItems: 'center', fontSize: 8, paddingLeft: 15}]}>
+                                        <Text style={isChecked(transport[0], request.data.transport)} />
+                                        <Text>{transport[0]}</Text>
+                                    </View>
+                                    <View style={[styles.row, { fontSize: 8, paddingLeft: 15}]}>
+                                        <Text style={[isChecked(transport[1], request.data.transport), { marginTop: 3 }]} />
+                                        <Text>{transport[1]}</Text>
+                                    </View>
+                                    <View style={[styles.row, { fontSize: 8, paddingLeft: 15, width: '84%'}]}>
+                                        <Text style={[isChecked(transport[2], request.data.transport), { marginTop: 3 }]} />
+                                        <Text>{transport[2]}</Text>
+                                    </View>
+
+
+                                    {/*------------------State of sample when it reached the laboratory------------------- */}
+                                    <View style={[styles.boldFont, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>4. State of sample when it reached the laboratory</Text>
+                                    </View>
+                                    <View style={[styles.row, { alignItems: 'center', fontSize: 8, paddingLeft: 15}]}>
+                                        <Text style={isChecked(stateOfSample[0], request.data.stateOfSample)} />
+                                        <Text>{stateOfSample[0]}</Text>
+                                    </View>
+                                    <View style={[styles.row, { fontSize: 8, paddingLeft: 15}]}>
+                                        <Text style={[isChecked(stateOfSample[1], request.data.stateOfSample)]} />
+                                        <Text>{stateOfSample[1]}</Text>
+                                    </View>
+
+                                </View>
+
+                                {/*------------------CRITERIA FOR REJECTION OF SAMPLES------------------- */}
+                                <View style={[styles.cellFour, { width: '100%', textAlign: 'center', }]}>
+                                    <Text style={[styles.boldFont, { fontSize: 8 }]}>CRITERIA FOR REJECTION OF SAMPLES</Text>
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    {rejectionOfSamples.map((sample, index) => (
+                                        <View style={[styles.row, { alignItems: 'center', fontSize: 8, paddingLeft: 15}]}>
+                                            <Text style={isChecked(sample, request.data.rejectionOfSamples)} />
+                                            <Text>{sample}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+
+                                {/*------------------ REVIEW OF REQUEST ------------------- */}
+                                <View style={[styles.cellFour, { width: '100%', textAlign: 'center' }]}>
+                                    <Text style={[styles.boldFont, { fontSize: 8 }]}>REVIEW OF REQUEST</Text>
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%', borderBottomWidth: 0 }]}>
+                                    <View style={[{ paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>1. Sample Storage:</Text>
+                                    </View>
+                                    {sampleStorage.map((sample, index) => (
+                                        <View style={[styles.row, { alignItems: 'center', fontSize: 8, paddingLeft: 15 }]}>
+                                            <Text style={isChecked(sample, request.data.sampleStorage)} />
+                                            <Text>{sample}</Text>
+                                        </View>
+                                    ))}
+                                    <View style={[styles.row, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>2. Sample retention (days, months, years):</Text>
+                                        <Text>{request.data.sampleRetentionDate}</Text>
+                                    </View>
+                                    <View style={[styles.row, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}>3. Sample storage location:</Text>
+                                        <Text style={[{ fontSize: 8 }]}>{request.data.sampleStorageLocation}</Text>
+                                    </View>
+                                    <View style={[styles.row, { paddingLeft: 3 }]}>
+                                        <Text style={[{ fontSize: 8 }]}> Sample disposal date:</Text>
+                                        <Text style={[{ fontSize: 8 }]}>{formatDate(request.data.sampleDisposalDate)}</Text>
+                                    </View>
+                                </View>
+                                {/*---------------------------Terms and condition----------------------------------- */}
+                                <View style={[styles.cellFour, { width: '100%', textAlign: 'center', }]}>
+                                    <Text style={[styles.boldFont, { fontSize: 8, borderTopWidth: 1 }]}>TERMS AND CONDITIONS</Text>
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%', borderBottomWidth: 0 }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[0].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[0].content}`}</Text>
+                                    </Text>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[1].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[1].content}`}</Text>
+                                    </Text>
+                                    <Text style={[{ flexWrap: 'wrap', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[2].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[2].content}`}</Text>
+                                    </Text>
+                                </View>
+                            </View>
+
+                            {/*---------------------------Terms and condition----------------------------------- */}
+                            <View style={[styles.cellFour, { width: '61%', borderRightWidth: 1 }]}>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[3].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[3].content}`}</Text>
+                                    </Text>
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[4].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[4].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[5].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[5].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[6].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[6].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[7].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[7].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[8].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[8].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[9].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[9].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[10].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[10].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[11].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[11].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[12].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[12].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%' }]}>
+                                    <Text style={[{ flexWrap: 'wrap', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[13].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[13].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                                <View style={[styles.cellFour, { width: '100%', borderBottomWidth: 0 }]}>
+                                    <Text style={[{ flexWrap: 'wrap', textAlign: 'justify', paddingHorizontal: 3 }]} hyphenationCallback={word => [word]}>
+                                        <Text style={[styles.termsBold, { fontSize: 8 }]}>{`${RabiesTerms[14].title}`}</Text>
+                                        <Text style={[styles.termsNormal, { fontSize: 8 }]}>{`${RabiesTerms[14].content}`}</Text>
+                                    </Text>
+
+                                </View>
+                            </View>
+                        </View>
+
+                    </View>
+                    <View style={[styles.row,]}>
+                        <View style={[styles.row, styles.cellTwo, styles.boldFont, { width: '100%', alignItems: 'center', fontSize: 8, justifyContent: 'center', borderLeftWidth: 0}]}>
+                            <Text style={styles.checkbox2} />
+                            <Text>I AGREE WITH TERMS AND CONDITIONS OF DA RFO5 ILD-REGIONAL ANIMAL DISEASE DIAGNOSTIC LABORATORY DISCLAIMER. </Text>
+                        </View>
+                    </View>
+                    <View style={[styles.row, { width: '100%' }]}>
+                        <View style={[styles.cellTwo, { width: '48%', borderLeftWidth: 0, alignItems: 'center', paddingTop: 4 }]}>
+                            {request && request.data.receivedBy !== '' ? (
+                                <Text style={{ borderBottomWidth: 0.5, width: '85%', fontSize: 8, textAlign: 'center' }}>{request.data.receivedBy}</Text>
+                            ) : (
+                                <Text>______________________________________________________________________</Text>
+                            )}
+                            <Text style={[styles.boldFont, { fontSize: 8 }]}>Receiving Staff</Text>
+                        </View>
+                        <View style={[styles.cellTwo, { width: '52%', borderLeftWidth: 0, alignItems: 'center', paddingTop: 4 }]}>
+                            {request && request.clientName !== '' ? (
+                                <Text style={{ borderBottomWidth: 0.5, width: '85%', fontSize: 8, textAlign: 'center' }}>{request.clientName}</Text>
+                            ) : (
+                                <Text>______________________________________________________________________</Text>
+                            )}
+                            <Text style={[styles.boldFont, { fontSize: 8 }]}>Client Printed Name and Signature</Text>
+                        </View>
+                    </View>
+
+                </View>
+                <View style={[{ width: '100%', marginLeft: 15, marginTop: -3 }]}>
+                    <Text style={[styles.font]}>
+                        -----------------------------------------------------------------------------------------------------------------------------------------------------------
+                    </Text>
+                    <Text style={[styles.boldFont, { fontSize: 7, margin: 0, marginTop: -3 }]}>PRESENT THIS UPON CLAIMING THE REPORT OF ANALYSIS</Text>
+                </View>
+
+                <View style={[styles.table, { marginTop: -3, borderBottomWidth: 1, borderRightWidth: 1 }]}>
+                    <View style={[styles.row, { width: '100%', justifyContent: 'center', }]}>
+                        <Text style={[styles.boldFont, { fontSize: 8 }]}>CUSTOMER'S ACKNOWLEDGEMENT RECEIPT</Text>
+                    </View>
+                    <View style={[styles.row, styles.boldFont, { width: '100%', fontSize: 8, paddingLeft: 3, gap: 185, marginBottom: 6 }]}>
+                        <View style={styles.row}>
+                            <Text>Date of Transaction: </Text>
+                            <Text style={{ borderBottomWidth: 0.5 }}>{formatDate(request.data.transactionDate)}</Text>
+                        </View>
+                        <Text>Report available on: __________________</Text>
+                    </View>
+                    <View style={[styles.normalFont, { width: '100%', fontSize: 8, paddingLeft: 3, marginBottom: 3 }]}>
+                        {request && request.clientName !== '' ? (
+                            <View style={styles.row}>
+                                <Text>This is to acknowledge the laboratory services availed by </Text>
+                                <Text style={{ borderBottomWidth: 0.5, width: '35%', textAlign: 'center' }}>{request.clientName}</Text>
+                                <Text>from DA RFO 5 ILD-RADDL. This also serves as</Text>
+                            </View>
+                        ) : (
+                            <Text>This is to acknowledge the laboratory services availed by _________________________________________________________________ from DA RFO 5 ILD-RADDL. This also serves as</Text>
+                        )}
+
+                        <Text>authorization for _______________________________________________ to claim the test report for the requested analysis. </Text>
+                    </View>
+                    <View style={[styles.row, { width: '100%', justifyContent: 'center', }]}>
+                        <View style={[styles.normalFont, styles.row, { fontSize: 8 }]}>
+                            <Text>Entered with the request ID no. </Text>
+                            <Text style={[styles.boldFont, { borderBottomWidth: 0.5, width: '30%', paddingLeft: 13, fontSize: 8 }]}>{request.requestId}</Text>
+                            <Text>indicated in the analysis request form</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.row, { width: '100%', paddingLeft: 3, marginBottom: 5 }]}>
+                        <Text style={[styles.boldFont, { fontSize: 8 }]}>Claimed by:</Text>
+                    </View>
+                    <View style={[styles.row, { width: '100%', justifyContent: 'space-around' }]}>
+                        <View style={[styles.boldFont, { fontSize: 8, alignItems: 'center' }]}>
+                            <Text>____________________________________</Text>
+                            <Text>Signature over printed name</Text>
+                        </View>
+                        <View style={[styles.boldFont, { fontSize: 8, alignItems: 'center' }]}>
+                            <Text>____________________________________________</Text>
+                            <Text>Signature over printed name of authorized person</Text>
+                        </View>
+                        <View style={[styles.boldFont, { fontSize: 8, alignItems: 'center' }]}>
+                            <Text>______________________________</Text>
+                            <Text> Date and Time claimed</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.cellThree, { width: '100%' }]}>
+                        <View style={[styles.row, styles.boldFont, { justifyContent: 'center', fontSize: 8, borderTopWidth: 1 }]}>
+                            <Text>WAIVER/CONSENT FOR POSSIBLE DELAY ON THE ISSUANCE OF REPORT OF ANALYSIS</Text>
+                        </View>
+                        <View style={[styles.normalFont, { fontSize: 8, flexWrap: 'wrap', paddingHorizontal: 3 }]}>
+                            <Text>
+                                I (name) ______________________________ representative of (name of institution) ____________________________________, is willing to wait and consented the laboratory for the possible delay on the issuance of the Report of Analysis beyond the scheduled releasing date due to insufficient or lack of supplies, malfunction of equipment, {'\n'}power interruption and other uncontrollable event of circumstances.
+                            </Text>
+                        </View>
+                        <View style={[styles.boldFont, { alignItems: 'center', fontSize: 8, marginTop: 3 }]}>
+                            <Text>__________________________________________</Text>
+                            <Text>Signature over printed name</Text>
+                        </View>
+                    </View>
+
+                </View>
+            </Page>
+
+        )
+    }
+
+    return generatePdf()
+}
+
+export default Page3

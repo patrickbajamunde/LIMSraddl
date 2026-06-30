@@ -80,7 +80,7 @@ const Page2 = ({ request, }) => {
     }
 
     const generatePdf = () => {
-        if (!request) return;
+        if (!request || !request.data) return;
 
 
         const normalize = (str) => str?.trim().replace(/\s+/g, ' ') ?? '';
@@ -147,7 +147,7 @@ const Page2 = ({ request, }) => {
                                         <Text style={[{ fontSize: 10 }]}>1. Sample Labeling</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15 }]}>
-                                        <Text style={isChecked(sampleLabel[0], request.sampleLabel)} />
+                                        <Text style={isChecked(sampleLabel[0], request.data.sampleLabel)} />
                                         <Text>{sampleLabel[0]}</Text>
                                     </View>
                                     {/*------------------Quantity of Sample------------------- */}
@@ -156,8 +156,11 @@ const Page2 = ({ request, }) => {
                                     </View>
                                     {quantityOfSample.map((quantity, index) => (
                                         <View key={index} style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                            <Text style={isChecked(quantity, request.quantityOfSample)} />
+                                            <Text style={isChecked(quantity, request.data.quantityOfSample)} />
                                             <Text>{quantity}</Text>
+                                            {quantity === 'Others' && (
+                                                <Text style={[{ borderBottomWidth: 0.5, textAlign: 'center' }]}>{request.data.sampleQuantityOthers || ' '}</Text>
+                                            )}
                                         </View>
                                     ))}
                                     {/*------------------Proper preservation used for sample type------------------- */}
@@ -165,20 +168,21 @@ const Page2 = ({ request, }) => {
                                         <Text style={[{ fontSize: 10 }]}>3. Proper preservation used for sample type</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={isChecked(preservationUsed[0], request.preservationUsed)} />
+                                        <Text style={isChecked(preservationUsed[0], request.data.preservationUsed)} />
                                         <Text>{preservationUsed[0]}</Text>
                                     </View>
                                     <View style={[styles.row, { fontSize: 10, paddingLeft: 15, width: '81%', marginBottom: 3 }]}>
-                                        <Text style={[isChecked(preservationUsed[1], request.preservationUsed), { marginTop: 3 }]} />
+                                        <Text style={[isChecked(preservationUsed[1], request.data.preservationUsed), { marginTop: 3 }]} />
                                         <Text>{preservationUsed[1]}</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={isChecked(preservationUsed[2], request.preservationUsed)} />
+                                        <Text style={isChecked(preservationUsed[2], request.data.preservationUsed)} />
                                         <Text>{preservationUsed[2]}</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={isChecked(preservationUsed[3], request.preservationUsed)} />
+                                        <Text style={isChecked(preservationUsed[3], request.data.preservationUsed)} />
                                         <Text>{preservationUsed[3]}</Text>
+                                        <Text style={[{ borderBottomWidth: 0.5, textAlign: 'center' }]}>{request.data.preserveOthers || ' '}</Text>
                                     </View>
 
                                     {/*------------------Proper Transport------------------- */}
@@ -186,20 +190,21 @@ const Page2 = ({ request, }) => {
                                         <Text style={[{ fontSize: 10 }]}>4. Proper Transport</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={isChecked(transport[0], request.transport)} />
+                                        <Text style={isChecked(transport[0], request.data.transport)} />
                                         <Text>{transport[0]}</Text>
                                     </View>
                                     <View style={[styles.row, { fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={[isChecked(transport[1], request.transport), { marginTop: 3 }]} />
+                                        <Text style={[isChecked(transport[1], request.data.transport), { marginTop: 3 }]} />
                                         <Text>{transport[1]}</Text>
                                     </View>
                                     <View style={[styles.row, { fontSize: 10, paddingLeft: 15, width: '84%', marginBottom: 3 }]}>
-                                        <Text style={[isChecked(transport[2], request.transport), { marginTop: 3 }]} />
+                                        <Text style={[isChecked(transport[2], request.data.transport), { marginTop: 3 }]} />
                                         <Text>{transport[2]}</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={isChecked(transport[3], request.transport)} />
+                                        <Text style={isChecked(transport[3], request.data.transport)} />
                                         <Text>{transport[3]}</Text>
+                                        <Text style={[{ borderBottomWidth: 0.5, textAlign: 'center' }]}>{request.data.tranportOthers || ' '}</Text>
                                     </View>
 
                                     {/*------------------State of sample when it reached the laboratory------------------- */}
@@ -207,19 +212,19 @@ const Page2 = ({ request, }) => {
                                         <Text style={[{ fontSize: 10 }]}>5. State of sample when it reached the laboratory</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={isChecked(stateOfSample[0], request.stateOfSample)} />
+                                        <Text style={isChecked(stateOfSample[0], request.data.stateOfSample)} />
                                         <Text>{stateOfSample[0]}</Text>
                                     </View>
                                     <View style={[styles.row, { fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={[isChecked(stateOfSample[1], request.stateOfSample)]} />
+                                        <Text style={[isChecked(stateOfSample[1], request.data.stateOfSample)]} />
                                         <Text>{stateOfSample[1]}</Text>
                                     </View>
                                     <View style={[styles.row, { alignItems: 'center', fontSize: 10, paddingLeft: 15, marginBottom: 3 }]}>
-                                        <Text style={[isChecked(stateOfSample[2], request.stateOfSample)]} />
+                                        <Text style={[isChecked(stateOfSample[2], request.data.stateOfSample)]} />
                                         <Text>{stateOfSample[2]}</Text>
                                     </View>
                                     <View style={[styles.row, { fontSize: 10, paddingLeft: 15, width: '81%', marginBottom: 3 }]}>
-                                        <Text style={[isChecked(stateOfSample[3], request.stateOfSample), { marginTop: 3 }]} />
+                                        <Text style={[isChecked(stateOfSample[3], request.data.stateOfSample), { marginTop: 3 }]} />
                                         <Text>{stateOfSample[3]}</Text>
                                     </View>
                                 </View>
@@ -231,7 +236,7 @@ const Page2 = ({ request, }) => {
                                 <View style={[styles.cellFour, { width: '100%' }]}>
                                     {rejectionOfSamples.map((sample, index) => (
                                         <View style={[styles.row, { alignItems: 'center', paddingLeft: 15, fontSize: 10, marginBottom: 3 }]}>
-                                            <Text style={isChecked(sample, request.rejectionOfSamples)} />
+                                            <Text style={isChecked(sample, request.data.rejectionOfSamples)} />
                                             <Text>{sample}</Text>
                                         </View>
                                     ))}
@@ -245,21 +250,21 @@ const Page2 = ({ request, }) => {
                                     </View>
                                     {sampleStorage.map((sample, index) => (
                                         <View style={[styles.row, { alignItems: 'center', paddingLeft: 15 }]}>
-                                            <Text style={isChecked(sample, request.sampleStorage)} />
+                                            <Text style={isChecked(sample, request.data.sampleStorage)} />
                                             <Text>{sample}</Text>
                                         </View>
                                     ))}
                                     <View style={[styles.row, { paddingLeft: 3 }]}>
                                         <Text style={[{ fontSize: 10 }]}>2. Sample retention (days, months, years):</Text>
-                                        <Text>{request.sampleRetentionDate}</Text>
+                                        <Text>{request.data.sampleRetentionDate}</Text>
                                     </View>
                                     <View style={[styles.row, { paddingLeft: 3 }]}>
                                         <Text style={[{ fontSize: 10 }]}>3. Sample storage location:</Text>
-                                        <Text style={[{ fontSize: 10 }]}>{request.sampleStorageLocation}</Text>
+                                        <Text style={[{ fontSize: 10 }]}>{request.data.sampleStorageLocation}</Text>
                                     </View>
                                     <View style={[styles.row, { paddingLeft: 3 }]}>
                                         <Text style={[{ fontSize: 10 }]}> Sample disposal date:</Text>
-                                        <Text style={[{ fontSize: 10 }]}>{formatDate(request.sampleDisposalDate)}</Text>
+                                        <Text style={[{ fontSize: 10 }]}>{formatDate(request.data.sampleDisposalDate)}</Text>
                                     </View>
                                 </View>
                             </View>

@@ -8,7 +8,7 @@ const activitiesSchema = new mongoose.Schema({
 
     fileType: {
         type: String,
-        enum: ['Arf', 'ROA']
+        enum: ['ARF', 'ROA', 'Rabies']
     },
 
     itemId: {

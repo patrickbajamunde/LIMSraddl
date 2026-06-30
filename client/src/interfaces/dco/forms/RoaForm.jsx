@@ -3,7 +3,6 @@ import './styles/arf.css'
 import axios from 'axios';
 import { useState } from 'react';
 import { RoaModal } from '../components/modal/Modal';
-import { PhysicalModal } from '../components/modal/PhysicalModal';
 import QRCode from 'qrcode';
 
 
@@ -14,111 +13,13 @@ function RoaForm() {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0')
 
-    const rfcal = 'RSL'
+    const raddl = 'RADDL'
     const roa = 'ROA';
 
     const numberSeries = '0000';
-    return `${year}-${month}-${rfcal}-${roa}-${numberSeries}`
+    return `${year}-${month}-${raddl}-${roa}-${numberSeries}`
   }
 
-  const interpretationPreset = {
-        'water': {
-            parameter1: '',
-            parameter2: '',
-            parameter3: '',
-            parameter4: '',
-            data1: '',
-            data2: '',
-            data3: '',
-            data4: '',
-            data5: '',
-            data6: '',
-            data7: '',
-            data8: '',
-            data9: '',
-            data10: '',
-            data11: '',
-            data12: '',
-            data13: '',
-            data14: '',
-            data15: '',
-            data16: '',
-            data17: '',
-            data18: '',
-        },
-        'rice and corn': {
-            parameter1: 'pH or soil reaction:',
-            parameter2: 'Nitrogen(N):',
-            parameter3: 'Phosphorus(P):',
-            parameter4: 'Potassium(K):',
-            data1: 'Intensely acidic       =   < 5.0',
-            data2: 'L =  Low                           =     0-2 %OM',
-            data3: 'L = Low                           =     0-2 ppm',
-            data4: 'D = Deficient    ',
-            data5: 'Moderately acidic  =  5.1– 5.5',
-            data6: 'ML = Moderately Low  =    2.1 – 3.5 %OM',
-            data7: 'ML = Moderately Low  =   2.1-6 ppm',
-            data8: 'Slightly acidic          =  5.6 –  6.5',
-            data9: 'MH =  Moderately High = 3.6-4.5 %OM  ',
-            data10: 'MH =  Moderately High =   6.1-10 ppm',
-            data11: 'S = Sufficient    ',
-            data12: 'Neutral                     =  6.6 – 7.0',
-            data13: 'H = High                            =   4.6-5.5 %OM',
-            data14: 'H = High                            =  10.1-15 ppm',
-            data15: 'Slightly alkaline       =  7.1 – 8.0',
-            data16: 'VH = Very High                =   >5.5 %OM',
-            data17: 'VH = Very High              =   15.1->20 ppm',
-            data18: '',
-        },
-        'high value': {
-            parameter1: 'pH or soil reaction:',
-            parameter2: 'Nitrogen(N):',
-            parameter3: 'Phosphorus(P):',
-            parameter4: 'Potassium(K):',
-            data1: 'Intensely acidic       =   < 5.0',
-            data2: 'L =  Low                           =     0-2 %OM',
-            data3: 'L = Low                           =     0-6 ppm',
-            data4: 'D = Deficient    ',
-            data5: 'Moderately acidic  =  5.1– 5.5',
-            data6: 'ML = Moderately Low  =    2.1 – 3.5 %OM',
-            data7: 'ML = Moderately Low  =   7-10 ppm',
-            data8: 'Slightly acidic          =  5.6 –  6.5',
-            data9: 'H =  High                         = 3.6-4.5 %OM',
-            data10: 'MH =  Moderately High =   11-15 ppm',
-            data11: 'S = Sufficient    ',
-            data12: 'Neutral                     =  6.6 – 7.0',
-            data13: 'VH = Very High                =   >4.5 %OM ',
-            data14: 'H = High                            =  16-20 ppm ',
-            data15: 'Slightly alkaline       =  7.1 – 8.0',
-            data16: '',
-            data17: 'VH = Very High                =   >20 ppm',
-            data18: '',
-        },
-        'regular soil': {
-            parameter1: 'pH or soil reaction:',
-            parameter2: 'Nitrogen(N):',
-            parameter3: 'Phosphorus(P):',
-            parameter4: 'Potassium(K):',
-            data1: 'Intensely acidic       =   < 5.0',
-            data2: 'L = Low          = <2.0 % OM',
-            data3: 'L = Low           = <10 ppm',
-            data4: 'D = Deficient    = < 75 ppm',
-            data5: 'Moderately acidic  =  5.1– 5.5',
-            data6: 'M = Medium = 2.1-4.5 % OM',
-            data7: 'M = Medium = 10-20 ppm',
-            data8: 'Slightly acidic          =  5.6 –  6.5',
-            data9: 'H = High         = >4.5 % OM',
-            data10: 'H = High         = >20 ppm',
-            data11: 'S = Sufficient    = > 75 ppm',
-            data12: 'Neutral                     =  6.6 – 7.0',
-            data13: '',
-            data14: '',
-            data15: 'Slightly alkaline       =  7.1 – 8.0',
-            data16: '',
-            data17: '',
-            data18: '',
-        }
-    }
 
   const report = {
     customerName: "",
@@ -133,26 +34,11 @@ function RoaForm() {
     sampleSource: "",
     url: '',
     qrCode: '',
-    method: {
-      method1: '',
-      method2: '',
-      method3: '',
-      method4: '',
-      method5: '',
-      method6: '',
-    },
-    physicalMethod: {
-      physical1: '',
-      physical2: '',
-      physical3: '',
-      physical4: '',
-      physical5: '',
-      physical6: ''
-    },
-
-    interpretation: interpretationPreset['regular soil'],
-    PhysMethodSelected: '',
-    ChemSelectedMethod: '',
+    purpose: '',
+    dateCollected: '',
+    labCode: '',
+    testMethod: '',
+    sampleType: '',
   }
 
 
@@ -170,115 +56,45 @@ function RoaForm() {
     const DesignationTable = {
       "MARYFRANIE I. BELANO, RChT": "Laboratory Analyst",
       "KRIZZA ASHLEY V. BALOLOY, RChT": "Laboratory Analyst",
-      "JENNIS A. RABLANDO, RChT": "Laboratory Analyst"
+      "JENNIS A. RABLANDO, RChT": "Laboratory Analyst",
+      "JULIE ANN C. SIARES": "Laboratory Analyst",
+      "MA. CRISSA F. JARANILLA": "Laboratory Analyst",
+      "CARL VINCENT DC. SARGENTO": "Laboratory Analyst",
+      "MA. CRISTINA V. CANON": "Laboratory Analyst",
+      "MARIAH NICKOLE T. GARCIA": "Laboratory Analyst",
+      "QUENNIE MAE M. BELANO": "Laboratory Analyst",
+      "QUELLY JEAN O. CAÑON": "Laboratory Analyst"
     }
     return DesignationTable[analyzedBy] || "";
   }
 
-  const ParameterName = (method) => {
-    const parameterTable = {
-      "pH|(1 Soil: 1 H2O)": "pH - Potentiometric Method",
-      "EC|(mS/cm)": "EC - Conductometric Method",
-      "%OM": "OM/N - Walkley-Black Method",
-      "%N": "OM/N - Walkley-Black Method",
-      "P|(ppm)": "P - Olsen P Method",
-      "N|(STK)": "N - STK Method",
-      "P|(STK)": "P - STK Method",
-      "K|(STK)": "K - STK Method",
-      "NO3-N|(ppm)": "NO3-N - Kjeldahl Method",
-      "PO4|(ppm)": "PO4 - Vanadomolybdate Method",
-      "%MC": "MC - Gravimetric Method",
-      "Cu|(ppm)": "DTPA Method using AAS",
-      "Zn|(ppm)": "DTPA Method using AAS",
-      "Fe|(ppm)": "DTPA Method using AAS",
-      "Mn|(ppm)": "DTPA Method using AAS",
-      "%WHC": "WHC - Tapping Method",
-      "%SAND" : "TEXTURE - Hydrometer Method",
-      "%SILT" : "TEXTURE - Hydrometer Method",
-      "%CLAY" : "TEXTURE - Hydrometer Method",
-    }
-    return parameterTable[method] || "";
-  }
+  const openEditModal = (index) => {
+    const reportToEdit = roaReport[index];
+    setReportDetails({
+      itemNo: reportToEdit.itemNo,
+      sampleNo: reportToEdit.sampleNo,
+      fieldSampleID: reportToEdit.fieldSampleID,
+      address: reportToEdit.address,
+      species: reportToEdit.species,
+      age: reportToEdit.age,
+      sex: reportToEdit.sex,
+      result: reportToEdit.result
+    });
+    setEditingIndex(index);
+    setIsEditing(true);
+    setShowModal(true)
+  };
 
-  const methodName = (testMethod) => {
-    const methodTable = {
-      'NPK - STK Method': 'NPK - STK Method',
-      'DTPA Method using AAS': 'DTPA Method using AAS',
-      'pH, EC, OM, NPK': 'pH - Potentiometric Method, EC - Conductometric Method, OM/N - Walkley-Black Method, P - Olsen P Method, K - STK Method',
-      'Water Analysis': 'NO3-N - Kjeldahl Method, PO4 - Vanadomolybdate Method',
-      'TEXTURE': 'TEXTURE - Hydrometer Method',
-      '%MC, %WHC, TEXTURE': 'MC - Gravimetric Method, WHC - Tapping Method, TEXTURE - Hydrometer Method' 
-    }
-
-    return methodTable[testMethod] || "";
-  }
-
-  const methodGroup = {
-    '': {
-      method1: '',
-      method2: '',
-      method3: '',
-      method4: '',
-      method5: '',
-      method6: ''
-    },
-    'NPK - STK Method': {
-      method1: 'pH|(1 Soil: 1 H2O)',
-      method2: 'N|(STK)',
-      method3: 'P|(STK)',
-      method4: 'K|(STK)',
-      method5: '',
-      method6: ''
-    },
-    'DTPA Method using AAS': {
-      method1: 'Cu|(ppm)',
-      method2: 'Zn|(ppm)',
-      method3: 'Fe|(ppm)',
-      method4: 'Mn|(ppm)',
-      method5: '',
-      method6: '',
-    },
-    'pH, EC, OM, NPK': {
-      method1: 'pH|(1 Soil: 1 H2O)',
-      method2: 'EC|(mS/cm)',
-      method3: '%OM',
-      method4: '%N',
-      method5: 'P|(ppm)',
-      method6: 'K|(STK)'
-    },
-    '': {
-      physical1: '',
-      physical2: '',
-      physical3: '',
-      physical4: '',
-      physical5: '',
-      physical6: ''
-    }, 
-    'Water Analysis': {
-      method1: 'NO3-N|(ppm)',
-      method2: 'PO4|(ppm)',
-      method3: '',
-      method4: '',
-      method5: '',
-      method6: ''
-    },
-    'TEXTURE': {
-      physical1: '%SAND',
-      physical2: '%SILT',
-      physical3: '%CLAY',
-      physical4: 'CLASSIFICATION',
-      physical5: '',
-      physical6: ''
-    },
-    '%MC, %WHC, TEXTURE':{
-      physical1: '%MC',
-      physical2: '%WHC',
-      physical3: '%SAND',
-      physical4: '%SILT',
-      physical5: '%CLAY',
-      physical6: 'CLASSIFICATION'
+  const deleteEntry = (index) => {
+    if (window.confirm("Are you sure you want to delete this report?")) {
+      const updatedReport = roaReport.filter((_, i) => i !== index);
+      setRoaReport(updatedReport);
     }
   }
+
+
+
+
 
 
   const [result, setResult] = useState(report);
@@ -289,61 +105,34 @@ function RoaForm() {
 
   //modal setState
   const [showModal, setShowModal] = useState(false)
-  const [physicalModal, setPhysicalModal] = useState(false)
 
-  const [roaReport, setRoaReport] = useState([]) //holds sample details in an array
-  const [physicalReport, setPhysicalReport] = useState([])
-
+  const [roaReport, setRoaReport] = useState([]) //holds sample details in an array & number of entries
   const [reportDetails, setReportDetails] = useState({
-    labCode: '',
-    customerCode: '',
-    sampleDescription: '',
-    results: {
-      method1Results: ''
-    },
-    testMethod: ''
+    sampleNo: '',
+    fieldSampleID: '',
+    address: '',
+    species: '',
+    age: '',
+    sex: '',
+    result: ''
   });// state of report details before change in the modal
 
-  const [physicalDetails, setPhysicalDetails] = useState({
-    labCode: '',
-    customerCode: '',
-    sampleDescription: '',
-    results: {
-      physc1Result: ''
-    },
-    testMethod: ''
-  })
-
-  const [interpretationType, setInterpretationType] = useState('regular soil');
-  const [ChemMethodSets, SetChemMethodSets] = useState('')
-  const [PhysMethodSets, SetPhysMethodSets] = useState('')
 
 
-  const handleMethodSets = (e) => {
-    const newType = e.target.value;
-    SetChemMethodSets(newType);
-    setResult({
-      ...result,
-      method: methodGroup[newType]
-    })
-  }
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [counter, setCounter] = useState(1);
 
-  const handlePhysMethodSets = (e) => {
-    const newType = e.target.value;
-    SetPhysMethodSets(newType);
-    setResult({
-      ...result,
-      physicalMethod: methodGroup[newType]
-    })
-  }
 
-  const handleInterpretationTypeChange = (e) => {
-    const newType = e.target.value;
-    setInterpretationType(newType);  // Only for UI state
-    setResult({
-      ...result,
-      interpretation: interpretationPreset[newType]  // Only send interpretation data
-    });
+  const entryGenerator = () => {
+    const num = parseInt(counter);
+    if (!num || num < 1) return;
+
+    const newEntries = Array(num).fill(null).map((_, index) => ({
+      itemNo: roaReport.length + index + 1,
+    }));
+
+    setRoaReport([...roaReport, ...newEntries]);
   };
 
   const qrGenerator = async (url) => {
@@ -370,21 +159,17 @@ function RoaForm() {
   const inputHandler = (e) => {
     const { name, value, dataset } = e.target;
     if (name === 'analyzedBy') {
-      const prc = analystPRC(value);
       const position = designation(value);
       setResult({
         ...result,
         [name]: value,
-        analystPRC: prc,
         position: position,
       });
     } else if (name === 'analyzedBy2') {
-      const prc = analystPRC(value);
       const position = designation(value);
       setResult({
         ...result,
         [name]: value,
-        analystPRC2: prc,
         position2: position,
       });
     } else if (name === 'datePerformedFrom') {
@@ -406,22 +191,12 @@ function RoaForm() {
       if (value.trim() !== '') {
         qrGenerator(value);  // Generate QR code when URL is entered
       }
-    } else if (name === 'PhysMethodSelected' ) {
-      const method = methodGroup[value];
-      setResult({
-        ...result,
-        [name]: value,
-        physicalMethod: method
-      });
-    } else if ( name === 'ChemSelectedMethod' ) {
-      const method = methodGroup[value];
-      setResult({
-        ...result,
-        [name]: value,
-        method: method
-      })
-    }
-    else {
+    } else if (dataset.array && dataset.index !== undefined) {
+      const idx = parseInt(dataset.index);
+      setRoaReport(prev =>
+        prev.map((item, i) => i === idx ? { ...item, [name]: value } : item)
+      );
+    } else {
       setResult({ ...result, [name]: value });
     }
   }
@@ -481,57 +256,51 @@ function RoaForm() {
     }
   }
 
-  const physicalInputHandler = (name, value, parent) => {
-    if (parent) {
-      setPhysicalDetails(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent],
-          [name]: value
-        }
-      }));
-    } else {
-      setPhysicalDetails(prev => ({ ...prev, [name]: value }))
-    }
-  }
 
   const reportSubmit = (e) => {
-    setRoaReport([...roaReport, reportDetails,]);
-    setReportDetails({
-      labCode: '',
-      customerCode: '',
-      sampleDescription: '',
-      results: {
-        method1Results: ''
-      },
-      testMethod: ''
-    });
-    setShowModal(false);
-  }
+    e.preventDefault();
 
-  const physicalResultHandler = (e) => {
-    setPhysicalReport([...physicalReport, physicalDetails])
-    setPhysicalDetails({
-      labCode: '',
-      customerCode: '',
-      sampleDescription: '',
-      results: {
-        physc1Result: ''
-      },
-      testMethod: ''
-    })
-    setPhysicalModal(false)
-  }
+    if (isEditing && editingIndex !== null) {
+      // ✅ Replace the existing entry instead of appending
+      const updatedReport = roaReport.map((item, i) =>
+        i === editingIndex ? reportDetails : item
+      );
+      setRoaReport(updatedReport);
+    } else {
+      // ✅ Generate entries based on counter, then append
+      // '_' is a placeholder for unused variable
+      const newEntries = Array(parseInt(counter)).fill(null).map((_, index) => ({
+        ...reportDetails,
+        itemNo: roaReport.length + index + 1,
+        sampleNo: parseInt(reportDetails.sampleNo) + index,
+      }));
+      setRoaReport([...roaReport, ...newEntries]);
+    }
+
+    setReportDetails({
+      sampleNo: '',
+      fieldSampleID: '',
+      address: '',
+      species: '',
+      age: '',
+      sex: '',
+      result: ''
+    });
+
+    setShowModal(false);
+    setIsEditing(false);
+    setEditingIndex(null);
+  };
+
 
   const submitForm = async (e) => {
     e.preventDefault();
-    const form = { ...result, roaDetails: roaReport, physicalDetails: physicalReport };
+    const form = { ...result, roaDetails: roaReport };
     await axios.post("http://localhost:8003/api/report/newReport", form, {
       withCredentials: true,
     })
       .then((response) => {
         setRoaReport([])
-        setPhysicalReport([])
         setResult({
           customerName: "",
           customerAddress: "",
@@ -541,51 +310,14 @@ function RoaForm() {
           dateIssued: "",
           reportId: "",
           analyzedBy: "",
-          analyzedBy2: "",
           sampleSource: "",
           url: '',
           qrCode: '',
-          method: {
-            method1: '',
-            method2: '',
-            method3: '',
-            method4: '',
-            method5: '',
-            method6: '',
-          },
-          physicalMethod: {
-            physical1: '',
-            physical2: '',
-            physical3: '',
-            physical4: '',
-            physical5: '',
-            physical6: ''
-          },
-          interpretation: {
-            parameter1: '',
-            parameter2: '',
-            parameter3: '',
-            parameter4: '',
-            data1: '',
-            data2: '',
-            data3: '',
-            data4: '',
-            data5: '',
-            data6: '',
-            data7: '',
-            data8: '',
-            data9: '',
-            data10: '',
-            data11: '',
-            data12: '',
-            data13: '',
-            data14: '',
-            data15: '',
-            data16: '',
-            data17: '',
-            data18: '',
-          },
-
+          purpose: '',
+          dateCollected: '',
+          labCode: '',
+          testMethod: '',
+          sampleType: '',
         })
         console.log("Report created successfully.")
       })
@@ -611,6 +343,7 @@ function RoaForm() {
               <label className='form-label'>G-drive Folder URL:</label>
               <input type="text" className="form-control border-dark" name='url' onChange={inputHandler} value={result.url} placeholder="Enter link here" />
             </div>
+
             <div className='card p-4 mb-3 shadow-sm border'>
               <h5 className='mb-4 text-primary fw-bold'>Report Details</h5>
               <div className='row g-4'>
@@ -623,9 +356,13 @@ function RoaForm() {
                   <label className='form-label'>Analyzed By: </label>
                   <select className='form-select border-dark' name='analyzedBy' onChange={inputHandler} value={result.analyzedBy}>
                     <option defaultValue="Choose...">Choose...</option>
-                    <option value="MARYFRANIE I. BELANO, RChT">Maryfranie I. Belano</option>
-                    <option value="KRIZZA ASHLEY V. BALOLOY, RChT">Krizza Ashley V. Baloloy</option>
-                    <option value="JENNIS A. RABLANDO, RChT">Jennis A. Reblando</option>
+                    <option value="JULIE ANN C. SIARES">JULIE ANN C. SIARES</option>
+                    <option value="MA. CRISSA F. JARANILLA">MA. CRISSA F. JARANILLA</option>
+                    <option value="CARL VINCENT DC. SARGENTO">CARL VINCENT DC. SARGENTO</option>
+                    <option value="MA. CRISTINA V. CANON">MA. CRISTINA V. CANON</option>
+                    <option value="MARIAH NICKOLE T. GARCIA">MARIAH NICKOLE T. GARCIA</option>
+                    <option value="QUENNIE MAE M. BELANO">QUENNIE MAE M. BELANO</option>
+                    <option value="QUELLY JEAN O. CAÑON">QUELLY JEAN O. CAÑON</option>
                   </select>
                 </div>
 
@@ -637,9 +374,13 @@ function RoaForm() {
                   <label className='form-label'>Analyzed By: </label>
                   <select className='form-select border-dark' name='analyzedBy2' onChange={inputHandler} value={result.analyzedBy2}>
                     <option defaultValue="Choose...">Choose...</option>
-                    <option value="MARYFRANIE I. BELANO, RChT">Maryfranie I. Belano</option>
-                    <option value="KRIZZA ASHLEY V. BALOLOY, RChT">Krizza Ashley V. Baloloy</option>
-                    <option value="JENNIS A. RABLANDO, RChT">Jennis A. Reblando</option>
+                    <option value="JULIE ANN C. SIARES">JULIE ANN C. SIARES</option>
+                    <option value="MA. CRISSA F. JARANILLA">MA. CRISSA F. JARANILLA</option>
+                    <option value="CARL VINCENT DC. SARGENTO">CARL VINCENT DC. SARGENTO</option>
+                    <option value="MA. CRISTINA V. CANON">MA. CRISTINA V. CANON</option>
+                    <option value="MARIAH NICKOLE T. GARCIA">MARIAH NICKOLE T. GARCIA</option>
+                    <option value="QUENNIE MAE M. BELANO">QUENNIE MAE M. BELANO</option>
+                    <option value="QUELLY JEAN O. CAÑON">QUELLY JEAN O. CAÑON</option>
                   </select>
                 </div>
 
@@ -674,7 +415,6 @@ function RoaForm() {
                               name="datePerformedFrom"
                               onChange={inputHandler}
                               value={dateFrom}
-
                             />
                           </div>
                         </div>
@@ -692,7 +432,6 @@ function RoaForm() {
                               name="datePerformedTo"
                               onChange={inputHandler}
                               value={dateTo}
-
                             />
                           </div>
                         </div>
@@ -704,6 +443,15 @@ function RoaForm() {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="col-md-6 ">
+                  <label className='form-label '>Purpose: </label>
+                  <input type="text" className="date form-control border-dark" name='purpose' onChange={inputHandler} value={result.purpose} placeholder="" />
+                </div>
+                <div className="col-md-6">
+                  <label className='form-label '>Date of Collection: </label>
+                  <input type="date" className="date form-control border-dark" name='dateCollected' onChange={inputHandler} value={result.dateCollected} placeholder="" />
                 </div>
               </div>
             </div>
@@ -730,11 +478,6 @@ function RoaForm() {
                   <label className='form-label'>Address:</label>
                   <input type="text" className="date form-control border-dark" name='customerAddress' onChange={inputHandler} value={result.customerAddress} placeholder="Street, Barangay, City" />
                 </div>
-
-                <div className='col-md-6'>
-                  <label className='form-label'>Sample Source:</label>
-                  <input type="text" className="date form-control border-dark" name='sampleSource' onChange={inputHandler} value={result.sampleSource} placeholder="Street, Barangay, City" />
-                </div>
               </div>
             </div>
 
@@ -743,171 +486,26 @@ function RoaForm() {
 
             {/*Chemical Analysis Result*/}
             <div className='card p-4 mb-3 mt-3 shadow-sm border'>
-              <h5 className='mb-4 text-primary fw-bold'>Chemical Analysis Result</h5>
-
-              <div className='row g-4 mb-3'>
-                <div className='col-md-2'>
-                  <label className='form-label'>Test Method</label>
-                  <select className='form-select border-dark' name='ChemSelectedMethod' value={result.ChemSelectedMethod} onChange={inputHandler}>
-                    <option value="">Choose...</option>
-                    <option value="NPK - STK Method">NPK - STK Method</option>
-                    <option value="DTPA Method using AAS">DTPA Method using AAS</option>
-                    <option value="pH, EC, OM, NPK">pH, EC, OM, NPK</option>
-                    <option value="Water Analysis">Water Analysis</option>
-                  </select>
-                </div>
-              </div>
+              <h5 className='mb-4 text-primary fw-bold'>Analysis Result</h5>
 
               <div className='row g-4'>
-
-                <div className='col-md-2'>
-                  <label className='form-label'>First Parameter</label>
-                  <select className='form-select border-dark' name='method1' data-parent='method' onChange={inputHandler}
-                    value={result.method.method1}>
-                    <option value="">Choose...</option>
-                    <option value="pH|(1 Soil: 1 H2O)">pH (1 Soil: 1 H2O)</option>
-                    <option value="EC|(mS/cm)">EC (mS/cm)</option>
-                    <option value="%OM">%OM</option>
-                    <option value="%N">%N</option>
-                    <option value="P|(ppm)">P (ppm)</option>
-                    <option value="N|(STK)">N (STK)</option>
-                    <option value="P|(STK)">P (STK)</option>
-                    <option value="K|(STK)">K (STK)</option>
-                    <option value="NO3-N|(ppm)">NO3-N (ppm)</option>
-                    <option value="PO4|(ppm)">PO4 (ppm)</option>
-                    <option value="%MC">%MC</option>
-                    <option value="Cu|(ppm)">Cu (ppm)</option>
-                    <option value="Zn|(ppm)">Zn (ppm)</option>
-                    <option value="Fe|(ppm)">Fe (ppm)</option>
-                    <option value="Mn|(ppm)">Mn (ppm)</option>
-                  </select>
+                <div className='col-md-6'>
+                  <label className='form-label'>Laboratory Code</label>
+                  <input type='text' className='form-control border-dark' name='labCode' value={result.labCode} onChange={inputHandler} />
                 </div>
 
-                {result.method.method1.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Second Parameter</label>
-                    <select className='form-select border-dark' name='method2' data-parent='method' onChange={inputHandler}
-                      value={result.method.method2}>
-                      <option value="">Choose...</option>
-                      <option value="pH|(1 Soil: 1 H2O)">pH (1 Soil: 1 H2O)</option>
-                      <option value="EC|(mS/cm)">EC (mS/cm)</option>
-                      <option value="%OM">%OM</option>
-                      <option value="%N">%N</option>
-                      <option value="P|(ppm)">P (ppm)</option>
-                      <option value="N|(STK)">N (STK)</option>
-                      <option value="P|(STK)">P (STK)</option>
-                      <option value="K|(STK)">K (STK)</option>
-                      <option value="NO3-N|(ppm)">NO3-N (ppm)</option>
-                      <option value="PO4|(ppm)">PO4 (ppm)</option>
-                      <option value="%MC">%MC</option>
-                      <option value="Cu|(ppm)">Cu (ppm)</option>
-                      <option value="Zn|(ppm)">Zn (ppm)</option>
-                      <option value="Fe|(ppm)">Fe (ppm)</option>
-                      <option value="Mn|(ppm)">Mn (ppm)</option>
-                    </select>
-                  </div>
-                )}
+                <div className='col-md-6'>
+                  <label className='form-label'>Test Method</label>
+                  <input type='text' className='form-control border-dark' name='testMethod' value={result.testMethod} onChange={inputHandler} />
+                </div>
 
-                {result.method.method2.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Third Parameter</label>
-                    <select className='form-select border-dark' name='method3' data-parent='method' onChange={inputHandler}
-                      value={result.method.method3}>
-                      <option value="">Choose...</option>
-                      <option value="pH|(1 Soil: 1 H2O)">pH (1 Soil: 1 H2O)</option>
-                      <option value="EC|(mS/cm)">EC (mS/cm)</option>
-                      <option value="%OM">%OM</option>
-                      <option value="%N">%N</option>
-                      <option value="P|(ppm)">P (ppm)</option>
-                      <option value="N|(STK)">N (STK)</option>
-                      <option value="P|(STK)">P (STK)</option>
-                      <option value="K|(STK)">K (STK)</option>
-                      <option value="NO3-N|(ppm)">NO3-N (ppm)</option>
-                      <option value="PO4|(ppm)">PO4 (ppm)</option>
-                      <option value="%MC">%MC</option>
-                      <option value="Cu|(ppm)">Cu (ppm)</option>
-                      <option value="Zn|(ppm)">Zn (ppm)</option>
-                      <option value="Fe|(ppm)">Fe (ppm)</option>
-                      <option value="Mn|(ppm)">Mn (ppm)</option>
-                    </select>
-                  </div>
-                )}
-
-                {result.method.method3.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Fourth Parameter</label>
-                    <select className='form-select border-dark' name='method4' data-parent='method' onChange={inputHandler}
-                      value={result.method.method4}>
-                      <option value="">Choose...</option>
-                      <option value="pH|(1 Soil: 1 H2O)">pH (1 Soil: 1 H2O)</option>
-                      <option value="EC|(mS/cm)">EC (mS/cm)</option>
-                      <option value="%OM">%OM</option>
-                      <option value="%N">%N</option>
-                      <option value="P|(ppm)">P (ppm)</option>
-                      <option value="N|(STK)">N (STK)</option>
-                      <option value="P|(STK)">P (STK)</option>
-                      <option value="K|(STK)">K (STK)</option>
-                      <option value="NO3-N|(ppm)">NO3-N (ppm)</option>
-                      <option value="PO4|(ppm)">PO4 (ppm)</option>
-                      <option value="%MC">%MC</option>
-                      <option value="Cu|(ppm)">Cu (ppm)</option>
-                      <option value="Zn|(ppm)">Zn (ppm)</option>
-                      <option value="Fe|(ppm)">Fe (ppm)</option>
-                      <option value="Mn|(ppm)">Mn (ppm)</option>
-                    </select>
-                  </div>
-                )}
-
-
-                {result.method.method4.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Fifth Parameter</label>
-                    <select className='form-select border-dark' name='method5' data-parent='method' onChange={inputHandler}
-                      value={result.method.method5}>
-                      <option value="">Choose...</option>
-                      <option value="pH|(1 Soil: 1 H2O)">pH (1 Soil: 1 H2O)</option>
-                      <option value="EC|(mS/cm)">EC (mS/cm)</option>
-                      <option value="%OM">%OM</option>
-                      <option value="%N">%N</option>
-                      <option value="P|(ppm)">P (ppm)</option>
-                      <option value="N|(STK)">N (STK)</option>
-                      <option value="P|(STK)">P (STK)</option>
-                      <option value="K|(STK)">K (STK)</option>
-                      <option value="NO3-N|(ppm)">NO3-N (ppm)</option>
-                      <option value="PO4|(ppm)">PO4 (ppm)</option>
-                      <option value="%MC">%MC</option>
-                      <option value="Cu|(ppm)">Cu (ppm)</option>
-                      <option value="Zn|(ppm)">Zn (ppm)</option>
-                      <option value="Fe|(ppm)">Fe (ppm)</option>
-                      <option value="Mn|(ppm)">Mn (ppm)</option>
-                    </select>
-                  </div>
-                )}
-                {result.method.method5.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Sixth Parameter</label>
-                    <select className='form-select border-dark' name='method6' data-parent='method' onChange={inputHandler}
-                      value={result.method.method6}>
-                      <option value="">Choose...</option>
-                      <option value="pH|(1 Soil: 1 H2O)">pH (1 Soil: 1 H2O)</option>
-                      <option value="EC|(mS/cm)">EC (mS/cm)</option>
-                      <option value="%OM">%OM</option>
-                      <option value="%N">%N</option>
-                      <option value="P|(ppm)">P (ppm)</option>
-                      <option value="N|(STK)">N (STK)</option>
-                      <option value="P|(STK)">P (STK)</option>
-                      <option value="K|(STK)">K (STK)</option>
-                      <option value="NO3-N|(ppm)">NO3-N (ppm)</option>
-                      <option value="PO4|(ppm)">PO4 (ppm)</option>
-                      <option value="%MC">%MC</option>
-                      <option value="Cu|(ppm)">Cu (ppm)</option>
-                      <option value="Zn|(ppm)">Zn (ppm)</option>
-                      <option value="Fe|(ppm)">Fe (ppm)</option>
-                      <option value="Mn|(ppm)">Mn (ppm)</option>
-                    </select>
-                  </div>
-                )}
+                <div className='col-md-6'>
+                  <label className='form-label'>Sample Type</label>
+                  <input type='text' className='form-control border-dark' name='sampleType' value={result.sampleType} onChange={inputHandler} />
+                </div>
               </div>
+
+
 
 
               <div className='d-flex mt-3'>
@@ -915,27 +513,12 @@ function RoaForm() {
                   type="button"
                   className="btn btn-primary"
                   onClick={() => {
-
-                    const testMethod = methodName(result.ChemSelectedMethod)
-
-                    const methodsArray = [
-                      result.method.method1,
-                      result.method.method2,
-                      result.method.method3,
-                      result.method.method4,
-                      result.method.method5,
-                      result.method.method6
-                    ].filter(method => method && method.trim() !== '');
-
-                    // Map each method to its full name, then join
-                    const selectedMethods = methodsArray
-                      .map(method => ParameterName(method))
-                      .join(', ');
-
-                    setReportDetails({
-                      ...reportDetails,
-                      testMethod: testMethod || selectedMethods,
-                    });
+                    if (!isEditing) {
+                      setReportDetails({
+                        ...reportDetails,
+                        itemNo: roaReport.length + 1
+                      });
+                    }
                     setShowModal(true);
                   }}>
                   <i className="bi bi-plus-lg me-2 fs-6"></i>Add Sample Details
@@ -948,225 +531,49 @@ function RoaForm() {
                   <table className="table table-bordered border-dark ">
                     <thead className="table-primary border-dark">
                       <tr className='text-center'>
-                        <th rowSpan="4">CUSTOMER CODE</th>
-                        <th rowSpan="2">LAB CODE</th>
-                        <th rowSpan="2">SAMPLE DESCRIPTION</th>
-                        <th colSpan="6">CHEMICAL ANALYSIS RESULT</th>
-                        <th rowSpan="2">TEST METHOD</th>
+                        <th>ITEM NO.</th>
+                        <th>SAMPLE NO.</th>
+                        <th>FIELD SAMPLE ID</th>
+                        <th>NAME OF OWNER</th>
+                        <th>ADDRESS</th>
+                        <th>SPECIES</th>
+                        <th>AGE</th>
+                        <th>SEX</th>
+                        <th>RESULT</th>
+                        <th>ACTION</th>
                       </tr>
-                      <tr className='text-center'>
-                        <th>{result.method.method1.replace('|', '\n')}</th>
-                        <th>{result.method.method2.replace('|', '\n')}</th>
-                        <th>{result.method.method3.replace('|', '\n')}</th>
-                        <th>{result.method.method4.replace('|', '\n')}</th>
-                        <th>{result.method.method5.replace('|', '\n')}</th>
-                        <th>{result.method.method6.replace('|', '\n')}</th>
-                      </tr>
+
                     </thead>
                     <tbody>
                       {roaReport.length > 0 ? (
                         roaReport.map((reportItem, index) => (
                           <tr key={index}>
-                            <td>{reportItem.customerCode}</td>
-                            <td>{reportItem.labCode}</td>
-                            <td>{reportItem.sampleDescription}</td>
-                            <td className='text-center'>{reportItem.results.method1Results || '-'}</td>
-                            <td className='text-center'>{reportItem.results.method2Results || '-'}</td>
-                            <td className='text-center'>{reportItem.results.method3Results || '-'}</td>
-                            <td className='text-center'>{reportItem.results.method4Results || '-'}</td>
-                            <td className='text-center'>{reportItem.results.method5Results || '-'}</td>
-                            <td className='text-center'>{reportItem.results.method6Results || '-'}</td>
-                            <td>{reportItem.testMethod}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td colSpan="10" className="text-center">No samples added yet.</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+                            <td>{reportItem.itemNo}</td>
+                            <td>{reportItem.sampleNo}</td>
+                            <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='fieldSampleID' data-index={index} data-array='roaReport' onChange={inputHandler} value={reportItem.fieldSampleID} /></td>
+                            <td>{reportItem.nameOfOwner}</td>
+                            <td>{reportItem.address}</td>
+                            <td>{reportItem.species}</td>
+                            <td>{reportItem.age}</td>
+                            <td>{reportItem.sex}</td>
+                            <td>{reportItem.result}</td>
+                            <td><button
+                              type='button'
+                              className='btn btn-sm btn-outline-primary me-2'
+                              onClick={() => openEditModal(index)}
+                              title="Edit Sample"
 
-            {/*BORDER*/}
-            <div className='container-fluid border border-secondary border-1 mt-3'></div>
+                            ><i className="bi bi-pencil"></i></button>
 
-            {/*Physical Analysis Result*/}
-            <div className='card p-4 mb-3 mt-3 shadow-sm border'>
-              <h5 className='mb-4 text-primary fw-bold'>Physical Analysis Result</h5>
-              <div className='row g-4 mb-3'>
-                <div className='col-md-2'>
-                  <label className='form-label'>Test Method</label>
-                  <select className='form-select border-dark' name='PhysMethodSelected' value={result.PhysMethodSelected} onChange={inputHandler}>
-                    <option value="">Choose...</option>
-                    <option value="TEXTURE">TEXTURE</option>
-                    <option value="%MC, %WHC, TEXTURE">%MC, %WHC, TEXTURE</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className='row g-4'>
-                <div className='col-md-2'>
-                  <label className='form-label'>First Parameter</label>
-                  <select type='text' className='date form-select border-dark' name='physical1' data-parent='physicalMethod' onChange={inputHandler} value={result.physicalMethod.physical1}>
-                    <option value="">Choose...</option>
-                    <option value="%MC">%MC</option>
-                    <option value="%WHC">%WHC</option>
-                    <option value="%SAND">%SAND</option>
-                    <option value="%SILT">%SILT</option>
-                    <option value="%CLAY">%CLAY</option>
-                    <option value="CLASSIFICATION">CLASSIFICATION</option>
-
-                  </select>
-                </div>
-
-                {result.physicalMethod?.physical1?.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Second Parameter</label>
-                    <select type='text' className='date form-select border-dark' name='physical2' data-parent='physicalMethod' onChange={inputHandler} value={result.physicalMethod.physical2}>
-                      <option value="">Choose...</option>
-                      <option value="%MC">%MC</option>
-                      <option value="%WHC">%WHC</option>
-                      <option value="%SAND">%SAND</option>
-                      <option value="%SILT">%SILT</option>
-                      <option value="%CLAY">%CLAY</option>
-                      <option value="CLASSIFICATION">CLASSIFICATION</option>
-
-                    </select>
-                  </div>
-                )}
-
-                {result.physicalMethod?.physical2?.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Third Parameter</label>
-                    <select type='text' className='date form-select border-dark' name='physical3' data-parent='physicalMethod' onChange={inputHandler} value={result.physicalMethod.physical3}>
-                      <option value="">Choose...</option>
-                      <option value="%MC">%MC</option>
-                      <option value="%WHC">%WHC</option>
-                      <option value="%SAND">%SAND</option>
-                      <option value="%SILT">%SILT</option>
-                      <option value="%CLAY">%CLAY</option>
-                      <option value="CLASSIFICATION">CLASSIFICATION</option>
-
-                    </select>
-                  </div>
-                )}
-
-                {result.physicalMethod?.physical3?.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Fourth Parameter</label>
-                    <select type='text' className='date form-select border-dark' name='physical4' data-parent='physicalMethod' onChange={inputHandler} value={result.physicalMethod.physical4}>
-                      <option value="">Choose...</option>
-                      <option value="%MC">%MC</option>
-                      <option value="%WHC">%WHC</option>
-                      <option value="%SAND">%SAND</option>
-                      <option value="%SILT">%SILT</option>
-                      <option value="%CLAY">%CLAY</option>
-                      <option value="CLASSIFICATION">CLASSIFICATION</option>
-
-                    </select>
-                  </div>
-                )}
-
-                {result.physicalMethod?.physical4?.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Fifth Parameter</label>
-                    <select type='text' className='date form-select border-dark' name='physical5' data-parent='physicalMethod' onChange={inputHandler} value={result.physicalMethod.physical5}>
-                      <option value="">Choose...</option>
-                      <option value="%MC">%MC</option>
-                      <option value="%WHC">%WHC</option>
-                      <option value="%SAND">%SAND</option>
-                      <option value="%SILT">%SILT</option>
-                      <option value="%CLAY">%CLAY</option>
-                      <option value="CLASSIFICATION">CLASSIFICATION</option>
-
-                    </select>
-                  </div>
-                )}
-
-                {result.physicalMethod?.physical5?.trim() !== '' && (
-                  <div className='col-md-2'>
-                    <label className='form-label'>Sixth Parameter</label>
-                    <select type='text' className='date form-select border-dark' name='physical6' data-parent='physicalMethod' onChange={inputHandler} value={result.physicalMethod.physical6}>
-                      <option value="">Choose...</option>
-                      <option value="%MC">%MC</option>
-                      <option value="%WHC">%WHC</option>
-                      <option value="%SAND">%SAND</option>
-                      <option value="%SILT">%SILT</option>
-                      <option value="%CLAY">%CLAY</option>
-                      <option value="CLASSIFICATION">CLASSIFICATION</option>
-
-                    </select>
-                  </div>
-                )}
-              </div>
-              <div className='d-flex mt-3'>
-                <button
-                  type="button"
-                  className="btn btn-primary" onClick={() => {
-                     const testMethod = methodName(result.PhysMethodSelected)
-
-                    const methodsArray = [
-                      result.physicalMethod.physical1,
-                      result.physicalMethod.physical2,
-                      result.physicalMethod.physical3,
-                      result.physicalMethod.physical4,
-                      result.physicalMethod.physical5,
-                      result.physicalMethod.physical6
-                    ].filter(method => method && method.trim() !== '');
-
-                    // Map each method to its full name, then join
-                    const selectedMethods = methodsArray
-                      .map(method => ParameterName(method))
-                      .join(', ');
-
-                    setPhysicalDetails({
-                      ...physicalDetails,
-                      testMethod: testMethod || selectedMethods
-                    });
-                    setPhysicalModal(true);
-                  }}>
-                  <i className="bi bi-plus-lg me-2 fs-6"></i>Add Sample Details
-                </button>
-              </div>
-
-              {/*Table for ROA Details */}
-              <div className="row mt-2">
-                <div className="col-12">
-                  <table className="table table-bordered border-dark">
-                    <thead className="table-primary border-dark">
-                      <tr className='text-center'>
-                        <th rowSpan="4">CUSTOMER CODE</th>
-                        <th rowSpan="2">LAB CODE</th>
-                        <th rowSpan="2">SAMPLE DESCRIPTION</th>
-                        <th colSpan="6">PHYSICAL ANALYSIS RESULT</th>
-                        <th rowSpan="2">TEST METHOD</th>
-                      </tr>
-                      <tr className='text-center'>
-                        <th>{result.physicalMethod.physical1}</th>
-                        <th>{result.physicalMethod.physical2}</th>
-                        <th>{result.physicalMethod.physical3}</th>
-                        <th>{result.physicalMethod.physical4}</th>
-                        <th>{result.physicalMethod.physical5}</th>
-                        <th>{result.physicalMethod.physical6}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {physicalReport.length > 0 ? (
-                        physicalReport.map((physicalItem, index) => (
-                          <tr key={index}>
-                            <td>{physicalItem.customerCode}</td>
-                            <td>{physicalItem.labCode}</td>
-                            <td>{physicalItem.sampleDescription}</td>
-                            <td className='text-center'>{physicalItem.results.physc1Result || '-'}</td>
-                            <td className='text-center'>{physicalItem.results.physc2Result || '-'}</td>
-                            <td className='text-center'>{physicalItem.results.physc3Result || '-'}</td>
-                            <td className='text-center'>{physicalItem.results.physc4Result || '-'}</td>
-                            <td className='text-center'>{physicalItem.results.physc5Result || '-'}</td>
-                            <td className='text-center'>{physicalItem.results.physc6Result || '-'}</td>
-                            <td>{physicalItem.testMethod}</td>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => deleteEntry(index)}
+                                title="Delete Sample"
+                              >
+                                <i className="bi bi-trash"></i>
+                              </button>
+                            </td>
                           </tr>
                         ))
                       ) : (
@@ -1181,66 +588,6 @@ function RoaForm() {
             </div>
 
 
-            {/*BORDER*/}
-            <div className='container-fluid border border-secondary border-1 mt-3'></div>
-
-            <div className='card p-4 mb-3 mt-3 shadow-sm border'>
-              <h5 className='mb-4 text-primary fw-bold'>Interpretation Table</h5>
-              <div>
-                <label className='form-label'>Select result interpretation</label>
-                <select className='form-select border-dark' value={interpretationType} onChange={handleInterpretationTypeChange}>
-                  <option value='water'>Water</option>
-                  <option value='rice and corn'>Rice and Corn</option>
-                  <option value='high value'>High Value</option>
-                  <option value='regular soil'>Regular Soil</option>
-                </select>
-              </div>
-              <div className='row mt-2'>
-                <div className='col-12'>
-                  <table className='table table-bordered border-dark'>
-                    <thead className='table-primary border-dark'>
-                      <tr className='text-center'>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='parameter1' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.parameter1} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='parameter2' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.parameter2} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='parameter3' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.parameter3} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='parameter4' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.parameter4} /></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className='text-center'>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data1' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data1} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data2' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data2} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data3' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data3} /></td>
-                        <td rowSpan='2'><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data4' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data4} /></td>
-                      </tr>
-                      <tr className='text-center'>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data5' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data5} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data6' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data6} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data7' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data7} /></td>
-                      </tr>
-                      <tr className='text-center'>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data8' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data8} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data9' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data9} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data10' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data10} /></td>
-                        <td rowSpan='2'><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data11' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data11} /></td>
-                      </tr>
-                      <tr className='text-center'>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data12' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data12} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data13' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data13} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data14' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data14} /></td>
-
-                      </tr>
-                      <tr className='text-center'>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data15' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data15} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data16' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data16} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data17' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data17} /></td>
-                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='data18' data-parent='interpretation' onChange={inputHandler} value={result.interpretation.data18} /></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
 
             <div className='col-md-6 gap-3 offset-md-6 d-flex justify-content-end pe-3'>
               <button className="btn btn-primary col-md-2">Save</button>
@@ -1250,6 +597,7 @@ function RoaForm() {
         </div>
       </div>
       <RoaModal
+        entryGenerator={entryGenerator}
         show={showModal}
         onClose={() => {
           setShowModal(false);
@@ -1266,49 +614,9 @@ function RoaForm() {
         reportDetails={reportDetails}
         onChange={reportInputHandler}
         onSubmit={reportSubmit}
-        inputLabel={result.method.method1.replace('|', ' ')}
-        inputLabel2={result.method.method2.replace('|', ' ')}
-        inputLabel3={result.method.method3.replace('|', ' ')}
-        inputLabel4={result.method.method4.replace('|', ' ')}
-        inputLabel5={result.method.method5.replace('|', ' ')}
-        inputLabel6={result.method.method6.replace('|', ' ')}
-        inputData1={result.method.method1}
-        inputData2={result.method.method2}
-        inputData3={result.method.method3}
-        inputData4={result.method.method4}
-        inputData5={result.method.method5}
-        inputData6={result.method.method6}
-      />
-
-      <PhysicalModal
-        show={physicalModal}
-        onClose={() => {
-          setPhysicalModal(false);
-          setPhysicalDetails({
-            labCode: '',
-            customerCode: '',
-            sampleDescription: '',
-            results: {
-              physc1Result: ''
-            },
-            testMethod: ''
-          });
-        }}
-        physicalDetails={physicalDetails}
-        onChange={physicalInputHandler}
-        onSubmit={physicalResultHandler}
-        inputLabel={result.physicalMethod.physical1}
-        inputLabel2={result.physicalMethod.physical2}
-        inputLabel3={result.physicalMethod.physical3}
-        inputLabel4={result.physicalMethod.physical4}
-        inputLabel5={result.physicalMethod.physical5}
-        inputLabel6={result.physicalMethod.physical6}
-        inputData1={result.physicalMethod.physical1}
-        inputData2={result.physicalMethod.physical2}
-        inputData3={result.physicalMethod.physical3}
-        inputData4={result.physicalMethod.physical4}
-        inputData5={result.physicalMethod.physical5}
-        inputData6={result.physicalMethod.physical6}
+        isEditing={isEditing}
+        counter={counter}
+        setCounter={setCounter}
       />
     </div>
   )

@@ -3,27 +3,16 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom'
 import './styles/arfData.css'
-import Arf from "../generatePdf/Arf";
+import Arf from '../generatePdf/Arf'
 
 
-function ArfData() {
+function GeneralData({requestData, setRequestData, id}) {
 
-    const [requestData, setRequestData] = useState(null);
-    const { id } = useParams();
     const location = useLocation();
     const backRoute = location.state?.from || "/Dco/Walkin/";
     const navigate = useNavigate();
 
-    useEffect(() => {
-        axios.get(`http://localhost:8003/api/client/getClient/${id}`)
-            .then((response) => {
-                setRequestData(response.data)
-            })
-            .catch((error) => {
-                console.error("Request not found", error)
-                setRequestData(null)
-            })
-    }, [id]);
+
 
     function formatDate(dateStr) {
         if (!dateStr) return "";
@@ -212,6 +201,7 @@ function ArfData() {
                                     <div className="row">
                                         <span className='fw-bold fs-2 '>Analysis Request Form</span>
                                         <span className='fs-5 text-decoration-underline'>Request ID: {requestData.requestId}</span>
+                                        <span className='fs-5 text-decoration-underline'>Laboratory Accession Number: {requestData.labAccessionNumber}</span>
                                     </div>
                                 </div>
                             </div>
@@ -692,17 +682,23 @@ function ArfData() {
 
 
                     <div className="d-flex flex-wrap gap-2 justify-content-center pb-4 mt-4">
-                    
+                        <div className="btn btn-primary text-white">
+                            <Arf requestId={requestData ? requestData._id : null}
+                                icon={<span className='text-white fw-bold'>Generate PDF</span>}
+                            />
+                        </div>
                         <button className="btn btn-success fw-bold">
                             <Link
                                 to={`/Dco/updateRequest/${id}`}
                                 type="button"
-                                className="btn p-0 border-0 text-white fw-bold" state={{ from: `/Dco/requestDetails/${id}` }}>Edit Request
+                                className="btn p-0 border-0 text-white fw-bold" state={{ from: `/Dco/requestData/${id}` }}>Edit Request
                             </Link>
                         </button>
-                        <button type='button' className="btn btn-success fw-bold text-white" onClick={() => navigate(`/Dco/GenerateReport/${id}`, { state: { from: `/Dco/requestDetails/${id}` } })}>
+                        <button type='button' className="btn btn-success fw-bold text-white" onClick={() => navigate(`/Dco/GenerateReport/${id}`, { state: { from: `/Dco/requestData/${id}` } })}>
                             Generate ROA
                         </button>
+
+
                         <button className="btn btn-danger fw-bold">
                             <Link to={backRoute} type="button" className="btn p-0 border-0 d-flex align-items-center gap-2">
                                 <span className='text-white fw-bold ps-4 pe-4'>Back</span>
@@ -715,4 +711,4 @@ function ArfData() {
     )
 }
 
-export default ArfData
+export default GeneralData

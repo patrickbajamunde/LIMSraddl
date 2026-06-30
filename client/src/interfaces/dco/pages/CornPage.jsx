@@ -4,7 +4,7 @@ import CornProgram from "../DataTable/CornPogram";
 function CornPage() {
   return (
     <div className='d-flex '>
-        <div className=' analysis container-fluid mb-5'>      
+        <div className='analysis container-fluid mb-5 mt-3'>      
             <CornProgram/>
         </div>
     </div>

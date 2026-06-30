@@ -67,7 +67,7 @@ function Home() {
 
 
   return (
-    <div className='d-flex container-fluid home'>
+    <div className='d-flex container-fluid home mt-4'>
       <div className='content container-fluid mt-1'>
 
         {/*NEW DASHBOARD CARDS DESIGN ROW 1*/}

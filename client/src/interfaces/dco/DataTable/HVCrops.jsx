@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
-import TestPdf from "../generatePdf/TestPdf";
+import Arf from "../generatePdf/Arf";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -20,7 +20,7 @@ export default function HVCrops() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8002/api/client/userRequest", {
+                const response = await axios.get("http://localhost:8003/api/client/userRequest", {
                 });
 
                 const regOnly = response.data.filter(clientData => clientData.clientType === "High Value Crops Program");
@@ -39,7 +39,7 @@ export default function HVCrops() {
             if (!confirmDelete) return;
 
             //if confirmDelete is true send a DELETE request from the API
-            await axios.delete(`http://localhost:8002/api/client/delete/arf/${arfId}`, {
+            await axios.delete(`http://localhost:8003/api/client/delete/arf/${arfId}`, {
                 withCredentials: true,
             });
 
@@ -79,17 +79,8 @@ export default function HVCrops() {
         },
 
         {
-            name: "Test Method",
-            cell: (row) => (
-                <div style={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap", // This is the key change: prevents text from wrapping
-                    maxWidth: "200px"
-                }}>
-                    {row.sampleDetails.map(s => s.methodReq)}
-                </div>
-            ),
+            name: "Form",
+            selector: (row) => row.type,
             sortable: true,
         },
 
@@ -99,36 +90,23 @@ export default function HVCrops() {
                 <div className="d-flex align-items-center gap-2">
                     <button type="button" className="btn p-0 border-0 " onClick={() => deletRequest(row._id)}><i className="bi bi-trash text-danger "></i></button>
                     <Link
-                        to={`/Dco/updateArf/${row._id}`}
-                        state={{from: '/Dco/HVCrops/'}}
+                        to={`/Dco/updateRequest/${row._id}`}
+                        state={{ from: '/Dco/HVCrops/' }}
                         type="button"
                         className="btn p-0 border-0"><i className="bi bi-pencil-square text-success "></i>
                     </Link>
-                    <TestPdf
+                    <Arf
                         requestId={row._id}
                         icon={<i className="bi bi-box-arrow-down text-primary"></i>}
                         disabledIcon={<i className="bi bi-box-arrow-down text-secondary"></i>}
                     />
-                    <Link to={`/Dco/requestDetails/${row._id}`} state={{from: '/Dco/HVCrops/'}} type="button" className="btn p-0 border-0"><i class="bi bi-eye"></i></Link>
+                   
+                    <Link to={`/Dco/requestData/${row._id}`} state={{ from: '/Dco/HVCrops/' }} type="button" className="btn p-0 border-0"><i class="bi bi-eye"></i></Link>
                 </div>
             ),
         },
-    ];
+    ]; 
 
-    const handleDelete = (row) => {
-        const confirmDelete = window.confirm(
-            `Are you sure you want to delete ${row.sampleDescription}?`
-        );
-        if (confirmDelete) {
-            const updatedData = data.filter((item) => item.itemNo !== row.itemNo);
-            setData(updatedData);
-        }
-    };
-
-
-    const handleAction = (row) => {
-        alert(`Action clicked for ${row.sampleDescription}`);
-    };
 
     // Filter the data based on the search term
     React.useEffect(() => {

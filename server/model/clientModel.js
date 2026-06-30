@@ -1,173 +1,38 @@
 import mongoose from "mongoose";
 
-const speciesSchema = new mongoose.Schema({
-    Bovine:{
-        type: String,
-    },
-    Bubaline:{
-        type: String,
-    },
-    Swine:{
-        type: String,
-    },
-    Caprine:{
-        type: String,
-    },
-    Ovine:{
-        type: String,
-    },
-    Feline:{
-        type: String,
-    },
-    Equine:{
-        type: String,
-    },
-    Canine:{
-        type: String,
-    },
-    Avian:{
-        type: String,
-    },
-    Others:{
-        type: String,
-    }
-})
-
 const clientSchema = new mongoose.Schema({
 
-    requestId: {
+    type : {
         type: String,
-        required: true,
-        unique: true,
+        enum: ['GENERAL', 'RABIES'],
+        required: true
     },
 
-    recordId:{
-        type: String,
-    },
 
-    labAccessionNumber: {
-        type: String,
-    },
+    //common fields
+    requestId: String,
+    recordId: String,
+    labAccessionNumber: String,
+    clientName: String,
+    clientType: String,
+    clientAge: Number,
+    clientAddress: String,
+    clientEmail: String,
+    clientContact: String,
+    clientGender: String,
+    locOfFarm:  String,
+    barangay: String,
+    municipality: String,
+    province: String,
+    contactNo:  String,
+    email:  String,
+    transactionDate: { type: Date, default: Date.now },
 
-    clientType: {
-        type: String,
-    },
 
-    clientName: {
-        type: String,
-    },
 
-    clientAge: {
-        type: Number
+    data: {
+        type: mongoose.Schema.Types.Mixed
     },
-
-    clientAddress: {
-        type: String,
-    },
-
-    clientEmail: {
-        type: String,
-    },
-
-    clientContact: {
-        type: String,
-    },
-
-    clientGender: {
-        type: String,
-    },
-
-    sampleDisposalDate: {
-        type: Date,
-    },
-
-    sampleStorageLocation:{
-        type: String,
-    },
-
-    sampleRetentionDate: {
-        type: String,
-    },
-
-    reportDue: {
-        type: Date,
-    },
-
-    transactionDate: {
-        type: Date,
-        default: Date.now,
-    },
-
-    receivedBy: {
-        type: String,
-    },
-
-    status: {
-        type: String,
-    },
-
-    locOfFarm: {
-        type: String,
-    },
-
-    barangay: {
-        type: String
-    },
-    municipality: {
-        type: String,
-    },
-    province: {
-        type: String,
-    },
-
-    contactNo :{
-        type: String,
-    },
-
-    email:{
-        type: String
-    },
-
-    dateSubmitted: {
-        type: Date,
-    },
-
-    dateCollected: {
-        type: Date,
-    },
-
-    samplingDate: {
-        type: Date,
-    },
-    samplingTime: {
-        type: String,
-    },
-
-    specimenAge:{
-        type: String,
-    },
-
-    specimen: [String],
-    wholeAnimal: [String],
-    specimenPart: [String],
-    pathologyList: [String],
-    rapidPlateTest: [String],
-    isoAndIdenList: [String],
-    bloodParasiteExam: [String],
-    fecalysis:[String],
-    parasiteIden: [String],
-    virologyList: [String],
-    elisaList: [String],
-    pcrList: [String],
-    purposeList: [String],
-    sampleLabel: [String],
-    quantityOfSample: [String],
-    preservationUsed: [String],
-    transport: [String],
-    stateOfSample: [String],
-    rejectionOfSamples: [String],
-    sampleStorage: [String],
-    sex: [String],
 
     user: {
         type: mongoose.Schema.Types.ObjectId,

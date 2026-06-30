@@ -4,7 +4,6 @@ import User from "../model/userModel.js";
 
 export const createClient = async (req, res) => {
     try {
-
         const userExist = await User.findOne({ name: req.user.name });
 
         const newClient = new Client({
@@ -16,7 +15,7 @@ export const createClient = async (req, res) => {
         const newActivity = new Activities({
             user: req.user.id,
             action: "Create new",
-            fileType: "Arf",
+            fileType: req.body.type === 'GENERAL' ? 'ARF' : 'Rabies',
             itemId: savedData.requestId,
             userName: userExist.name
         })
@@ -42,6 +41,8 @@ export const getClient = async (req, res) => {
     }
 }
 
+
+//fetch arf data by id without aunthentication
 export const getClientId = async (req, res) => {
     try {
         const id = req.params.id;
@@ -56,7 +57,7 @@ export const getClientId = async (req, res) => {
 }
 
 
-//Fetch Arf data based on user id
+//Fetch Arf data 
 export const userRequest = async (req, res) => {
     try {
         const requestData = await Client.find();
@@ -67,15 +68,15 @@ export const userRequest = async (req, res) => {
     } catch (error) {
         res.status(500).json({ errorMessage: error.message })
     }
-} 
+}
 
 export const deleteRequest = async (req, res) => {
     try {
-        const userExist = await User.findOne({ name: req.user.name})
+        const userExist = await User.findOne({ name: req.user.name })
         const requestId = req.params.id;
 
-        if(!userExist){
-            return res.status(404).json({message: "user not found!"})
+        if (!userExist) {
+            return res.status(404).json({ message: "user not found!" })
         }
 
         const requestExist = await Client.findById(requestId)
@@ -85,11 +86,11 @@ export const deleteRequest = async (req, res) => {
         }
 
         const deletedRequest = await Client.findByIdAndDelete(requestId);
-        
+
         const newActivity = new Activities({
             user: req.user.id,
             action: "Deleted",
-            fileType: "Arf",
+            fileType: requestExist.type === 'GENERAL' ? 'ARF' : 'Rabies',
             itemId: deletedRequest.requestId,
             userName: userExist.name
         })
@@ -105,7 +106,7 @@ export const updateRequest = async (req, res) => {
     try {
         const requestId = req.params.id;
         const userId = req.user.id;
-        const userExist = await User.findOne({name: req.user.name})
+        const userExist = await User.findOne({ name: req.user.name })
 
         const requestExist = await Client.findById(requestId)
 
@@ -113,14 +114,14 @@ export const updateRequest = async (req, res) => {
             return res.status(404).json({ message: "Arf data not found" })
         }
 
-        const newRequestData = await Client.findByIdAndUpdate(requestId, req.body, {
+        const newRequestData = await Client.findByIdAndUpdate(requestId, { ...req.body, 'data': req.body.data }, {
             new: true
         })
 
         const newActivity = new Activities({
             user: userId,
             action: "Updated",
-            fileType: "Arf",
+            fileType: requestExist.type === 'GENERAL' ? 'ARF' : 'Rabies',
             itemId: newRequestData.requestId,
             userName: userExist.name
         })

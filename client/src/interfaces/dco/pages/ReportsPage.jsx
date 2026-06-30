@@ -4,7 +4,7 @@ import Reports from "../DataTable/Reports";
 function RegulatoryPage() {
   return (
     <div className='d-flex'>
-        <div className=' analysis container-fluid mb-5'>      
+        <div className=' analysis container-fluid mb-5 mt-3'>      
             <Reports/>
         </div>
     </div>

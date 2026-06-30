@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import './styles/sidebar.css';
 import image1 from '../components/images/DA2.png';
 
@@ -7,6 +7,8 @@ function Sidebar() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const location = useLocation()
+    const hiddenRoutes = ['/Dco/Arf/', '/Dco/Rabies/']
 
     const handleLogout = () => {
         fetch('http://localhost:8003/api/auth/logout', {
@@ -21,6 +23,10 @@ function Sidebar() {
                 }
             })
     }
+
+    if(hiddenRoutes.includes(location.pathname)) return null;
+
+     
 
     return (
         <div>
@@ -48,11 +54,22 @@ function Sidebar() {
                                 <span className='ms-2'>Home</span>
                             </Link>
                         </li>
-                        <li className='nav-item'>
-                            <Link to="Arf/" className='nav-link text-white sidebar-link'>
-                                <i className='bi bi-file-earmark-plus-fill text-white fs-5 ms-2 me-3' />
-                                <span>Receiving Form</span>
-                            </Link>
+                        <li className='nav-item mt-2'>
+                            <button className='btn btn-link sidebar-link ms-2 text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#receivingForm' aria-expanded='false' aria-controls='receivingForm'>
+                                <i className='bi bi-archive-fill text-white fs-5 me-3 ms-1' />
+                                Request Forms
+                                <i className='bi bi-caret-down-fill float-end me-3 mt-1' />
+                            </button>
+                            <div className='collapse' id='receivingForm'>
+                                <ul className='list-unstyled ms-5'>
+                                    <li>
+                                        <Link className="nav-link text-white mt-2 sidebar-link" to="Arf/">General Sample</Link>
+                                    </li>
+                                    <li>
+                                        <Link className='nav-link text-white sidebar-link' to="Rabies/">Rabies</Link>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li className='nav-item'>
                             <Link to="RoaForm/" className='nav-link text-white sidebar-link'>
@@ -112,6 +129,14 @@ function Sidebar() {
                                 </ul>
                             </div>
                         </li>
+                        {/*
+                        <li className='nav-item'>
+                            <Link to="TestForm/" className='nav-link text-white sidebar-link'>
+                                <i className='bi bi-file-earmark-text-fill text-white fs-5 ms-2 me-3' />
+                                <span>Sample General</span>
+                            </Link>
+                        </li>
+                        */}
                     </ul>
                 </div>
 

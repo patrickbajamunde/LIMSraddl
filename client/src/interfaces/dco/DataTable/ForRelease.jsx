@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 export default function ForRelease() {
     const [search, setSearch] = useState("");
     const [filteredData, setFilteredData] = useState([]);
-    const [client, setclient] = useState([]);
+    const [client, setclient] = useState([]);   
 
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
