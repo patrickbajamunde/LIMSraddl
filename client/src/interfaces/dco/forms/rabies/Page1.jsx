@@ -228,7 +228,7 @@ function Page1({ request, inputHandler, checkboxHandler }) {
               </div>
               <div>
                 <label className='form-label'>Email</label>
-                <input type="text" className="form-control border border-dark" id="email" name='email' value={request.email} onChange={inputHandler} placeholder="xxxx@email.com" />
+                <input type="text" className="form-control border border-dark" id="email" name='email' value={request.email} onChange={inputHandler} placeholder="example@email.com" />
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@ function Page1({ request, inputHandler, checkboxHandler }) {
 
               <div>
                 <label className='form-label'>Email</label>
-                <input type="text" className="form-control border border-dark" id="clientEmail" name='clientEmail' value={request.clientEmail} onChange={inputHandler} placeholder="xxxx@email.com" />
+                <input type="text" className="form-control border border-dark" id="clientEmail" name='clientEmail' value={request.clientEmail} onChange={inputHandler} placeholder="example@email.com" />
               </div>
             </div>
           </div>

@@ -1,14 +1,5 @@
 import mongoose from "mongoose";
 
-const methodResults = new mongoose.Schema({
-    method1Results: { type: String },
-    method2Results: { type: String },
-    method3Results: { type: String },
-    method4Results: { type: String },
-    method5Results: { type: String },
-    method6Results: { type: String },
-})
-
 const roaModel = new mongoose.Schema({
     itemNo: {
         type: String,
@@ -44,18 +35,58 @@ const roaModel = new mongoose.Schema({
     result: {
         type: String
     },
+    flotation: {
+        type: String
+    },
+    sedimentation: {
+        type: String
+    },
+    spRatio: {
+        type: String
+    },
+    interpretation: {
+        type: String
+    },
+    snRatio: {
+        type: String
+    },
+    packedCellVolume: {
+        type: String
+    },
+    hemoglobin: {
+        type: String
+    },
+    redBlood: {
+        type: String
+    },
+    whiteBlood: {
+        type: String
+    },
+    heterophils: {
+        type: String
+    },
+    lymphocytes: {
+        type: String
+    },
+    eosinophils: {
+        type: String
+    },
+    monocytes: {
+        type: String
+    },
+    basophils: {
+        type: String
+    },
+    platelets: {
+        type: String
+    },
+    bacteCount: {
+        type: String
+    },
+    bacteIdentified: {
+        type: String
+    }
 })
-
-
-const methodology = new mongoose.Schema({
-    method1: { type: String },
-    method2: { type: String },
-    method3: { type: String },
-    method4: { type: String },
-    method5: { type: String },
-    method6: { type: String },
-})
-
 
 const reportSchema = new mongoose.Schema({
 
@@ -86,32 +117,10 @@ const reportSchema = new mongoose.Schema({
     reportId: {
         type: String,
     },
-    
+
     requestId: {
         type: String,
         unique: true
-    },
-
-
-    analyzedBy: {
-        type: String,
-    },
-
-    analystPRC: {
-        type: String,
-    },
-    position: {
-        type: String,
-    },
-
-    analyzedBy2: {
-        type: String,
-    },
-    analystPRC2: {
-        type: String,
-    },
-    position2: {
-        type: String,
     },
 
     status: {
@@ -138,8 +147,6 @@ const reportSchema = new mongoose.Schema({
         type: String,
     },
 
-    method: methodology,
-
     roaDetails: [roaModel],
 
     user: {
@@ -157,9 +164,8 @@ const reportSchema = new mongoose.Schema({
         type: String,
     },
 
-    ChemSelectedMethod: {
-        type: String,
-    },
+    analyzedBy: [],
+    interpretationTable: []
 
 
 })

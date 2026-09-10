@@ -5,6 +5,9 @@ import image1 from '../../analysts/components/images/DA5.jpg';
 import image2 from '../../dco/components/images/unnamed.png'
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useEffect, useState } from 'react';
+import { RoaTableConfig, RoaDataRowConfig, OverlayConfig, InterpretDataTableConfig } from './tableConfig/RoaTable';
+import { InterpretResults, InterpretResultsHeader } from '../forms/roaTable/ReportTable';
+import { RoaRemarsk } from './tableConfig/RoaRemarks';
 
 const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }) => {
 
@@ -84,6 +87,8 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
     };
 
 
+
+
     function generatePdf() {
         if (!report || !report.roaDetails) return;
 
@@ -98,6 +103,16 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
         };
 
 
+        const columns = RoaTableConfig(report.testMethod)
+        const id = report.roaDetails.every((item) => (item.fieldSampleID.length ?? 0) <= 2)
+        const rows = RoaDataRowConfig(report.testMethod, id)
+        const idforOverlay = report.roaDetails[0]?.fieldSampleID?.length <= 2
+        const overlay = OverlayConfig(report.testMethod, idforOverlay)
+        const interpretTable = InterpretResultsHeader(report.testMethod)
+        const InterpretDataTable = InterpretDataTableConfig(report.testMethod)
+        const remarks = RoaRemarsk(report.testMethod)
+
+
 
         return (
             <Document>
@@ -105,43 +120,43 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                     <View style={styles.roaHeaderCont} fixed>
                         <Image style={styles.roaImage} src={image1} />
                         <View style={{ alignItems: 'justify', marginTop: -10 }} >
-                            <Text style={[styles.normalFont, { fontSize: 10 }]}>Republic of the Philippines</Text>
+                            <Text style={[styles.normalFont, { fontSize: 11 }]}>Republic of the Philippines</Text>
                             <Text style={[styles.boldFont]}>DEPARTMENT OF AGRICULTURE</Text>
                             <Text style={styles.boldFont} >REGIONAL FIELD OFFICE 5</Text>
                             <Text style={styles.boldFont} >Integrated Laboratories Division</Text>
                             <Text style={styles.boldFont} >Regional Animal Disease Diagnostic Laboratory</Text>
-                            <Text style={styles.normalFont} >San Agustin, Pili, Camarines Sur</Text>
+                            <Text style={[styles.normalFont, { fontSize: 11 }]} >San Agustin, Pili, Camarines Sur</Text>
                         </View>
                     </View>
 
 
-                    <View style={[styles.row, { position: 'absolute', right: 50, top: 5 }]} fixed>
-                        <Image src={report.qrCode} style={{ width: 80, height: 80 }} />
+                    <View style={[styles.row, { position: 'absolute', right: 50, top: -10 }]} fixed>
+                        <Image src={report.qrCode} style={{ width: 90, height: 90 }} />
                     </View>
 
                     <View style={[{ marginLeft: 15, marginTop: 20 }]} fixed>
                         <View style={[styles.row, { width: '100%' }]}>
-                            <View style={[styles.boldFont, { width: '20%' }]}>
+                            <View style={[styles.boldFont, { width: '18%' }]}>
                                 <Text>Customer Name:</Text>
                                 <Text>Address:</Text>
                                 <Text>Contact Number:</Text>
                                 <Text>Date Received:</Text>
                                 <Text>Date Performed:</Text>
                             </View>
-                            <View style={[styles.normalFont, { width: '30%' }]}>
+                            <View style={[styles.normalFont, { width: '35%' }]}>
                                 <Text style={[styles.normalFont, { fontSize: 11, color: '#2f5496' }]}>{report.customerName}</Text>
                                 <Text style={[styles.normalFont, { fontSize: 11, color: '#2f5496' }]}>{report.customerAddress}</Text>
                                 <Text style={[styles.normalFont, { fontSize: 11, color: '#2f5496' }]}>{report.customerContact}</Text>
                                 <Text style={[styles.normalFont, { fontSize: 11 }]}>{formatDate(report.dateReceived)}</Text>
                                 <Text style={[styles.normalFont, { fontSize: 11 }]}>{report.datePerformed}</Text>
                             </View>
-                            <View style={[styles.boldFont, { width: '20%', marginLeft: 25 }]}>
+                            <View style={[styles.boldFont, { width: '18%' }]}>
                                 <Text>Report Number:</Text>
                                 <Text>Date Issued:</Text>
                                 <Text>Date of Collection:</Text>
                                 <Text>Purpose:</Text>
                             </View>
-                            <View style={[styles.normalFont, { width: '30%' }]}>
+                            <View style={[styles.normalFont, { width: '25%' }]}>
                                 <Text style={[styles.normalFont, { fontSize: 11 }]}>{report.reportId}-{copyCode}</Text>
                                 <Text style={[styles.normalFont, { fontSize: 11 }]}>{formatDate(report.dateIssued)}</Text>
                                 <Text style={[styles.normalFont, { fontSize: 11, color: '#2f5496' }]}>{report.dateCollected}</Text>
@@ -156,34 +171,68 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                         </View>
                     </View>
 
-                    <View style={[styles.row, styles.normalFont, { marginLeft: 15, }]} fixed>
+                    <View style={[styles.row, styles.normalFont, { paddingHorizontal: 15, width: '100%' }]} fixed>
                         <View style={{ width: '50%' }}>
                             <Text style={[styles.boldFont]}>Laboratory Code: <Text style={{ fontWeight: 'normal', fontSize: 11 }}>{report.labCode}</Text></Text>
                         </View>
-                        <View style={{ width: '40%', marginLeft: 11 }}>
-                            <Text style={[styles.boldFont]}>Test Method: <Text style={{ fontWeight: 'normal', fontSize: 11 }}>{report.testMethod}</Text></Text>
+                        <View style={[styles.row, { width: '50%'}]}>
+                            <View style={{ width: '25%' }}>
+                                <Text style={[styles.boldFont]}>Test Method:</Text>
+                            </View>
+
+                            <View style={{ width: '75%' }}>
+                                <Text style={{ fontWeight: 'normal', fontSize: 11 }}>{report.testMethod}</Text>
+                            </View>
+
                         </View>
                     </View>
 
 
                     {/*Analysis Result */}
-                    <View style={[styles.roaTable]}>
+                    <View style={[styles.roaTable, { borderLeftWidth: 1 }]}>
                         {/* HEADER ROW */}
-                        <View style={[styles.row, styles.boldFont, { width: '100%', textAlign: 'center' }]} fixed>
-                            <Text style={[styles.roaHeader, styles.specificCell, { width: "6%", textAlign: 'center', paddingVertical: 2, paddingHorizontal: 5, fontSize: 11, borderTopWidth: 1 }]}>ITEM NO.</Text>
-                            <Text style={[styles.roaHeader, { width: "9%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>SAMPLE NO.</Text>
-                            <Text style={[styles.roaHeader, { width: "28%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>FIELD SAMPLE ID</Text>
-                            <Text style={[styles.roaHeader, { width: "15%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>ADDRESS</Text>
-                            <Text style={[styles.roaHeader, { width: "10%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>SPECIES</Text>
-                            <Text style={[styles.roaHeader, { width: "9%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>AGE</Text>
-                            <Text style={[styles.roaHeader, { width: "5%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>SEX</Text>
-                            <Text style={[styles.roaHeader, { width: "18%", paddingVertical: 2, fontSize: 11, borderTopWidth: 1 }]}>RESULTS</Text>
+                        <View style={[styles.row, styles.boldFont, { width: '100%' }]} fixed>
+                            {columns.map(col =>
+                                col.subColumns ? (
+                                    <View key={col.key} style={[styles.roaHeader, { width: col.width, }]}>
+                                        <View style={[styles.row, { width: '100%', paddingVertical: 2, borderTopWidth: 1, alignItems: 'center', justifyContent: 'center' }]}>
+                                            <Text style={{ fontSize: 11 }} hyphenationCallback={word => [word]}>
+                                                {col.label}
+                                            </Text>
+                                        </View>
+
+                                        <View style={[styles.row, { width: '100%', flexGrow: 1 }]}>
+                                            {col.subColumns.map((sub, i) => (
+                                                <View key={sub.key} style={[{ width: sub.width, borderTopWidth: 1, borderRightWidth: i < col.subColumns.length - 1 ? 1 : 0, alignItems: 'center', justifyContent: 'center' }]}>
+                                                    <Text
+                                                        style={{
+                                                            paddingVertical: 2,
+                                                            fontSize: 9,
+                                                        }}
+                                                    >
+                                                        {sub.label}
+                                                    </Text>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <View key={col.key} style={[styles.roaHeader, styles.row, { width: col.width, borderTopWidth: 1, justifyContent: 'center', alignItems: 'center' }]}>
+                                        <Text key={col.key} style={[{ paddingVertical: 2, fontSize: 11, }]} hyphenationCallback={word => [word]}>
+                                            {col.label}
+                                        </Text>
+                                    </View>
+
+                                )
+
+                            )}
+
                         </View>
 
                         {/* DATA ROWS */}
 
                         {report.roaDetails && (
-                            report.roaDetails.fieldSampleID ? (
+                            report.roaDetails.some(row => row.fieldSampleID) ? (
                                 <View style={{ width: "100%" }}>  {/* ✅ Removed flex: 1 from here */}
                                     {(() => {
                                         const groups = [];
@@ -192,13 +241,19 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                                         while (i < report.roaDetails.length) {
                                             const currentOwner = normalize(report.roaDetails[i].nameOfOwner);
                                             const currentAddress = normalize(report.roaDetails[i].address);
+                                            const currentSpecies = normalize(report.roaDetails[i].species);
+                                            const currentResult = normalize(report.roaDetails[i].result);
                                             const originalName = report.roaDetails[i].nameOfOwner;
                                             const originalAddress = report.roaDetails[i].address;
+                                            const originalSpecies = report.roaDetails[i].species;
+                                            const originalResult = report.roaDetails[i].result;
                                             let j = i + 1;
                                             while (
                                                 j < report.roaDetails.length &&
                                                 normalize(report.roaDetails[j].nameOfOwner) === currentOwner &&
-                                                normalize(report.roaDetails[j].address) === currentAddress
+                                                normalize(report.roaDetails[j].address) === currentAddress &&
+                                                normalize(report.roaDetails[j].species) === currentSpecies &&
+                                                normalize(report.roaDetails[j].result) === currentResult
                                             ) {
                                                 j++;
                                             }
@@ -206,6 +261,8 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                                                 rows: report.roaDetails.slice(i, j),
                                                 originalName,
                                                 originalAddress,
+                                                originalSpecies,
+                                                originalResult
                                             });
                                             i = j;
                                         }
@@ -215,61 +272,36 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                                                 {/* Rows for this group */}
                                                 {group.rows.map((row, index) => (
                                                     <View style={[styles.row, { flexGrow: 1 }]} key={index} wrap={false}>
-                                                        {/* Left columns with actual data */}
-                                                        <View style={[styles.roaCell, styles.specificCell, { width: "6%", fontSize: 11, textAlign: 'center', justifyContent: 'center' }]}>
-                                                            <Text>{row.itemNo}</Text>
-                                                        </View>
-                                                        <View style={[styles.roaCell, { width: "9%", fontSize: 11, textAlign: 'center', justifyContent: 'center' }]}>
-                                                            <Text>{row.sampleNo}</Text>
-                                                        </View>
-                                                        <Text style={[styles.roaCell, { width: (row.fieldSampleID?.length ?? 0) <= 2 ? "5%" : "9%", textAlign: 'center', color: '#2f5496' }]}>
-                                                            {row.fieldSampleID}
-                                                        </Text>
-
-                                                        {/* Empty placeholders for merged columns */}
-                                                        <View style={[styles.roaCell, { width: row.fieldSampleID?.length <= 2 ? "23%" : "19%" }]} />
-                                                        <View style={[styles.roaCell, { width: "15%", minHeight: 37 }]} />
-
-                                                        {/* Right side actual data */}
-                                                        <Text style={[styles.roaCell, { width: "10%", textAlign: 'center', color: '#2f5496' }]}>{row.species}</Text>
-                                                        <Text style={[styles.roaCell, { width: "9%", textAlign: 'center' }]}>{row.age}</Text>
-                                                        <Text style={[styles.roaCell, { width: "5%", textAlign: 'center' }]}>{row.sex}</Text>
-                                                        <Text style={[styles.roaCell, { width: "18%", textAlign: 'center' }]}>{row.result}</Text>
+                                                        {rows.map(cell => (
+                                                            <View key={cell.key} style={[styles.roaCell, { width: cell.width,height: cell.height, fontSize: 11, textAlign: 'center', justifyContent: 'center', color: cell.color }]}>
+                                                                {cell.skipRender ?
+                                                                    (
+                                                                        cell.key === 'address' && index === 0 && group.rows.length === 1 && (
+                                                                            <Text style={{
+                                                                                fontSize: 10,
+                                                                                color: 'white',
+                                                                                flexWrap: 'wrap',
+                                                                                width: '100%',
+                                                                            }}>
+                                                                                {group.originalAddress}
+                                                                            </Text>
+                                                                        )
+                                                                    ) : (
+                                                                        <Text hyphenationCallback={word => [word]}>{row[cell.key ?? '']}</Text>
+                                                                    )}
+                                                            </View>
+                                                        ))}
                                                     </View>
                                                 ))}
 
-                                                {/* nameOfOwner overlay - spans full group height */}
-                                                <View style={[styles.cell, {
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    bottom: 0,
-                                                    left: report.roaDetails[0].fieldSampleID?.length <= 2 ? "20%" : "24%",
-                                                    width: report.roaDetails[0].fieldSampleID?.length <= 2 ? "23%" : "19%",
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    backgroundColor: 'white',
 
-                                                }]} fixed>
-                                                    <Text style={{ fontSize: 10, textAlign: 'center', color: '#2f5496' }}>
-                                                        {group.originalName}
-                                                    </Text>
-                                                </View>
-
-                                                {/* address overlay - spans full group height */}
-                                                <View style={[styles.cell, {
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    bottom: 0,
-                                                    left: '43%',
-                                                    width: '15%',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    backgroundColor: 'white',
-                                                }]} fixed>
-                                                    <Text style={{ fontSize: 10, textAlign: 'center', color: '#2f5496' }}>
-                                                        {group.originalAddress}
-                                                    </Text>
-                                                </View>
+                                                {overlay.map(column =>
+                                                    <View style={[styles.cell, styles.overlay, { left: column.left, width: column.width, borderRightWidth: column.borderRightWidth, position: column.position }]} fixed>
+                                                        <Text style={{ fontSize: 10, textAlign: column.textAlign, color: column.color,}} hyphenationCallback={word => [word]}>
+                                                            {group[column.key]}
+                                                        </Text>
+                                                    </View>
+                                                )}
                                             </View>
                                         ));
                                     })()}
@@ -317,7 +349,7 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                                                         {/* Empty placeholders for merged columns */}
                                                         <View style={[styles.roaCell, { width: "28%" }]} />
                                                         <View style={[styles.roaCell, { width: "15%" }]}>
-                                                            {index === 0 && group.rows.length === 1 && (
+                                                            {group.rows.length === 1 && (
                                                                 <Text style={{
                                                                     fontSize: 10,
                                                                     color: 'white',
@@ -375,21 +407,68 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                                 </View>
                             )
                         )}
-
                     </View>
 
 
 
 
-
-
-
-                    <View style={[styles.row, { marginTop: 5, marginLeft: 20 }]} >
+                    <View style={[styles.row, { marginTop: 5, marginLeft: 20 }]}>
                         <View style={[styles.row]}>
-                            <Text style={[styles.boldFont, { fontSize: 10 }]}>Sample Type:  </Text>
+                            <Text style={[styles.normalFont, { fontSize: 10 }]}>Sample Type:  </Text>
                             <Text style={[styles.normalFont, { fontSize: 10 }]}>{report.sampleType}</Text>
                         </View>
                     </View>
+
+                    <View style={[styles.row, { marginHorizontal: 20 }]}>
+                        <Text style={[styles.italicFont, { fontSize: 9 }]}>{remarks.remarks1}</Text>
+                    </View>
+
+                    {/*Interpretation of Results */}
+                    <View style={[styles.row, { marginLeft: 20, marginTop: 8 }]}>
+                        <Text style={[styles.italicFont, { fontSize: 9 }]}>{remarks.tableTitle}</Text>
+                    </View>
+
+
+                    <View style={report.testMethod === 'INFLUENZA A VIRUS ANTIBODY DETECTION - ELISA' ? [{ marginLeft: 20, borderLeftWidth: 0 }] : [styles.roaTable, { borderLeftWidth: 1 }]}>
+                        <View style={[styles.row]}>
+                            {interpretTable.map(header =>
+                                <View key={header.key} style={report.testMethod === 'INFLUENZA A VIRUS ANTIBODY DETECTION - ELISA' ? '' : [styles.roaHeader, { borderTopWidth: 1, width: header.width, backgroundColor: 'white', paddingVertical: header.paddingVertical }]}>
+                                    <View style={[styles.row, { justifyContent: 'center' }]}>
+                                        <Text style={[styles.boldFont, { fontSize: 9 }]}>
+                                            {header.label}
+                                        </Text>
+                                    </View>
+                                </View>
+                            )}
+                        </View>
+                        {report.interpretationTable.map((item, index) => (
+                            <View key={index} style={[styles.row, { width: '100%' }]}>
+                                {InterpretDataTable.map((row, index) =>
+                                    <View key={row.key} style={report.testMethod === 'INFLUENZA A VIRUS ANTIBODY DETECTION - ELISA' ? [{ fontFamily: 'Cambria', }] : [styles.roaCell, { width: row.width, alignItems: 'center' }]}>
+                                        {report.testMethod === 'INFLUENZA A VIRUS ANTIBODY DETECTION - ELISA' ? (
+                                            <View style={styles.row}>
+                                                {index === InterpretDataTable.length - 1 && (
+                                                    <Text style={{ marginHorizontal: 18 }}>-</Text>
+                                                )}
+                                                <Text style={[{ fontSize: 9 }]}>{item[row.key ?? '']}</Text>
+                                            </View>
+                                        ) : (
+                                            <Text style={[{ fontSize: 9 }]}>{item[row.key ?? '']}</Text>
+                                        )}
+                                    </View>
+                                )}
+                            </View>
+                        ))}
+                    </View>
+                    <View style={[styles.row, { marginLeft: 20, marginTop: 10 }]}>
+                        <Text style={[styles.italicFont, { fontSize: 9 }]}>{remarks.reference}</Text>
+                    </View>
+
+                    <View style={[styles.column, { marginHorizontal: 20, marginTop: 12, }]}>
+                        <Text style={[styles.normalFont, { fontSize: 9, marginBottom: 5 }]}>{remarks.remarks2}</Text>
+                        <Text style={[styles.italicFont, { fontSize: 9 }]}>{remarks.remarks3}</Text>
+                    </View>
+
 
 
                     <View style={[{ fontSize: 9, marginTop: 5, paddingHorizontal: 15 }]} >
@@ -405,16 +484,19 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                         </View>
                     </View>
 
-                    <View style={[styles.font, { paddingLeft: 55, bottom: 180, position: 'absolute' }]} fixed>
+                    <View style={[styles.font, { paddingLeft: 55, bottom: 210, position: 'absolute' }]} fixed>
                         <Text style={{ fontWeight: 'bold', bottom: 35 }}>Analyzed/Examined By:</Text>
-                        <Text style={{ fontWeight: 'bold' }}>{report.analyzedBy}</Text>
-                        <Text>{report.position}</Text>
+                    </View>
+                    <View style={[styles.font, { paddingLeft: 55, bottom: 180, position: 'absolute' }]} fixed>
+                        <Text style={{ fontWeight: 'bold' }}>{report.analyzedBy[0]?.name}</Text>
+                        <Text>{report.analyzedBy[0]?.position}</Text>
                     </View>
 
-                    <View style={[styles.font, { paddingLeft: 335, bottom: 180, position: 'absolute' }]} fixed>
-                        <Text style={{ fontWeight: 'bold' }}>{report.analyzedBy2}</Text>
-                        <Text>{report.position2}</Text>
+                    <View style={[styles.font, { paddingLeft: 320, bottom: 180, position: 'absolute' }]} fixed>
+                        <Text style={{ fontWeight: 'bold' }}>{report.analyzedBy[1]?.name}</Text>
+                        <Text>{report.analyzedBy[1]?.position}</Text>
                     </View>
+
 
                     <View style={[styles.row, { position: 'absolute', bottom: 95, gap: 35 }]} fixed>
                         <View style={[styles.font, { paddingLeft: 55 }]}>
@@ -423,7 +505,7 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
                             <Text>Veterinarian III/Laboratory Head</Text>
                         </View>
 
-                        <View style={[styles.font, { paddingLeft: 47 }]}>
+                        <View style={[styles.font, { paddingLeft: 64 }]}>
                             <Text style={{ fontWeight: 'bold', bottom: 30 }}>Noted By:</Text>
                             <Text style={{ fontWeight: 'bold' }}>ANACLETO B. ESPLANA, RAgr, MPA</Text>
                             <Text>OIC-Chief, Integrated Laboratories Division</Text>

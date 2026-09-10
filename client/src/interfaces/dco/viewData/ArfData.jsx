@@ -235,7 +235,6 @@ function ArfData() {
                                             <span className='fw-bold text-secondary'>LOCATION OF FARM</span>
                                             <span className='fs-5 fw-semibold'>{requestData.locOfFarm || '-'}</span>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div className='col'>

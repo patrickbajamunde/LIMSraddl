@@ -5,6 +5,9 @@ import { useState, useEffect, } from 'react';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import { RoaModal } from '../components/modal/Modal';
 import QRCode from 'qrcode';
+import { TestMethods, InterpretResults, InterpretResultsHeader } from './roaTable/ReportTable';
+import { components } from 'react-select';
+import Creatable from 'react-select/creatable';
 
 
 
@@ -39,7 +42,6 @@ function GenerateReport() {
         qrCode: '',
         purpose: '',
         dateCollected: '',
-        ChemSelectedMethod: '',
         labCode: '',
         testMethod: '',
         sampleType: '',
@@ -55,11 +57,19 @@ function GenerateReport() {
         return PrcTable[analyzedBy] || "";
     }
 
+
+    const analystList = [
+        "JULIE ANN C. SIARES",
+        "MA. CRISSA F. JARANILLA",
+        "CARL VINCENT DC. SARGENTO",
+        "MA. CRISTINA V. CANON",
+        "MARIAH NICKOLE T. GARCIA",
+        "QUENNIE MAE M. BELANO",
+        "QUELLY JEAN O. CAÑON"
+    ]
+
     const designation = (analyzedBy) => {
         const DesignationTable = {
-            "MARYFRANIE I. BELANO, RChT": "Laboratory Analyst",
-            "KRIZZA ASHLEY V. BALOLOY, RChT": "Laboratory Analyst",
-            "JENNIS A. RABLANDO, RChT": "Laboratory Analyst",
             "JULIE ANN C. SIARES": "Laboratory Analyst",
             "MA. CRISSA F. JARANILLA": "Laboratory Analyst",
             "CARL VINCENT DC. SARGENTO": "Laboratory Analyst",
@@ -73,8 +83,6 @@ function GenerateReport() {
 
 
     const [result, setResult] = useState(report);
-    const [ChemMethodSets, SetChemMethodSets] = useState('')
-    const [PhysMethodSets, SetPhysMethodSets] = useState('')
 
     //date setState
     const [dateFrom, setDateFrom] = useState('');
@@ -96,7 +104,21 @@ function GenerateReport() {
         species: '',
         age: '',
         sex: '',
-        result: ''
+        result: '',
+        flotation: '',
+        sedimentation: '',
+        spRatio: '',
+        interpretation: '',
+        snRatio: '',
+        hemoglobin: '',
+        redBlood: '',
+        whiteBlood: '',
+        heterophils: '',
+        lymphocytes: '',
+        eosinophils: '',
+        monocytes: '',
+        basophils: '',
+        platelets: '',
     });// state of report details before change in the modal
 
 
@@ -105,8 +127,20 @@ function GenerateReport() {
     const [isEditing, setIsEditing] = useState(false);
     const [counter, setCounter] = useState(1);
 
+    const [analystMenuOpen, setAnalystMenuOpen] = useState(false);
+    const [selectedValue, setSelectedValue] = useState([]);
+
     const location = useLocation();
     const backRoute = location.state?.from || "/Dco/Walkin/";
+
+    const table = InterpretResults(result.testMethod)
+    const header = InterpretResultsHeader(result.testMethod)
+    const [inputs, setInputs] = useState([
+        {
+            result: "",
+            status: ""
+        }
+    ])
 
 
     const openEditModal = (index) => {
@@ -262,6 +296,39 @@ function GenerateReport() {
 
     }
 
+    const addSelectedValue = (value) => {
+        const currentValue = [...selectedValue, value];
+        setSelectedValue(currentValue);
+
+        const selectedAnalyst = currentValue.map((name) => ({
+            name: name,
+            position: designation(name)
+        }))
+
+        setResult({
+            ...result,
+            analyzedBy: selectedAnalyst
+        })
+    }
+
+    const removeSelectedValue = (value) => {
+        const currentValue = selectedValue.filter((n) => n !== value);
+        setSelectedValue(currentValue);
+
+        const selectedAnalyst = currentValue.map((name) => ({
+            name: name,
+            position: designation(name)
+        }))
+
+        setResult({
+            ...result,
+            analyzedBy: selectedAnalyst
+        })
+    }
+
+
+    const availableValues = analystList.filter(item => !selectedValue.includes(item));
+
     const reportSubmit = (e) => {
         e.preventDefault();
 
@@ -277,7 +344,7 @@ function GenerateReport() {
             const newEntries = Array(parseInt(counter)).fill(null).map((_, index) => ({
                 ...reportDetails,
                 itemNo: roaReport.length + index + 1,
-                sampleNo: parseInt(reportDetails.sampleNo) + index,
+                sampleNo: String(Number(reportDetails.sampleNo) + index).padStart(reportDetails.sampleNo.length, '0'),
             }));
             setRoaReport([...roaReport, ...newEntries]);
         }
@@ -285,6 +352,7 @@ function GenerateReport() {
         setReportDetails({
             sampleNo: '',
             fieldSampleID: '',
+            nameOfOwner: '',
             address: '',
             species: '',
             age: '',
@@ -323,6 +391,7 @@ function GenerateReport() {
                     sampleType: '',
                 })
                 console.log("Report created successfully.")
+                setInputs([])
             })
             .catch((error) => {
                 console.log(error)
@@ -342,18 +411,7 @@ function GenerateReport() {
                     requestId: clientData.requestId,
                     sampleType: clientData.data.specimenPart?.map(part => part.name).filter(Boolean).join(', ') || '',
                     labCode: clientData.labAccessionNumber || ' ',
-                    testMethod: [
-                        clientData.data.pathologyList,
-                        clientData.data.rapidPlateTest,
-                        clientData.data.isoAndIdenList,
-                        clientData.data.bloodParasiteExam,
-                        clientData.data.fecalysis,
-                        clientData.data.parasiteIden,
-                        clientData.data.virologyList,
-                        clientData.data.elisaList,
-                        clientData.data.pcrList,
-                        clientData.data.bacteOthers2,
-                    ].flat().filter(item => item && item.trim() !== '').join(' & ') || ' ',
+
                     species: clientData.data.specimen?.map(species => species.name) || ' '
                 }))
             })
@@ -367,6 +425,93 @@ function GenerateReport() {
         const date = new Date(dateStr);
         return date.toISOString().split("T")[0];
     }
+
+    const columns = TestMethods(result.testMethod)
+
+
+    const interpretInputHandler = (index, key, value) => {
+        const inputValue = inputs.map((row, i) => i === index ? { ...row, [key]: value } : row)
+
+        setInputs(inputValue)
+        setResult({
+            ...result,
+            interpretationTable: inputValue
+        })
+    }
+
+    const addField = () => {
+        setInputs([...inputs, { result: "", status: "" }])
+    }
+
+    const deleteField = (index) => {
+        const updated = inputs.filter((_, i) => i !== index);
+        setInputs(updated);
+    };
+
+    const selectOptions = [
+        { value: '', label: 'Choose...' },
+        { value: 'CAPRINE ARTHRITIS ENCEPHALITIS VIRUS ANTIBODY DETECTION - ELISA', label: 'CAPRINE ARTHRITIS ENCEPHALITIS VIRUS ANTIBODY DETECTION - ELISA' },
+        { value: 'INFECTIOUS LARYNGOTRACHEITIS VIRUS ANTIBODY DETECTION - ELISA', label: 'INFECTIOUS LARYNGOTRACHEITIS VIRUS ANTIBODY DETECTION - ELISA' },
+        { value: 'Q FEVER (Coxiella burnetii) ANTIBODY DETECTION - ELISA', label: 'Q FEVER (Coxiella burnetii) ANTIBODY DETECTION - ELISA' },
+        { value: 'INFECTIOUS BURSAL DISEASE VIRUS ANTIBODY DETECTION - ELISA', label: 'INFECTIOUS BURSAL DISEASE VIRUS ANTIBODY DETECTION - ELISA' },
+        { value: 'INFLUENZA A VIRUS ANTIBODY DETECTION - ELISA', label: 'INFLUENZA A VIRUS ANTIBODY DETECTION - ELISA' },
+        { value: 'BRUCELLOSIS (Brucella abortus, Brucella melitensis, Brucella suis) ANTIBODY DETECTION - ELISA', label: 'BRUCELLOSIS (Brucella abortus, Brucella melitensis, Brucella suis) ANTIBODY DETECTION - ELISA' },
+        { value: 'FECALYSIS (FLOTATION AND SEDIMENTATION TECHNIQUE)', label: 'FECALYSIS (FLOTATION AND SEDIMENTATION TECHNIQUE)' },
+        { value: 'McMASTER COUNTING TECHNIQUE', label: 'McMASTER COUNTING TECHNIQUE' },
+        { value: 'CLINICAL HEMATOLOGY (Complete Blood Count)', label: 'CLINICAL HEMATOLOGY (Complete Blood Count)' },
+        { value: 'NECROPSY', label: 'NECROPSY' },
+        { value: 'BACTERIAL ISOLATION AND IDENTIFICATION - 2', label: 'BACTERIAL ISOLATION AND IDENTIFICATION - 2' }
+    ];
+
+    const selectChange = (selectOptions) => {
+        setResult(prev => ({
+            ...prev,
+            testMethod: selectOptions.value
+        }))
+    }
+
+    const selectValue = (testMethod) => {
+        return testMethodOptions.find(option => option.value === testMethod) || null;
+    }
+
+    const [testMethodOptions, setTestMethodOptions] = useState(selectOptions);
+
+
+    const addTestMethod = (testMethod) => {
+        const newTestMethod = { value: testMethod, label: testMethod, __isCustom: true }
+        setTestMethodOptions(prevOptions => [
+            ...prevOptions,
+            newTestMethod
+        ])
+        setResult(prev => ({ ...prev, testMethod }))
+    }
+
+    const removeTestMethod = (testMethod) => {
+         setTestMethodOptions(prevOptions => prevOptions.filter(option => option.value !== testMethod));
+    }
+
+    const customOption = (props) => {
+        return (
+            <components.Option {...props}>
+                <div className="d-flex justify-content-between align-items-center">
+                    <span>{props.data.label}</span>
+                    {props.data.__isCustom && (
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-link text-danger p-0 ms-2"
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                props.selectProps.onRemoveOption(props.data.value);
+                            }}
+                        >
+                            <i className="bi bi-x-lg"></i>
+                        </button>
+                    )}
+                </div>
+            </components.Option>
+        );
+    };
 
     return (
         <div className='d-flex mt-3'>
@@ -395,110 +540,121 @@ function GenerateReport() {
                                 </div>
 
                                 <div className='col-md-6'>
-                                    <label className='form-label'>Request Id: </label>
-                                    <input type="text" className="date form-control border-dark" name='requestId' id='requestId' onChange={inputHandler} value={result.requestId} placeholder="" />
-                                </div>
-
-                                <div className='col-md-6'>
-                                    <label className='form-label'>Analyzed By: </label>
-                                    <select className='form-select border-dark' name='analyzedBy' onChange={inputHandler} value={roaReport.analyzedBy}>
-                                        <option defaultValue="Choose...">Choose...</option>
-                                        <option value="JULIE ANN C. SIARES">JULIE ANN C. SIARES</option>
-                                        <option value="MA. CRISSA F. JARANILLA">MA. CRISSA F. JARANILLA</option>
-                                        <option value="CARL VINCENT DC. SARGENTO">CARL VINCENT DC. SARGENTO</option>
-                                        <option value="MA. CRISTINA V. CANON">MA. CRISTINA V. CANON</option>
-                                        <option value="MARIAH NICKOLE T. GARCIA">MARIAH NICKOLE T. GARCIA</option>
-                                        <option value="QUENNIE MAE M. BELANO">QUENNIE MAE M. BELANO</option>
-                                        <option value="QUELLY JEAN O. CAÑON">QUELLY JEAN O. CAÑON</option>
-                                    </select>
-                                </div>
-
-                                <div className='col-md-6'>
                                     <label className='form-label '>Date Issued: </label>
                                     <input type="date" className="date form-control border-dark" name='dateIssued' onChange={inputHandler} value={result.dateIssued} placeholder="" />
                                 </div>
+
+
                                 <div className='col-md-6'>
-                                    <label className='form-label'>Analyzed By: </label>
-                                    <select className='form-select border-dark' name='analyzedBy2' onChange={inputHandler} value={result.analyzedBy2}>
-                                        <option defaultValue="Choose...">Choose...</option>
-                                        <option value="JULIE ANN C. SIARES">JULIE ANN C. SIARES</option>
-                                        <option value="MA. CRISSA F. JARANILLA">MA. CRISSA F. JARANILLA</option>
-                                        <option value="CARL VINCENT DC. SARGENTO">CARL VINCENT DC. SARGENTO</option>
-                                        <option value="MA. CRISTINA V. CANON">MA. CRISTINA V. CANON</option>
-                                        <option value="MARIAH NICKOLE T. GARCIA">MARIAH NICKOLE T. GARCIA</option>
-                                        <option value="QUENNIE MAE M. BELANO">QUENNIE MAE M. BELANO</option>
-                                        <option value="QUELLY JEAN O. CAÑON">QUELLY JEAN O. CAÑON</option>
-                                    </select>
+                                    <div className='position-relative'>
+                                        <label className='form-label'>Analyzed By</label>
+                                        <div className='form-control border-dark d-flex flex-wrap align-items-center gap-1 ' onClick={() => setAnalystMenuOpen((open) => !open)}>
+                                            {selectedValue.length === 0 ? (
+                                                <span>Choose analysts...</span>
+                                            ) : (
+                                                selectedValue.map((value, index) => (
+                                                    <span key={index} className='bg-primary bg-opacity-50 text-white  rounded-4 p-1' style={{ fontSize: 11 }}>
+                                                        {value}
+                                                        <button
+                                                            className='ms-2 text-dark border-0 bg-transparent'
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                removeSelectedValue(value);
+                                                            }}
+                                                            style={{ cursor: 'pointer', fontSize: 12 }}
+                                                        >
+                                                            X
+                                                        </button>
+                                                    </span>
+                                                ))
+                                            )}
+
+                                        </div>
+                                        {analystMenuOpen && (
+                                            <div className='card mt-1 border border-dark position-absolute w-100 z-3'>
+                                                {availableValues.map((analyst, index) => (
+                                                    <span key={index} className='button mb-1 px-3 ' onClick={() => { addSelectedValue(analyst) }}>
+                                                        {analyst}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="col-md-6">
+
+
+                                <div className="col-md-6 ">
                                     <label className='form-label '>Date Received: </label>
                                     <input type="date" className="date form-control border-dark" name='dateReceived' onChange={inputHandler} value={result.dateReceived} placeholder="" />
-                                </div>
-
-                                <div className='col-md-6'>
-                                    {/*Date Performed*/}
-                                    <div className="col">
-                                        <div className='col-md mt-4 pt-2'>
-                                            <div className='row'>
-                                                <label className=" col-md-3 col-form-label">Date Performed:</label>
-                                                <div className='col-md-9'>
-                                                    <input type="text" className="date form-control border-dark" id="datePerformed" name="datePerformed" onChange={inputHandler} value={result.datePerformed} placeholder="" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className=" row mt-4">
-
-                                            {/*FROM*/}
-                                            <div className="col-sm-5">
-                                                <div className="row ">
-                                                    <label className="col-sm-4 col-form-label">From</label>
-                                                    <div className="col-md-8">
-                                                        <input
-                                                            type="date"
-                                                            className="form-control border-dark"
-                                                            id="datePerformedFrom"
-                                                            name="datePerformedFrom"
-                                                            onChange={inputHandler}
-                                                            value={dateFrom}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/*TO*/}
-                                            <div className="col-sm-5">
-                                                <div className="row ">
-                                                    <label className="col-sm-4 col-form-label ">To</label>
-                                                    <div className="col-md-8">
-                                                        <input
-                                                            type="date"
-                                                            className="form-control border-dark"
-                                                            id="datePerformedTo"
-                                                            name="datePerformedTo"
-                                                            onChange={inputHandler}
-                                                            value={dateTo}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/*BUTTON*/}
-                                            <div className='col-sm d-flex align-items-center justify-content-center'>
-                                                <button type='button' className='btn btn-primary' onClick={addDateRange}><i className="bi bi-plus-lg fs-8"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="col-md-6 ">
                                     <label className='form-label '>Purpose: </label>
                                     <input type="text" className="date form-control border-dark" name='purpose' onChange={inputHandler} value={result.purpose} placeholder="" />
                                 </div>
+
+                                <div className='col-md-6 mt-3'>
+                                    {/*Date Performed*/}
+                                    <div className="col">
+                                        <div className='col-md'>
+                                            <label className=" col-md-3 col-form-label">Date Performed:</label>
+                                            <div className='col-auto'>
+                                                <input type="text" className="date form-control border-dark" id="datePerformed" name="datePerformed" onChange={inputHandler} value={result.datePerformed} placeholder="" />
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
                                 <div className="col-md-6">
                                     <label className='form-label '>Date of Collection: </label>
                                     <input type="date" className="date form-control border-dark" name='dateCollected' onChange={inputHandler} value={result.dateCollected} placeholder="" />
+                                </div>
+                                <div className="col-md-6">
+                                    <div className=" row mt-4">
+
+                                        {/*FROM*/}
+                                        <div className="col-sm-5">
+                                            <div className="row ">
+                                                <label className="col-sm-4 col-form-label">From</label>
+                                                <div className="col-md-8">
+                                                    <input
+                                                        type="date"
+                                                        className="form-control border-dark"
+                                                        id="datePerformedFrom"
+                                                        name="datePerformedFrom"
+                                                        onChange={inputHandler}
+                                                        value={dateFrom}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/*TO*/}
+                                        <div className="col-sm-5">
+                                            <div className="row ">
+                                                <label className="col-sm-4 col-form-label ">To</label>
+                                                <div className="col-md-8">
+                                                    <input
+                                                        type="date"
+                                                        className="form-control border-dark"
+                                                        id="datePerformedTo"
+                                                        name="datePerformedTo"
+                                                        onChange={inputHandler}
+                                                        value={dateTo}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/*BUTTON*/}
+                                        <div className='col-sm d-flex align-items-center justify-content-center'>
+                                            <button type='button' className='btn btn-primary' onClick={addDateRange}><i className="bi bi-plus-lg fs-8"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -531,7 +687,7 @@ function GenerateReport() {
                         {/*BORDER*/}
                         <div className='container-fluid border border-secondary border-1 mt-3'></div>
 
-                        {/*Chemical Analysis Result*/}
+
                         <div className='card p-4 mb-3 mt-3 shadow-sm border'>
                             <h5 className='mb-4 text-primary fw-bold'>Analysis Result</h5>
 
@@ -543,7 +699,23 @@ function GenerateReport() {
 
                                 <div className='col-md-6'>
                                     <label className='form-label'>Test Method</label>
-                                    <input type='text' className='form-control border-dark' name='testMethod' value={result.testMethod} onChange={inputHandler} />
+                                    <Creatable
+                                        styles={{
+                                            control: (baseStyles) => ({
+                                                ...baseStyles,
+                                                borderColor: 'black',
+                                                borderRadius: '6px',
+                                            }),
+                                        }}
+
+                                        options={testMethodOptions}
+                                        name='testMethod'
+                                        value={selectValue(result.testMethod)}
+                                        onChange={selectChange}
+                                        onCreateOption={addTestMethod}
+                                        onRemoveOption={removeTestMethod}
+                                        components={{ Option: customOption }}
+                                    />
                                 </div>
 
                                 <div className='col-md-6'>
@@ -567,9 +739,9 @@ function GenerateReport() {
                                                 species: result.species
                                             }
                                             setReportDetails(newDetails);
-                                            setShowModal(true);
-                                        }
 
+                                        }
+                                        setShowModal(true);
                                     }}>
                                     <i className="bi bi-plus-lg me-2 fs-6"></i>Add Sample Details
                                 </button>
@@ -581,39 +753,21 @@ function GenerateReport() {
                                     <table className="table table-bordered border-dark ">
                                         <thead className="table-primary border-dark">
                                             <tr className='text-center'>
-                                                <th>ITEM NO.</th>
-                                                <th>SAMPLE NO.</th>
-                                                <th>FIELD SAMPLE ID</th>
-                                                <th>NAME OF OWNER</th>
-                                                <th>ADDRESS</th>
-                                                <th>SPECIES</th>
-                                                <th>AGE</th>
-                                                <th>SEX</th>
-                                                <th>RESULT</th>
+                                                {columns.map(col => <th key={col.key}>{col.label}</th>)}
                                                 <th>ACTION</th>
                                             </tr>
-
                                         </thead>
                                         <tbody>
                                             {roaReport.length > 0 ? (
                                                 roaReport.map((reportItem, index) => (
                                                     <tr key={index}>
-                                                        <td>{reportItem.itemNo}</td>
-                                                        <td>{reportItem.sampleNo}</td>
-                                                        <td><input type='text' className='form-control border-0 shadow-none bg-transparent' name='fieldSampleID' data-index={index} data-array='roaReport' onChange={inputHandler} value={reportItem.fieldSampleID} /></td>
-                                                        <td>{reportItem.nameOfOwner}</td>
-                                                        <td>{reportItem.address}</td>
-                                                        <td>{reportItem.species}</td>
-                                                        <td>{reportItem.age}</td>
-                                                        <td>{reportItem.sex}</td>
-                                                        <td>{reportItem.result}</td>
-                                                        <td><button
-                                                            type='button'
-                                                            className='btn btn-sm btn-outline-primary me-2'
-                                                            onClick={() => openEditModal(index)}
-                                                            title="Edit Sample"
+                                                        {columns.map(col =>
+                                                            <td key={col.key}>
+                                                                <input type='text' className='border-0 shadow-none bg-transparent' style={{ boxShadow: 'none', outline: 0, width: '100%' }} name={col.key} data-index={index} data-array='roaReport' onChange={inputHandler} value={reportItem[col.key ?? '']}></input>
+                                                            </td>
+                                                        )}
 
-                                                        ><i className="bi bi-pencil"></i></button>
+                                                        <td>
 
                                                             <button
                                                                 type="button"
@@ -628,13 +782,65 @@ function GenerateReport() {
                                                 ))
                                             ) : (
                                                 <tr>
-                                                    <td colSpan="10" className="text-center">No samples added yet.</td>
+                                                    <td colSpan="15" className="text-center">No samples added yet.</td>
                                                 </tr>
                                             )}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="card p-4 mb-3 mt-3 shadow-sm border">
+                            <h5 className='mb-4 text-primary fw-bold'>Interpretation of Results</h5>
+                            <table className="table table-bordered border-dark w-50">
+                                <thead className="table-primary border-dark">
+                                    <tr className='text-center'>
+                                        {header.map(header =>
+                                            <th key={header.key} colSpan={header.colSpan ?? 1}>
+                                                {header.label}
+                                            </th>
+                                        )}
+                                        <th style={{ width: '1%', whiteSpace: 'nowrap' }}></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {inputs.map((field, index) => (
+                                        <tr key={index}>
+                                            {table.map(cell =>
+                                                <td key={cell.key} className='pb-0 pt-1 px-0'>
+                                                    <input type='text' className='form-control border border-dark border-0' style={{ boxShadow: 'none', outline: 0, width: '100%' }} name={cell.key} value={field[cell.key] ?? ''} onChange={(e) => interpretInputHandler(index, cell.key, e.target.value)} />
+                                                </td>
+                                            )}
+                                            <td>
+                                                {inputs.length > 1 &&
+                                                    <button type='button' className='btn btn-sm btn-outline-danger' onClick={() => deleteField(index)}><i className="bi bi-trash"></i></button>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {/*{inputs.map((field, index) => (
+                <div key={index}>
+                  {columns.map(table =>
+                    table.tableOfResults && (
+                      <div key={table.key} className='row'>
+                        {table.tableOfResults.map(col =>
+                          <div key={col.key} className='col-md-3'>
+                            <label>{col.label}</label>
+
+                          </div>
+                        )}
+                        <button type='button' className='btn btn-danger col-2' onClick={() => deleteField(index)}>DELETE</button>
+                      </div>
+                    )
+                  )}
+                </div>
+              ))} */}
+                            <button type='button' className='btn btn-primary col-2 fw-bold' onClick={addField}>+ Add Row</button>
+
                         </div>
 
 
@@ -652,13 +858,14 @@ function GenerateReport() {
                 onClose={() => {
                     setShowModal(false);
                     setReportDetails({
-                        labCode: '',
-                        customerCode: '',
-                        sampleDescription: '',
-                        results: {
-                            method1Results: ''
-                        },
-                        testMethod: ''
+                        sampleNo: '',
+                        fieldSampleID: '',
+                        nameOfOwner: '',
+                        address: '',
+                        species: '',
+                        age: '',
+                        sex: '',
+                        result: ''
                     });
                 }}
                 reportDetails={reportDetails}
@@ -667,6 +874,7 @@ function GenerateReport() {
                 isEditing={isEditing}
                 counter={counter}
                 setCounter={setCounter}
+                testMethod={result.testMethod}
             />
         </div>
     )

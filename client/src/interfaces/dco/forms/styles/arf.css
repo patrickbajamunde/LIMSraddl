@@ -66,9 +66,23 @@ label{
 
 .methodReq{
     font-weight: bold; 
-    
+
 }
 
 .border-bottom:focus{
     outline: none;
+}
+
+.button:hover{
+    background-color: #0d6efd;
+    color: white
+}
+
+.react-select__control {
+    border-color: black;
+}
+
+.my-select__control {
+  background-color: #f0f0f0;
+  border-color: #ccc;
 }

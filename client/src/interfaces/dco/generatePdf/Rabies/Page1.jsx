@@ -143,7 +143,7 @@ const Rabies = ({ request }) => {
 
                     <View style={[styles.headerCell, { flexDirection: 'column', }]}>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3 }]}>Document Code</Text>
-                        <Text style={[styles.normalFont, { fontSize: 8, borderBottom: 1, paddingLeft: 3, paddingBottom: 3, paddingRight: 5 }]}>ILD5-RADDL-FR-001-0</Text>
+                        <Text style={[styles.normalFont, { fontSize: 8, borderBottom: 1, paddingLeft: 3, paddingBottom: 3, paddingRight: 5 }]}>ILD5-RADDL-FR-001-1</Text>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3, paddingTop: 3 }]}>Record ID</Text>
                         <View style={[styles.normalFont, { fontSize: 8, paddingRight: 2, paddingLeft: 3 }]}>
                             <Text>{request.recordId.substring(0, 18)}</Text>
@@ -154,7 +154,7 @@ const Rabies = ({ request }) => {
                     <View style={[styles.headerCell, { flexDirection: 'column', width: '13%', borderRightWidth: 0 }]}>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3 }]}>Effectivity Date</Text>
                         <View style={[styles.row, { borderBottom: 1, width: '100%' }]}>
-                            <Text style={[styles.normalFont, { fontSize: 8, paddingLeft: 3, paddingBottom: 3, }]}>March 17, 2026</Text>
+                            <Text style={[styles.normalFont, { fontSize: 8, paddingLeft: 3, paddingBottom: 3, }]}>June 18, 2026</Text>
                         </View>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3, paddingTop: 3 }]}>Page No.</Text>
                         <Text
@@ -165,6 +165,11 @@ const Rabies = ({ request }) => {
                 </View>
 
                 <View style={[styles.table, { marginTop: 6 }]}>
+                    <View style={[styles.row, ]}>
+                        <View style={[styles.cellFour, { width: '100%', borderRightWidth: 1, paddingLeft: 4 }]}>
+                            <Text style={[styles.boldFont, { fontSize: 10, }]}>Method: DIRECT FLUORESCENT ANTIBODY TEST (DFAT)</Text>
+                        </View>
+                    </View>
                     <View style={styles.row}>
                         {/*------------------------------------------ Request Details ----------------------------------------*/}
                         <View style={[{ width: '51.5%' }]}>

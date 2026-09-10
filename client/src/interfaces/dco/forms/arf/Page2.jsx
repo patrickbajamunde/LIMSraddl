@@ -51,12 +51,12 @@ function Page2({ request, inputHandler, checkboxHandler }) {
 
                             <div>
                                 <label className='form-label'>Barangay</label>
-                                <input type="email" className="form-control border border-dark" id="barangay" name='barangay' value={request.barangay} onChange={inputHandler} placeholder="example@email.com" />
+                                <input type="email" className="form-control border border-dark" id="barangay" name='barangay' value={request.barangay} onChange={inputHandler} placeholder="Barangay" />
                             </div>
 
                             <div>
                                 <label className='form-label'>Municipality</label>
-                                <input type="tel" className="form-control border border-dark" id="municipality" name='municipality' value={request.municipality || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" />
+                                <input type="tel" className="form-control border border-dark" id="municipality" name='municipality' value={request.municipality || ''} onChange={inputHandler} placeholder="Municipality" />
                             </div>
 
                             <div>
@@ -70,7 +70,7 @@ function Page2({ request, inputHandler, checkboxHandler }) {
                             </div>
                             <div>
                                 <label className='form-label'>Email</label>
-                                <input type="text" className="form-control border border-dark" id="email" name='email' value={request.email} onChange={inputHandler} placeholder="Street, Barangay, City" />
+                                <input type="text" className="form-control border border-dark" id="email" name='email' value={request.email} onChange={inputHandler} placeholder="example@email.com" />
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@ function Page2({ request, inputHandler, checkboxHandler }) {
 
                             <div>
                                 <label className='form-label'>Address</label>
-                                <input type="email" className="form-control border border-dark" id="clientAddress" name='clientAddress' value={request.clientAddress} onChange={inputHandler} placeholder="example@email.com" />
+                                <input type="email" className="form-control border border-dark" id="clientAddress" name='clientAddress' value={request.clientAddress} onChange={inputHandler} placeholder="Street, Barangay, City" />
                             </div>
 
                             <div>

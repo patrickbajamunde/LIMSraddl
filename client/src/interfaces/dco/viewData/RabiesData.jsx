@@ -6,7 +6,7 @@ import './styles/arfData.css'
 import Arf from '../generatePdf/Arf'
 
 
-function RabiesData({requestData, setRequestData, id}) {
+function RabiesData({ requestData, setRequestData, id }) {
 
 
     const location = useLocation();
@@ -186,30 +186,50 @@ function RabiesData({requestData, setRequestData, id}) {
                                 <div className="col ">
                                     <div className="row">
                                         <span className='fw-bold fs-2 '>Analysis Request Form</span>
-                                        <span className='fs-5 text-decoration-underline'>Request ID: {requestData.requestId}</span>
-                                        <span className='fs-5 text-decoration-underline'>Laboratory Accession Number: {requestData.labAccessionNumber}</span>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+                                            <div className='col '>
+                                                <span className='fs-5'>Request ID: </span>
+                                                <span className='fs-5 text-decoration-underline'>{requestData.requestId || 'N/A'}</span>
+                                            </div>
+                                            <div className='col '>
+                                                <span className='fs-5'>Laboratory Accession Number: </span>
+                                                <span className='fs-5 text-decoration-underline'>{requestData.labAccessionNumber || 'N/A'}</span>
+                                            </div>
+                                        </div>
+                                        <div className="col border-start border-2 border-opacity-25 border-white">
+                                            <div className="col">
+                                                <span className='fs-5'>Customer Type: </span>
+                                                <span className='fs-5 text-decoration-underline'>{requestData.clientType || 'N/A'}</span>
+                                            </div>
+                                            <div className="col">
+                                                <span className='fs-5'>Received By: </span>
+                                                <span className='fs-5 text-decoration-underline'>{requestData.data.receivedBy || 'N/A'}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/*Request Details*/}
                             <div className='row p-3'>
-                                <span className='fs-3 px-1 d-flex justify-items-center fw-bold'><i className='bi bi-list-check fs-2 me-2 text-success' />Request Details</span>
+                                <span className='fs-3 px-1 d-flex justify-items-center fw-bold'><i className='bi bi-list-check fs-2 me-2 text-success' />Origin of Samples</span>
                             </div>
                             <div className='row m-1 p-1 gap-5'>
                                 <div className='col'>
                                     <div className='row g-3'>
                                         <div className='card pt-2 pb-2 ps-3'>
-                                            <span className='fw-bold text-secondary'>CUSTOMER TYPE</span>
-                                            <span className='fs-5 fw-semibold'>{requestData.clientType || '-'}</span>
+                                            <span className='fw-bold text-secondary'>Owner/Farm</span>
+                                            <span className='fs-5 fw-semibold'>{requestData.locOfFarm || '-'}</span>
                                         </div>
                                         <div className="card pt-2 pb-2 ps-3">
-                                            <span className='fw-bold text-secondary'>RECEIVED BY</span>
-                                            <span className='fs-5 fw-semibold'>{requestData.data.receivedBy || '-'}</span>
+                                            <span className='fw-bold text-secondary'>BARANGGAY</span>
+                                            <span className='fs-5 fw-semibold'>{requestData.barangay || '-'}</span>
                                         </div>
                                         <div className='card pt-2 pb-2 ps-3'>
-                                            <span className='fw-bold text-secondary'>LOCATION OF FARM</span>
-                                            <span className='fs-5 fw-semibold'>{requestData.locOfFarm || '-'}</span>
+                                            <span className='fw-bold text-secondary'>MUNICIPALITY</span>
+                                            <span className='fs-5 fw-semibold'>{requestData.municipality || '-'}</span>
                                         </div>
 
                                     </div>
@@ -217,16 +237,16 @@ function RabiesData({requestData, setRequestData, id}) {
                                 <div className='col'>
                                     <div className='row g-3'>
                                         <div className='card pt-2 pb-2 ps-3'>
-                                            <span className='fw-bold text-secondary'>CROPS PLANTED</span>
-                                            <span className='fs-5 fw-semibold'>{requestData.cropsPlanted || '-'}</span>
+                                            <span className='fw-bold text-secondary'>PROVINCE</span>
+                                            <span className='fs-5 fw-semibold'>{requestData.province || '-'}</span>
                                         </div>
                                         <div className='card pt-2 pb-2 ps-3'>
-                                            <span className='fw-bold text-secondary'>AREA</span>
-                                            <span className='fs-5 fw-semibold'>{requestData.area || '-'}</span>
+                                            <span className='fw-bold text-secondary'>CONTACT NO.</span>
+                                            <span className='fs-5 fw-semibold'>{requestData.contactNo || '-'}</span>
                                         </div>
                                         <div className='card pt-2 pb-2 ps-3'>
-                                            <span className='fw-bold text-secondary'>TOPOGRAPHY</span>
-                                            <span className='fs-5 fw-semibold'>{requestData.topography || '-'}</span>
+                                            <span className='fw-bold text-secondary'>EMAIL</span>
+                                            <span className='fs-5 fw-semibold'>{requestData.email || '-'}</span>
                                         </div>
 
                                     </div>
@@ -320,7 +340,7 @@ function RabiesData({requestData, setRequestData, id}) {
                                         {specimenList.map((specimenList, index) => (
                                             <>
                                                 <input className="btn-check border border-dark " type="checkbox" name="specimenList" id={`specimenList-${index}`} value={specimenList} checked={(requestData.data.specimen || []).some(item => item.name === specimenList)} />
-                                                <label className={`btn shadow-sm px-5 py-2 fw-bold fs-5 ${(requestData.data.specimen).some(item => item.name === specimenList) ? ' border-primary text-primary bg-primary bg-opacity-10' : 'border border-primary text-secondary'}`} style={(requestData.data.specimen).some(item => item.name === specimenList) ? { borderBottomWidth: '5px' } : {}} htmlFor={`specimenList-${index}`}>{specimenList}</label>
+                                                <label className={`btn shadow-sm px-5 py-2 fw-bold fs-5 ${(requestData.data.specimen).some(item => item.name === specimenList) ? 'border-primary text-primary bg-primary bg-opacity-10' : 'border border-primary text-secondary'}`} style={(requestData.data.specimen).some(item => item.name === specimenList) ? { borderBottomWidth: '5px' } : {}} htmlFor={`specimenList-${index}`}>{specimenList}</label>
                                             </>
                                         ))}
                                     </div>

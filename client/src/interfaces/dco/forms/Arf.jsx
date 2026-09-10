@@ -7,6 +7,8 @@ import Page1 from './arf/Page1';
 import Page2 from './arf/Page2';
 import Page3 from './arf/Page3';
 import Page4 from './arf/Page4';
+import Page5 from './arf/Page5';
+import SignatureCanvas from 'react-signature-canvas';
 
 
 function Arf() {
@@ -75,6 +77,7 @@ function Arf() {
         sampleStorage: [],
         sex: [],
         bacteOthers2: [],
+        signature: "",
     }
 
     const customerCategory = (clientType) => {
@@ -133,7 +136,7 @@ function Arf() {
         const raddl = 'RADDL';
         const fr = 'FR';
 
-        const formCode = '002'
+        const formCode = '001'
         const defaultSequence = '0000';
 
         return `${year}-${raddl}-${fr}-${formCode}-${defaultSequence}`;
@@ -143,6 +146,8 @@ function Arf() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [step]);
 
+
+    //INPUT HANDLER
     const inputHandler = (e) => {
         const { name, value, dataset } = e.target;
 
@@ -182,7 +187,7 @@ function Arf() {
         } else {
             setRequest({ ...request, [name]: value });
         }
-    };
+    }
 
     const checkboxHandler = (e) => {
         const { name, value, checked } = e.target;
@@ -270,7 +275,7 @@ function Arf() {
                     </div>
                 </div>
             </div>
-            <div className='d-flex mt-5 w-75 container'>
+            <div className='d-flex mt-5 w-75 container justify-content-center'>
                 <div className='row g-6'>
                     <div className='message col-md-4'>
                         {successMessage && (
@@ -313,9 +318,16 @@ function Arf() {
                             />
                         }
 
+                        {step === 5 &&
+                            <Page5
+                                setRequest={setRequest}
+                                request={request} 
+                            />
+                        }
+
                         <div className='col d-flex align-item-center justify-content-end gap-3'>
                             <button type="button" className='btn btn-primary px-5' onClick={handleBack} disabled={step === 1}>Back</button>
-                            {step === 4 ?
+                            {step === 5 ?
                                 <button type="button" className="btn btn-success px-5" onClick={submitForm}>Submit</button>
                                 :
                                 <button type="button" className="btn btn-primary px-5" onClick={handleNext}>Next</button>

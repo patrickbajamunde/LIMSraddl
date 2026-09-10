@@ -1,4 +1,5 @@
 import React from 'react';
+import { ModalField } from '../../forms/roaTable/ReportTable';
 
 export const RoaModal = ({ show,
   onClose,
@@ -7,8 +8,10 @@ export const RoaModal = ({ show,
   onSubmit,
   isEditing,
   counter,
-  setCounter
+  setCounter,
+  testMethod
 }) => {
+  const fields = ModalField(testMethod)
   if (!show) return null;
 
   return (
@@ -17,7 +20,7 @@ export const RoaModal = ({ show,
         <div className="modal-content">
           <form onSubmit={onSubmit}>
             <div className="modal-header bg-primary text-white">
-              <h5 className="modal-title">Chemical Analysis Results Details</h5>
+              <h5 className="modal-title">Results Details</h5>
               <button type="button" className="btn-close" onClick={onClose} />
             </div>
             <div className="modal-body">
@@ -122,17 +125,28 @@ export const RoaModal = ({ show,
                   <h6 className="fw-bold text-secondary mb-1">Test Results</h6>
                 </div>
 
-                <div className="col-md-12">
-                  <label className="form-label">Results</label>
-                  <input
-                    type="text"
-                    className="form-control border-black"
-                    name="result"
-                    value={reportDetails.result}
-                    onChange={(e) => onChange('result', e.target.value)}
-                  />
-                </div>
+                {fields.map(field =>
+                  <div className={fields.length === 1 ? `col-md-12` : 'col-md-6'}>
+                    <label className="form-label">{field.label}</label>
+                    {testMethod === 'NECROPSY' ? (
+                      <textarea
+                        className="form-control border-black"
+                        name={field.key}
+                        value={reportDetails[field.key] ?? ''}
+                        onChange={(e) => onChange(field.key, e.target.value)}
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control border-black"
+                        name={field.key}
+                        value={reportDetails[field.key] ?? ''}
+                        onChange={(e) => onChange(field.key, e.target.value)}
+                      />
+                    )}
 
+                  </div>
+                )}
               </div>
             </div>
             <div className="modal-footer">

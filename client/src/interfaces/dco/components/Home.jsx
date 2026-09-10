@@ -26,28 +26,28 @@ function Home() {
     const fetchRegCount = async () => {
       try {
         const resReg = await axios.get("http://localhost:8003/api/dbcontrol/countReg", {
-          
+
         })
         const resCorn = await axios.get("http://localhost:8003/api/dbcontrol/countCorn", {
-          
+
         })
         const resLgu = await axios.get("http://localhost:8003/api/dbcontrol/countLgu", {
-          
+
         })
         const resResearch = await axios.get("http://localhost:8003/api/dbcontrol/countResearch", {
-          
+
         })
         const resWalk = await axios.get("http://localhost:8003/api/dbcontrol/countWalkin", {
-          
+
         })
         const resHVC = await axios.get("http://localhost:8003/api/dbcontrol/countHVC", {
-          
+
         })
-        const resRice = await axios.get("http://localhost:8003/api/dbcontrol/countRice",{
-          
+        const resRice = await axios.get("http://localhost:8003/api/dbcontrol/countRice", {
+
         })
-        const resGovtAgency = await axios.get("http://localhost:8003/api/dbcontrol/countGovtAgency",{
-          
+        const resGovtAgency = await axios.get("http://localhost:8003/api/dbcontrol/countGovtAgency", {
+
         })
 
         setRegCount(resReg.data.count);
@@ -67,35 +67,22 @@ function Home() {
 
 
   return (
-    <div className='d-flex container-fluid home mt-4'>
-      <div className='content container-fluid mt-1'>
+    <>
+      
+      {/*<div className='content'>
+        <div className="row d-flex g-4 px-4 pt-3">
 
-        {/*NEW DASHBOARD CARDS DESIGN ROW 1*/}
-        <div className='row d-flex'>
-
-          {/*WALIK-IN CARD */}
-          <div className='col mb-3'>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{walkinCount}</h3>
-                  <p className='fs-5 mb-0'>Walk-in</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image5}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+                <div className="row">
+                  <div className="col bg-primary">1</div>
+                  <div className="col bg-success">2</div>
                 </div>
               </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#339399", }}
-              >
+              <div className='container-fluid bg-warning d-flex'>
                 <Link
-                  className='text-white nav-link ms-auto p-0'
+                  className='text-white nav-link ms-auto p-0 pe-2'
                   to="/Dco/Walkin/"
                 >
                   view more
@@ -103,220 +90,51 @@ function Home() {
               </div>
             </div>
           </div>
-          
-          
-          {/*REGULATORY CARD */}
-          <div className='col mb-3'>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{regCount}</h3>
-                  <p className='fs-5 mb-0'>Regulatory</p>
-                </div>
-                <i className='bi bi-person fs-1'></i>
+
+
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+                2
+
+
               </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#C7CF6F", }}
-              >
+              <div className='container-fluid bg-warning d-flex'>
                 <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/Regulatory/"
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
                 >
                   view more
                 </Link>
               </div>
             </div>
           </div>
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
 
+                3
 
-          {/*CORN PROGRAM CARD */}
-          <div className='col mb-3'>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{cornCount}</h3>
-                  <p className='fs-5 mb-0'>Corn Program</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image3}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
-                </div>
               </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#777CFF", }}
-              >
+              <div className='container-fluid bg-warning d-flex'>
                 <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/CornProgram/"
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
                 >
                   view more
                 </Link>
               </div>
             </div>
           </div>
-
-
-          {/*LGU CARD */}
-          <div className='col mb-3'>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{lguCount}</h3>
-                  <p className='fs-5 mb-0'>LGU</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image4}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
-                </div>
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+                4
               </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#EC8187", }}
-              >
+              <div className='container-fluid bg-warning d-flex'>
                 <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/LGU/"
-                >
-                  view more
-                </Link>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-
-
-        {/*NEW DASHBOARD CARDS DESIGN ROW 2*/}
-        <div className='row d-flex'>
-
-          {/*HIGH VALUE CROPS CARD */}
-          <div className='col mb-3 '>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{HvcCount}</h3>
-                  <p className='fs-5 mb-0'>High Value Crops</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image4}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
-                </div>
-              </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#ff3a3aff", }}
-              >
-                <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/HVCrops/"
-                >
-                  view more
-                </Link>
-              </div>
-            </div>
-          </div>
-          
-          {/*RICE PROGRAM */}
-          <div className='col mb-3 '>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{riceCount}</h3>
-                  <p className='fs-5 mb-0'>Rice Program</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image4}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
-                </div>
-              </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#8925fcff", }}
-              >
-                <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/Rice Program/"
-                >
-                  view more
-                </Link>
-              </div>
-            </div>
-          </div>
-
-
-          {/*GOVERNMENT AGENCY */}
-          <div className='col mb-3 '>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{GaCount}</h3>
-                  <p className='fs-5 mb-0'>Gov. Agency</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image4}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
-                </div>
-              </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#84d7f8ff", }}
-              >
-                <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/Government Agency/"
-                >
-                  view more
-                </Link>
-              </div>
-            </div>
-          </div>
-          
-          {/*RESEARCH CARD */}
-          <div className='col mb-3'>
-            <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
-              <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
-                <div className='me-3'>
-                  <h3 className='fs-2'>{resCount}</h3>
-                  <p className='fs-5 mb-0'>Research</p>
-                </div>
-                <div className='ms-4'>
-                  <img
-                    src={image4}
-                    alt="description"
-                    className='image2-style'
-                    style={{ maxWidth: '150px', height: 'auto' }}
-                  />
-                </div>
-              </div>
-              <div
-                className='d-flex container rounded-bottom-1'
-                style={{ backgroundColor: "#FCA625", }}
-              >
-                <Link
-                  className='text-white nav-link ms-auto p-0'
-                  to="/Dco/Research/"
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
                 >
                   view more
                 </Link>
@@ -325,17 +143,348 @@ function Home() {
           </div>
         </div>
 
-        {/*RECENT TRANSACTIONS */}
-        <div>
-          <div className="row">
-            <div className="col-md">
-              <Dashboard />
+
+        <div className="row d-flex g-4 px-4 pt-3">
+
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+                5
+              </div>
+              <div className='container-fluid bg-warning d-flex'>
+                <Link
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
+                >
+                  view more
+                </Link>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+
+                6
+
+              </div>
+              <div className='container-fluid bg-warning d-flex'>
+                <Link
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
+                >
+                  view more
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+
+                7
+
+              </div>
+              <div className='container-fluid bg-warning d-flex'>
+                <Link
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
+                >
+                  view more
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="col-6 col-xl-3">
+            <div className='bg-primary'>
+              <div className='container-fluid bg-danger p-4'>
+                8
+              </div>
+              <div className='container-fluid bg-warning d-flex'>
+                <Link
+                  className='text-white nav-link ms-auto p-0 pe-2'
+                  to="/Dco/Walkin/"
+                >
+                  view more
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
+      </div> */}
+
+      <div className='d-flex container-fluid home mt-4'>
+        <div className='content container-fluid mt-1'>
+
+          {/*NEW DASHBOARD CARDS DESIGN ROW 1*/}
+          <div className='row d-flex'>
+            {/*WALIK-IN CARD */}
+            <div className='col mb-3'>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{walkinCount}</h3>
+                    <p className='fs-5 mb-0'>Walk-in</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image5}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#339399", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/Walkin/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+
+            {/*REGULATORY CARD */}
+            <div className='col mb-3'>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{regCount}</h3>
+                    <p className='fs-5 mb-0'>Regulatory</p>
+                  </div>
+                  <i className='bi bi-person fs-1'></i>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#C7CF6F", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/Regulatory/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+
+            {/*CORN PROGRAM CARD */}
+            <div className='col mb-3'>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{cornCount}</h3>
+                    <p className='fs-5 mb-0'>Corn Program</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image3}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#777CFF", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/CornProgram/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+
+            {/*LGU CARD */}
+            <div className='col mb-3'>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{lguCount}</h3>
+                    <p className='fs-5 mb-0'>LGU</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image4}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#EC8187", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/LGU/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          {/*NEW DASHBOARD CARDS DESIGN ROW 2*/}
+          <div className='row d-flex'>
+
+            {/*HIGH VALUE CROPS CARD */}
+            <div className='col mb-3 '>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{HvcCount}</h3>
+                    <p className='fs-5 mb-0'>High Value Crops</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image4}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#ff3a3aff", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/HVCrops/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/*RICE PROGRAM */}
+            <div className='col mb-3 '>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{riceCount}</h3>
+                    <p className='fs-5 mb-0'>Rice Program</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image4}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#8925fcff", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/Rice Program/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+
+            {/*GOVERNMENT AGENCY */}
+            <div className='col mb-3 '>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{GaCount}</h3>
+                    <p className='fs-5 mb-0'>Gov. Agency</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image4}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#84d7f8ff", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/Government Agency/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/*RESEARCH CARD */}
+            <div className='col mb-3'>
+              <div className='container border border-2 bg-light p-0 shadow-sm rounded'>
+                <div className='d-flex align-items-center mb-3 ms-4 mt-3'>
+                  <div className='me-3'>
+                    <h3 className='fs-2'>{resCount}</h3>
+                    <p className='fs-5 mb-0'>Research</p>
+                  </div>
+                  <div className='ms-4'>
+                    <img
+                      src={image4}
+                      alt="description"
+                      className='image2-style'
+                      style={{ maxWidth: '150px', height: 'auto' }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className='d-flex container rounded-bottom-1'
+                  style={{ backgroundColor: "#FCA625", }}
+                >
+                  <Link
+                    className='text-white nav-link ms-auto p-0'
+                    to="/Dco/Research/"
+                  >
+                    view more
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/*RECENT TRANSACTIONS */}
+          <div>
+            <div className="row">
+              <div className="col-md">
+                <Dashboard />
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

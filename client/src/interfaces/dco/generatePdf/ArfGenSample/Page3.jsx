@@ -147,6 +147,7 @@ const Page3 = ({ request, }) => {
                     </View>
                     <View style={[styles.row, { width: '100%' }]}>
                         <View style={[styles.cellTwo, { width: '48%', borderLeftWidth: 0, alignItems: 'center', paddingTop: 7 }]}>
+                            <Image src={request.data.signature} style={{ width: 90, height: 90, position: 'absolute', objectFit:'contain', bottom: -22 }} />
                             {request && request.data.receivedBy !== '' ? (
                                 <Text style={{ borderBottomWidth: 0.5, width: '85%', fontSize: 10, textAlign: 'center' }}>{request.data.receivedBy}</Text>
                             ) : (

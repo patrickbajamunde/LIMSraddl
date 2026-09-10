@@ -114,6 +114,7 @@ const TestPdf = ({ request }) => {
         "Classical Swine Fever Virus (CSFV)",
         "Others",
         "Infectious Bursal Disease Virus (IBDV) in serum",
+        "Foot and Mouth Disease Virus (FMDV)"
     ]
 
     const pcrList = [
@@ -230,7 +231,7 @@ const TestPdf = ({ request }) => {
 
                     <View style={[styles.headerCell, { flexDirection: 'column', }]}>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3 }]}>Document Code</Text>
-                        <Text style={[styles.normalFont, { fontSize: 8, borderBottom: 1, paddingLeft: 3, paddingBottom: 3, paddingRight: 5 }]}>ILD5-RADDL-FR-001-0</Text>
+                        <Text style={[styles.normalFont, { fontSize: 8, borderBottom: 1, paddingLeft: 3, paddingBottom: 3, paddingRight: 5 }]}>ILD5-RADDL-FR-002-1</Text>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3, paddingTop: 3 }]}>Record ID</Text>
                         <View style={[styles.normalFont, { fontSize: 8, paddingRight: 2, paddingLeft: 3 }]}>
                             <Text>{request.recordId.substring(0, 18)}</Text>
@@ -241,7 +242,7 @@ const TestPdf = ({ request }) => {
                     <View style={[styles.headerCell, { flexDirection: 'column', width: '13%', borderRightWidth: 0 }]}>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3 }]}>Effectivity Date</Text>
                         <View style={[styles.row, { borderBottom: 1, width: '100%' }]}>
-                            <Text style={[styles.normalFont, { fontSize: 8, paddingLeft: 3, paddingBottom: 3, }]}>March 17, 2026</Text>
+                            <Text style={[styles.normalFont, { fontSize: 8, paddingLeft: 3, paddingBottom: 3, }]}>July 3, 2026</Text>
                         </View>
                         <Text style={[styles.boldFont, { fontSize: 8, paddingLeft: 3, paddingTop: 3 }]}>Page No.</Text>
                         <Text
@@ -669,6 +670,10 @@ const TestPdf = ({ request }) => {
                             <View style={[styles.row, { alignItems: 'center', paddingLeft: 18 }]}>
                                 <Text style={isChecked(elisaList[12], request.data.elisaList)} />
                                 <Text>{elisaList[12]}</Text>
+                            </View>
+                            <View style={[styles.row, { alignItems: 'center', paddingLeft: 18 }]}>
+                                <Text style={isChecked(elisaList[13], request.data.elisaList)} />
+                                <Text>{elisaList[13]}</Text>
                             </View>
                         </View>
                         <View style={[styles.cellTwo, { width: '38%', borderBottomWidth: 0, borderRightWidth: 0 }]}>

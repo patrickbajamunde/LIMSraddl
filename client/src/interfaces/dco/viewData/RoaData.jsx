@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom'
 import GenerateRoa from '../generatePdf/GenerateRoa';
+import { TestMethods } from '../forms/roaTable/ReportTable';
 
 
 function RoaData() {
@@ -12,6 +13,7 @@ function RoaData() {
     const location = useLocation();
     const backRoute = location.state?.from || "/Dco/ForRelease/";
     const navigate = useNavigate()
+
 
     useEffect(() => {
         axios.get(`http://localhost:8003/api/report/reportData/${id}`)
@@ -30,6 +32,8 @@ function RoaData() {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return date.toLocaleDateString('en-US', options);
     };
+
+    const columns = TestMethods(reportDetails?.testMethod)
 
     return (
         <>
@@ -51,13 +55,12 @@ function RoaData() {
                                         <div className='col'>
                                             <div className='row'>
                                                 <span className='fs-5 text-decoration-underline'>Report ID: {reportDetails.reportId}</span>
-                                                <span className='fs-5 text-decoration-underline'>Analyzed By: {reportDetails.analyzedBy}, {reportDetails.analyzedBy2}</span>
+                                                <span className='fs-5 text-decoration-underline'>Analyzed By: {(reportDetails.analyzedBy ?? []).map(analyst => analyst.name).join(', ')}</span>
                                             </div>
                                         </div>
                                         <div className='col border-start border-2 border-opacity-25 border-white'>
-                                            <span className='fs-5 text-decoration-underline'>Request ID: {reportDetails.reportId}</span>
+                                            <span className='fs-5 text-decoration-underline'>Request ID: {reportDetails.requestId  }</span>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -204,36 +207,24 @@ function RoaData() {
                             <table className='table table-striped table-borderless table-hover'>
                                 <thead className='tableHead'>
                                     <tr className='text-center'>
-                                        <th className='align-content-center'>ITEM NO.</th>
-                                        <th className='align-content-center'>SAMPLE NO.</th>
-                                        <th className='align-content-center'>FIELD SAMPLE ID</th>
-                                        <th className='align-content-center'>NAME OF OWNER</th>
-                                        <th className='align-content-center'>ADDRESS</th>
-                                        <th className='align-content-center'>SPECIES</th>
-                                        <th className='align-content-center'>AGE</th>
-                                        <th className='align-content-center'>SEX</th>
-                                        <th className='align-content-center'>RESULT</th>
+                                        {columns.map(col => <th key={col.key}>{col.label}</th>)}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {reportDetails && reportDetails.roaDetails.length > 0 ? (
                                         reportDetails.roaDetails.map((reportItem, index) => (
                                             <tr className='text-center' key={index}>
-                                                <td>{reportItem.itemNo}</td>
-                                                <td>{reportItem.sampleNo}</td>
-                                                <td>{reportItem.fieldSampleID}</td>
-                                                <td>{reportItem.nameOfOwner}</td>
-                                                <td>{reportItem.address}</td>
-                                                <td>{reportItem.species}</td>
-                                                <td>{reportItem.age}</td>
-                                                <td>{reportItem.sex}</td>
-                                                <td>{reportItem.result}</td>
+                                                {columns.map(col =>
+                                                    <td key={col.key}>
+                                                        {reportItem[col.key]}
+                                                    </td>
+                                                )}
                                             </tr>
                                         ))
                                     ) :
                                         (
                                             <tr>
-                                                <td colSpan="10" className="text-center">No data available</td>
+                                                <td colSpan="15" className="text-center">No data available</td>
                                             </tr>
                                         )}
                                 </tbody>

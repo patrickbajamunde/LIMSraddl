@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Page2 from './rabies/Page2';
 import Page3 from './rabies/Page3';
 import Page1 from './rabies/Page1';
+import Page4 from './rabies/Page4';
 import image1 from '../components/images/DA2.png';
 
 function Rabies() {
@@ -100,7 +101,8 @@ function Rabies() {
     dateCollected: "",
     samplingTime: "",
     otherIllness: "",
-    otherSiteOfbite: ""
+    otherSiteOfbite: "",
+    signature: "",
   }
 
   const customerCategory = (clientType) => {
@@ -249,7 +251,7 @@ function Rabies() {
     const raddl = 'RADDL';
     const fr = 'FR';
 
-    const formCode = '002'
+    const formCode = '001'
     const defaultSequence = '0000';
 
     return `${year}-${raddl}-${fr}-${formCode}-${defaultSequence}`;
@@ -383,7 +385,7 @@ function Rabies() {
       </div>
 
 
-      <div className='d-flex mt-5 w-75 container '>
+      <div className='d-flex mt-5 w-75 container justify-content-center'>
         <div className='row g-6'>
           <div className='message col-md-4'>
             {successMessage && (
@@ -420,10 +422,17 @@ function Rabies() {
               />
             }
 
+            {page === 4 &&
+              <Page4
+                setRequest={setRequest}
+                request={request}
+              />
+            }
+
 
             <div className='col d-flex align-item-center justify-content-end gap-3'>
               <button type="button" className='btn btn-primary px-5' onClick={previousPage} disabled={page === 1}>Back</button>
-              {page === 3 ?
+              {page === 4 ?
                 <button type="button" className="btn btn-success px-5" onClick={submitForm}>Submit</button>
                 :
                 <button type="button" className="btn btn-primary px-5" onClick={nextPage}>Next</button>

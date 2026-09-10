@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     cellFour: {
         fontFamily: 'Cambria',
         fontSize: 9,
-        borderRightWidth: 0, 
+        borderRightWidth: 0,
         borderLeftWidth: 0,
         borderBottomWidth: 1,
     },
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         marginRight: 12,
     },
-    checkedBox:{
+    checkedBox: {
         width: 6,
         height: 6,
         borderWidth: 1,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
     },
 
-    checkedBox2:{
+    checkedBox2: {
         width: 6,
         height: 6,
         borderWidth: 1,
@@ -243,9 +243,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderLeftWidth: 0,
         borderTopWidth: 0,
-        backgroundColor: '#D9EAD3',
+        backgroundColor: '#cae2b5',
         textAlign: 'center',
-        paddingBottom: 0
+        paddingBottom: 0,
+
     },
     roaHeaderCont: {
         flexDirection: 'row', // horizontal layout
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     },
     roaTitle: {
         display: 'table',
-        backgroundColor: '#B6D7A8',
+        backgroundColor: '#cae2b5',
         marginLeft: 15,
         width: '95%',
         borderBottomWidth: 1,
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 0,
         borderTopWidth: 0,
         borderBottomWidth: 1,
-        padding: 2
+        padding: 2,
     },
     roaImage: {
         marginLeft: 20,
@@ -291,6 +292,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Cambria',
         fontSize: 8,
         paddingLeft: 3
+    },
+
+    overlay: {
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
     }
 
 

@@ -15,7 +15,7 @@ function Arf({ requestId, icon, disabledIcon }) {
 
     useEffect(() => {
         // Fetch request data using the requestId passed as a prop
-        axios.get(`http://192.168.100.200:8003/api/client/getClient/${requestId}`)
+        axios.get(`http://localhost:8003/api/client/getClient/${requestId}`)
             .then((response) => {
                 setRequest(response.data);
             })

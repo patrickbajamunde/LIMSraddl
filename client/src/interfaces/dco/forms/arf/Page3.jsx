@@ -63,6 +63,7 @@ function Page3({ request, inputHandler, checkboxHandler }) {
         "Classical Swine Fever Virus (CSFV)",
         "Others",
         "Infectious Bursal Disease Virus (IBDV) in serum",
+        "Foot and Mouth Disease Virus (FMDV)",
     ]
 
     const pcrList = [
