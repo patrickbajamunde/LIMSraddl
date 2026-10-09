@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import '../forms/styles/arf.css'
+import '../../forms/styles/arf.css'
 import axios from 'axios';
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
+import { CustomerSignaturePad, ReceivedBySignature } from '../../components/modal/SignaturePad';
 
-function UpdateRGeneral({ request, setRequest }) {
+function ApproveGeneral({ request, setRequest }) {
 
 
   const generalData = {
@@ -308,6 +309,9 @@ function UpdateRGeneral({ request, setRequest }) {
   const location = useLocation();
   const backRoute = location.state?.from || "/Dco/Walkin/";
 
+  const [receviedModal, setReceivedModal] = useState(false);
+  const [customerModal, setCustomerModal] = useState(false);
+
 
 
   const inputHandler = (e) => {
@@ -354,8 +358,11 @@ function UpdateRGeneral({ request, setRequest }) {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    const form = { ...request };
-    await axios.put(`http://localhost:8003/api/client/update/arf/${id}`, form,
+    const confirmUpdate = window.confirm(`Do you want to approve ${id}?`);
+    if (!confirmUpdate) return;
+
+    const form = { ...request, status: 'approved' };
+    await axios.put(`http://localhost:8003/api/client/approve/arf/${id}`, form,
       {
         withCredentials: true,
       }
@@ -466,31 +473,31 @@ function UpdateRGeneral({ request, setRequest }) {
                   <div className='col'>
                     <div>
                       <label className='form-label'>Owner/Farm</label>
-                      <input type="text" className="form-control border border-dark" id="locOfFarm" name='locOfFarm' value={request.locOfFarm} onChange={inputHandler} placeholder="Owner/Farm Name" />
+                      <input type="text" className="form-control border border-dark" id="locOfFarm" name='locOfFarm' value={request.locOfFarm} onChange={inputHandler} placeholder="Owner/Farm Name" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Barangay</label>
-                      <input type="email" className="form-control border border-dark" id="barangay" name='barangay' value={request.barangay} onChange={inputHandler} placeholder="example@email.com" />
+                      <input type="email" className="form-control border border-dark" id="barangay" name='barangay' value={request.barangay} onChange={inputHandler} placeholder="example@email.com" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Municipality</label>
-                      <input type="tel" className="form-control border border-dark" id="municipality" name='municipality' value={request.municipality || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" />
+                      <input type="tel" className="form-control border border-dark" id="municipality" name='municipality' value={request.municipality || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Province</label>
-                      <input type="text" className="form-control border border-dark" id="province" name='province' value={request.province} onChange={inputHandler} placeholder="Province" />
+                      <input type="text" className="form-control border border-dark" id="province" name='province' value={request.province} onChange={inputHandler} placeholder="Province" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Contact No.</label>
-                      <input type="tel" className="form-control border border-dark" id="contactNo" name='contactNo' value={request.contactNo || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" />
+                      <input type="tel" className="form-control border border-dark" id="contactNo" name='contactNo' value={request.contactNo || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" disabled />
                     </div>
                     <div>
                       <label className='form-label'>Email</label>
-                      <input type="text" className="form-control border border-dark" id="email" name='email' value={request.email} onChange={inputHandler} placeholder="Street, Barangay, City" />
+                      <input type="text" className="form-control border border-dark" id="email" name='email' value={request.email} onChange={inputHandler} placeholder="Street, Barangay, City" disabled />
                     </div>
                   </div>
                 </div>
@@ -502,22 +509,22 @@ function UpdateRGeneral({ request, setRequest }) {
                   <div className='col'>
                     <div className='col'>
                       <label className='form-label'>Name</label>
-                      <input type="text" className="form-control border border-dark" id="clientName" name='clientName' value={request.clientName} onChange={inputHandler} placeholder="Full Name" />
+                      <input type="text" className="form-control border border-dark" id="clientName" name='clientName' value={request.clientName} onChange={inputHandler} placeholder="Full Name" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Address</label>
-                      <input type="email" className="form-control border border-dark" id="clientAddress" name='clientAddress' value={request.clientAddress} onChange={inputHandler} placeholder="example@email.com" />
+                      <input type="email" className="form-control border border-dark" id="clientAddress" name='clientAddress' value={request.clientAddress} onChange={inputHandler} placeholder="example@email.com" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Age</label>
-                      <input type="tel" className="form-control border border-dark" id="clientAge" name='clientAge' value={request.clientAge} onChange={inputHandler} />
+                      <input type="tel" className="form-control border border-dark" id="clientAge" name='clientAge' value={request.clientAge} onChange={inputHandler} disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Sex</label>
-                      <select id='clientGender' name="clientGender" onChange={inputHandler} value={request.clientGender} className='form-select border-dark'>
+                      <select id='clientGender' name="clientGender" onChange={inputHandler} value={request.clientGender} className='form-select border-dark' disabled>
                         <option value="">Choose...</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
@@ -526,12 +533,12 @@ function UpdateRGeneral({ request, setRequest }) {
 
                     <div>
                       <label className='form-label'>Contact No.</label>
-                      <input type="tel" className="form-control border border-dark" id="clientContact" name='clientContact' value={request.clientContact || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" />
+                      <input type="tel" className="form-control border border-dark" id="clientContact" name='clientContact' value={request.clientContact || ''} onChange={inputHandler} placeholder="09XXXXXXXXX" disabled />
                     </div>
 
                     <div>
                       <label className='form-label'>Email</label>
-                      <input type="text" className="form-control border border-dark" id="clientEmail" name='clientEmail' value={request.clientEmail} onChange={inputHandler} placeholder="Street, Barangay, City" />
+                      <input type="text" className="form-control border border-dark" id="clientEmail" name='clientEmail' value={request.clientEmail} onChange={inputHandler} placeholder="Street, Barangay, City" disabled />
                     </div>
                   </div>
                 </div>
@@ -549,9 +556,9 @@ function UpdateRGeneral({ request, setRequest }) {
                 {specimenList.map((specimen, index) => (
                   <div className='form-check col-3 mt-0' key={index}>
                     <div className='d-flex align-items-center gap-2'>
-                      <input type='checkbox' className='form-check-input border border-dark' id={`specimen-${index}`} name='specimen' value={specimen} onChange={checkboxHandler} checked={(request.data.specimen || []).some(item => item.name === specimen)} />
+                      <input type='checkbox' className='form-check-input border border-dark' id={`specimen-${index}`} name='specimen' value={specimen} onChange={checkboxHandler} checked={(request.data.specimen || []).some(item => item.name === specimen)} disabled />
                       <label className='form-check-label' htmlFor={`specimen-${index}`}>{specimen}:</label>
-                      <input type='text' className='col-4 border-0 border-bottom border-dark ' data-specimen={specimen} data-field='specimen' onChange={inputHandler} value={(request.data.specimen || []).find(item => item.name === specimen)?.quantity || ''} />
+                      <input type='text' className='col-4 border-0 border-bottom border-dark ' data-specimen={specimen} data-field='specimen' onChange={inputHandler} value={(request.data.specimen || []).find(item => item.name === specimen)?.quantity || ''} disabled />
                     </div>
                   </div>
                 ))}
@@ -559,7 +566,7 @@ function UpdateRGeneral({ request, setRequest }) {
 
               <div className='col-3 pb-2 ps-1 d-flex align-items-center gap-1 border-start border-4 mt-4 border-primary bg-primary bg-opacity-25 rounded'>
                 <label className='form-label mt-2'>Age:</label>
-                <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='specimenAge' value={request.data.specimenAge} onChange={inputHandler} />
+                <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='specimenAge' value={request.data.specimenAge} onChange={inputHandler} disabled />
               </div>
 
               <div className='col-3 pb-2 ps-2 mb-4 border-start border-4 mt-3 border-primary bg-primary bg-opacity-25 rounded'>
@@ -567,7 +574,7 @@ function UpdateRGeneral({ request, setRequest }) {
                   <label className='form-label col-2'>Sex:</label>
                   {sexList.map((gender, index) => (
                     <div className='form-check col-3' key={index}>
-                      <input type='checkbox' className='form-check-input border border-dark' name='sex' value={gender} onChange={checkboxHandler} checked={(request.data.sex || []).includes(gender)} />
+                      <input type='checkbox' className='form-check-input border border-dark' name='sex' value={gender} onChange={checkboxHandler} checked={(request.data.sex || []).includes(gender)} disabled />
                       <label className='form-check-label' htmlFor={`gender-${index}`}>{gender}</label>
                     </div>
                   ))}
@@ -580,16 +587,16 @@ function UpdateRGeneral({ request, setRequest }) {
                   <label className='form-label mb-0 col-2'>Whole Animal:</label>
                   <div className='form-check col-3'>
                     <div className='d-flex align-items-center gap-2'>
-                      <input type='checkbox' className='form-check-input border border-dark' name='wholeAnimal' value={wholeAnimal[0]} onChange={checkboxHandler} checked={(request.data.wholeAnimal || []).some(item => item.name === wholeAnimal[0])} />
+                      <input type='checkbox' className='form-check-input border border-dark' name='wholeAnimal' value={wholeAnimal[0]} onChange={checkboxHandler} checked={(request.data.wholeAnimal || []).some(item => item.name === wholeAnimal[0])} disabled />
                       <label className='form-check-label'>{wholeAnimal[0]}</label>
-                      <input type='text' className='col-4 border-0 border-bottom border-dark bg-transparent' data-field="wholeAnimal" data-specimen={wholeAnimal[0]} onChange={inputHandler} value={(request.data.wholeAnimal || []).find(item => item.name === wholeAnimal[0])?.quantity || ''} />
+                      <input type='text' className='col-4 border-0 border-bottom border-dark bg-transparent' data-field="wholeAnimal" data-specimen={wholeAnimal[0]} onChange={inputHandler} value={(request.data.wholeAnimal || []).find(item => item.name === wholeAnimal[0])?.quantity || ''} disabled />
                     </div>
                   </div>
                   <div className='form-check col-7'>
                     <div className='d-flex align-items-center gap-2'>
-                      <input type='checkbox' className='form-check-input border border-dark' name='wholeAnimal' value={wholeAnimal[1]} onChange={checkboxHandler} checked={(request.data.wholeAnimal || []).some(item => item.name === wholeAnimal[1])} />
+                      <input type='checkbox' className='form-check-input border border-dark' name='wholeAnimal' value={wholeAnimal[1]} onChange={checkboxHandler} checked={(request.data.wholeAnimal || []).some(item => item.name === wholeAnimal[1])} disabled />
                       <label className='form-check-label'>{wholeAnimal[1]}</label>
-                      <input type='text' className='col-4 border-0 border-bottom border-dark bg-transparent' data-field="wholeAnimal" data-specimen={wholeAnimal[1]} onChange={inputHandler} value={(request.data.wholeAnimal || []).find(item => item.name === wholeAnimal[1])?.quantity || ''} />
+                      <input type='text' className='col-4 border-0 border-bottom border-dark bg-transparent' data-field="wholeAnimal" data-specimen={wholeAnimal[1]} onChange={inputHandler} value={(request.data.wholeAnimal || []).find(item => item.name === wholeAnimal[1])?.quantity || ''} disabled />
                     </div>
                   </div>
                 </div>
@@ -600,9 +607,9 @@ function UpdateRGeneral({ request, setRequest }) {
                 {specimenPart.map((specimen, index) => (
                   <div className='form-check col-3 mt-0' key={index}>
                     <div className='d-flex align-items-center gap-2'>
-                      <input type='checkbox' className='form-check-input border border-dark' id={`specimen-${index}`} name='specimenPart' value={specimen} onChange={checkboxHandler} checked={(request.data.specimenPart || []).some(item => item.name === specimen)} />
+                      <input type='checkbox' className='form-check-input border border-dark' id={`specimen-${index}`} name='specimenPart' value={specimen} onChange={checkboxHandler} checked={(request.data.specimenPart || []).some(item => item.name === specimen)} disabled />
                       <label className='form-check-label' htmlFor={`specimen-${index}`}>{specimen}:</label>
-                      <input type='text' className='col-4 border-0 border-bottom border-dark ' data-specimen={specimen} data-field="specimenPart" onChange={inputHandler} value={(request.data.specimenPart || []).find(item => item.name === specimen)?.quantity || ''} />
+                      <input type='text' className='col-4 border-0 border-bottom border-dark ' data-specimen={specimen} data-field="specimenPart" onChange={inputHandler} value={(request.data.specimenPart || []).find(item => item.name === specimen)?.quantity || ''} disabled />
                     </div>
                   </div>
                 ))}
@@ -619,10 +626,10 @@ function UpdateRGeneral({ request, setRequest }) {
                 {pathologyList.map((pathology, index) => (
                   <div className='form-check col-auto mt-0 me-3' key={index}>
                     <div className='d-flex align-items-center gap-2'>
-                      <input type='checkbox' className='form-check-input border border-dark' name='pathologyList' value={pathology} onChange={checkboxHandler} checked={(request.data.pathologyList || []).includes(pathology)} />
+                      <input type='checkbox' className='form-check-input border border-dark' name='pathologyList' value={pathology} onChange={checkboxHandler} checked={(request.data.pathologyList || []).includes(pathology)} disabled />
                       <label className='form-check-label' htmlFor={`pathology-${index}`}>{pathology}</label>
                       {pathology === 'Others' && (
-                        <input type='text' className='col-4 border-0 border-bottom border-dark' name='pathologyOthers' value={request.data.pathologyOthers} onChange={inputHandler} />
+                        <input type='text' className='col-4 border-0 border-bottom border-dark' name='pathologyOthers' value={request.data.pathologyOthers} onChange={inputHandler} disabled />
                       )}
                     </div>
                   </div>
@@ -639,7 +646,7 @@ function UpdateRGeneral({ request, setRequest }) {
                     {isoAndIdenList.map((isoAndIdenList, index) => (
                       <div className='form-check mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='isoAndIdenList' value={isoAndIdenList} onChange={checkboxHandler} checked={(request.data.isoAndIdenList || []).includes(isoAndIdenList)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='isoAndIdenList' value={isoAndIdenList} onChange={checkboxHandler} checked={(request.data.isoAndIdenList || []).includes(isoAndIdenList)} disabled />
                           <label className='form-check-label' htmlFor={`isoAndIdenList-${index}`}>{isoAndIdenList}</label>
                         </div>
                       </div>
@@ -652,10 +659,10 @@ function UpdateRGeneral({ request, setRequest }) {
                     {rapidPlateTest.map((rapidPlateTest, index) => (
                       <div className='form-check col-5 mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='rapidPlateTest' value={rapidPlateTest} onChange={checkboxHandler} checked={(request.data.rapidPlateTest || []).includes(rapidPlateTest)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='rapidPlateTest' value={rapidPlateTest} onChange={checkboxHandler} checked={(request.data.rapidPlateTest || []).includes(rapidPlateTest)} disabled />
                           <label className='form-check-label' htmlFor={`rapidPlateTest-${index}`}>{rapidPlateTest}</label>
                           {rapidPlateTest === 'Others' && (
-                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='rpcOthers' value={request.data.rpcOthers} onChange={inputHandler} />
+                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='rpcOthers' value={request.data.rpcOthers} onChange={inputHandler} disabled />
                           )}
                         </div>
                       </div>
@@ -665,15 +672,15 @@ function UpdateRGeneral({ request, setRequest }) {
               </div>
               <div className='col-3 pb-2 ps-1 d-flex align-items-center gap-1 border-start border-4 mt-4 border-primary bg-primary bg-opacity-25 rounded'>
                 <label className='form-label mt-2'>Other Tests:</label>
-                <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='otherTests' value={request.data.otherTests} onChange={inputHandler} />
+                <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='otherTests' value={request.data.otherTests} onChange={inputHandler} disabled />
               </div>
               <div className='row g-1 mt-3'>
                 {bacteOthers2.map((bacte, index) => (
                   <div className='form-check col-5 mt-0' key={index}>
-                    <input type='checkbox' className='form-check-input border border-dark' name='bacteOthers2' value={bacte} onChange={checkboxHandler} checked={(request.data.bacteOthers2 || []).includes(bacte)} />
+                    <input type='checkbox' className='form-check-input border border-dark' name='bacteOthers2' value={bacte} onChange={checkboxHandler} checked={(request.data.bacteOthers2 || []).includes(bacte)} disabled />
                     <label className='form-check-label' htmlFor={`rapidPlateTest-${index}`}>{bacte}</label>
                     {bacte === 'Others' && (
-                      <input type='text' className='col-4 border-0 border-bottom border-dark' name='bacteOthers' value={request.data.bacteOthers} onChange={inputHandler} />
+                      <input type='text' className='col-4 border-0 border-bottom border-dark' name='bacteOthers' value={request.data.bacteOthers} onChange={inputHandler} disabled />
                     )}
                   </div>
                 ))}
@@ -690,7 +697,7 @@ function UpdateRGeneral({ request, setRequest }) {
                     {fecalysisList.map((fecalysis, index) => (
                       <div className='form-check mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='fecalysis' value={fecalysis} onChange={checkboxHandler} checked={(request.data.fecalysis || []).includes(fecalysis)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='fecalysis' value={fecalysis} onChange={checkboxHandler} checked={(request.data.fecalysis || []).includes(fecalysis)} disabled />
                           <label className='form-check-label' htmlFor={`fecalysis-${index}`}>{fecalysis}</label>
                         </div>
                       </div>
@@ -698,7 +705,7 @@ function UpdateRGeneral({ request, setRequest }) {
                   </div>
                   <div className='col-9 pb-2 ps-1 d-flex align-items-center gap-1 border-start border-4 mt-4 border-primary bg-primary bg-opacity-25 rounded'>
                     <label className='form-label mt-2'>Other Tests:</label>
-                    <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='parasiteOthers' value={request.data.parasiteOthers} onChange={inputHandler} />
+                    <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='parasiteOthers' value={request.data.parasiteOthers} onChange={inputHandler} disabled />
                   </div>
                 </div>
 
@@ -708,7 +715,7 @@ function UpdateRGeneral({ request, setRequest }) {
                     {parasiteIden.map((parasite, index) => (
                       <div className='form-check col-auto mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='parasiteIden' value={parasite} onChange={checkboxHandler} checked={(request.data.parasiteIden || []).includes(parasite)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='parasiteIden' value={parasite} onChange={checkboxHandler} checked={(request.data.parasiteIden || []).includes(parasite)} disabled />
                           <label className='form-check-label' htmlFor={`parasite-${index}`}>{parasite}</label>
                         </div>
                       </div>
@@ -722,7 +729,7 @@ function UpdateRGeneral({ request, setRequest }) {
                     {bloodParasiteExam.map((bloodParasiteExam, index) => (
                       <div className='form-check mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='bloodParasiteExam' value={bloodParasiteExam} onChange={checkboxHandler} checked={(request.data.bloodParasiteExam || []).includes(bloodParasiteExam)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='bloodParasiteExam' value={bloodParasiteExam} onChange={checkboxHandler} checked={(request.data.bloodParasiteExam || []).includes(bloodParasiteExam)} disabled />
                           <label className='form-check-label' htmlFor={`bloodParasiteExam-${index}`}>{bloodParasiteExam}</label>
                         </div>
                       </div>
@@ -730,7 +737,7 @@ function UpdateRGeneral({ request, setRequest }) {
                   </div>
                   <div className='col-9 pb-2 ps-1 d-flex align-items-center gap-1 border-start border-4 mt-4 border-primary bg-primary bg-opacity-25 rounded'>
                     <label className='form-label mt-2'>Other Tests:</label>
-                    <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='bloodParaOthers' value={request.data.bloodParaOthers} onChange={inputHandler} />
+                    <input type='text' className='border-0 border-bottom border-dark bg-transparent' name='bloodParaOthers' value={request.data.bloodParaOthers} onChange={inputHandler} disabled />
                   </div>
                 </div>
               </div>
@@ -744,10 +751,10 @@ function UpdateRGeneral({ request, setRequest }) {
                   {virologyList.map((virology, index) => (
                     <div className='form-check mt-0' key={index}>
                       <div className='d-flex align-items-center gap-2'>
-                        <input type='checkbox' className='form-check-input border border-dark' name='virologyList' value={virology} onChange={checkboxHandler} checked={(request.data.virologyList || []).includes(virology)} />
+                        <input type='checkbox' className='form-check-input border border-dark' name='virologyList' value={virology} onChange={checkboxHandler} checked={(request.data.virologyList || []).includes(virology)} disabled />
                         <label className='form-check-label' htmlFor={`virology-${index}`}>{virology}</label>
                         {virology === 'Others' && (
-                          <input type='text' className='col-4 border-0 border-bottom border-dark' name='virologyOthers' value={request.data.virologyOthers} onChange={inputHandler} />
+                          <input type='text' className='col-4 border-0 border-bottom border-dark' name='virologyOthers' value={request.data.virologyOthers} onChange={inputHandler} disabled />
                         )}
                       </div>
                     </div>
@@ -760,10 +767,10 @@ function UpdateRGeneral({ request, setRequest }) {
                     {elisaList.map((elisa, index) => (
                       <div className='form-check col-5 mt-0 ' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='elisaList' value={elisa} onChange={checkboxHandler} checked={(request.data.elisaList || []).includes(elisa)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='elisaList' value={elisa} onChange={checkboxHandler} checked={(request.data.elisaList || []).includes(elisa)} disabled />
                           <label className='form-check-label' htmlFor={`elisa-${index}`}>{elisa}</label>
                           {elisa === 'Others' && (
-                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='elisaOthers' value={request.data.elisaOthers} onChange={inputHandler} />
+                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='elisaOthers' value={request.data.elisaOthers} onChange={inputHandler} disabled />
                           )}
                         </div>
                       </div>
@@ -777,10 +784,10 @@ function UpdateRGeneral({ request, setRequest }) {
                     {pcrList.map((pcrList, index) => (
                       <div className='form-check mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='pcrList' value={pcrList} onChange={checkboxHandler} checked={(request.data.pcrList || []).includes(pcrList)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='pcrList' value={pcrList} onChange={checkboxHandler} checked={(request.data.pcrList || []).includes(pcrList)} disabled />
                           <label className='form-check-label' htmlFor={`pcrList-${index}`}>{pcrList}</label>
                           {pcrList === 'Others' && (
-                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='pcrOthers' value={request.data.pcrOthers} onChange={inputHandler} />
+                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='pcrOthers' value={request.data.pcrOthers} onChange={inputHandler} disabled />
                           )}
                         </div>
                       </div>
@@ -798,10 +805,10 @@ function UpdateRGeneral({ request, setRequest }) {
                     {purposeList.map((purpose, index) => (
                       <div className='form-check col-5 mt-0' key={index}>
                         <div className='d-flex align-items-center gap-2'>
-                          <input type='checkbox' className='form-check-input border border-dark' name='purposeList' value={purpose} onChange={checkboxHandler} checked={(request.data.purposeList || []).includes(purpose)} />
+                          <input type='checkbox' className='form-check-input border border-dark' name='purposeList' value={purpose} onChange={checkboxHandler} checked={(request.data.purposeList || []).includes(purpose)} disabled />
                           <label className='form-check-label' htmlFor={`purpose-${index}`}>{purpose}</label>
                           {purpose === 'Others' && (
-                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='purposeOthers' value={request.data.purposeOthers} onChange={inputHandler} />
+                            <input type='text' className='col-4 border-0 border-bottom border-dark' name='purposeOthers' value={request.data.purposeOthers} onChange={inputHandler} disabled />
                           )}
                         </div>
                       </div>
@@ -813,102 +820,85 @@ function UpdateRGeneral({ request, setRequest }) {
 
             <div className='container-fluid border border-secondary border-1 mt-3'></div>
             <h5 className='mb-2 mt-3 text-primary fw-bold'>Filled out by RADDL staff</h5>
-            <div className='row'>
-              <div className='col'>
-                <div className='card p-4 mb-3 shadow-sm border'>
-                  <span className='mb-3 text-primary fw-bold ' style={{ fontSize: 20 }}>ASSESSMENT</span>
+            <div className="card shadow-sm border mb-3">
+              <div className='row'>
+                <div className='col'>
+                  <div className='p-4 mb-3'>
+                    <span className='mb-3 text-primary fw-bold ' style={{ fontSize: 20 }}>ASSESSMENT</span>
 
-                  <div className='col-auto'>
-                    <span className='text-primary fw-bold border-primary col-auto' style={{ fontSize: 17 }}>1. Sample Labeling</span>
-                    <div className='row g-1'>
-                      {sampleLabel.map((label, index) => (
-                        <div className='form-check col-5 mt-0' key={index}>
-                          <div className='d-flex align-items-center gap-2'>
-                            <input type='checkbox' className='form-check-input border border-dark' name='sampleLabel' value={label} onChange={checkboxHandler} checked={(request.data.sampleLabel || []).includes(label)} />
-                            <label className='form-check-label' htmlFor={`label-${index}`}>{label}</label>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className='col-auto mt-2'>
-                    <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>2. Quantity of Sample</span>
-                    <div className='row g-1'>
-                      {quantityOfSample.map((quantity, index) => (
-                        <div className='form-check mt-0' key={index}>
-                          <div className='d-flex align-items-center gap-2'>
-                            <input type='checkbox' className='form-check-input border border-dark' name='quantityOfSample' value={quantity} onChange={checkboxHandler} checked={(request.data.quantityOfSample || []).includes(quantity)} />
-                            <label className='form-check-label' htmlFor={`quantity-${index}`}>{quantity}</label>
-                            {quantity === 'Others' && (
-                              <input type='text' className='col-4 border-0 border-bottom border-dark' name='sampleQuantityOthers' value={request.data.sampleQuantityOthers} onChange={inputHandler} />
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className='col-auto mt-2'>
-                    <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>3. Proper preservation used for sample Type</span>
-                    <div className='row g-1'>
-                      {preservationUsed.map((preservation, index) => (
-                        <div className='form-check mt-0' key={index}>
-                          <div className='d-flex align-items-center gap-2'>
-                            <input type='checkbox' className='form-check-input border border-dark' name='preservationUsed' value={preservation} onChange={checkboxHandler} checked={(request.data.preservationUsed || []).includes(preservation)} />
-                            <label className='form-check-label' htmlFor={`preservation-${index}`}>{preservation}</label>
-                            {preservation === 'Other' && (
-                              <input type='text' className='col-4 border-0 border-bottom border-dark' name='preserveOthers' value={request.data.preserveOthers} onChange={inputHandler} />
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className='col-auto mt-2'>
-                    <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>4. Proper transport</span>
-                    <div className='row g-1'>
-                      {transport.map((transport, index) => (
-                        <div className='form-check mt-0' key={index}>
-                          <div className='d-flex align-items-center gap-2'>
-                            <input type='checkbox' className='form-check-input border border-dark' name='transport' value={transport} onChange={checkboxHandler} checked={(request.data.transport || []).includes(transport)} />
-                            <label className='form-check-label' htmlFor={`transport-${index}`}>{transport}</label>
-                            {transport === 'Other' && (
-                              <input type='text' className='col-4 border-0 border-bottom border-dark' name='tranportOthers' value={request.data.tranportOthers} onChange={inputHandler} />
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className='col-auto mt-2'>
-                    <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>5. State of sample when it reached the laboratory</span>
-                    <div className='row g-1'>
-                      {stateOfSample.map((state, index) => (
-                        <div className='form-check mt-0' key={index}>
-                          <div className='d-flex align-items-center gap-2'>
-                            <input type='checkbox' className='form-check-input border border-dark' name='stateOfSample' value={state} onChange={checkboxHandler} checked={(request.data.stateOfSample || []).includes(state)} />
-                            <label className='form-check-label' htmlFor={`state-${index}`}>{state}</label>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className='col'>
-                <div className='card p-4 mb-3 shadow-sm border'>
-                  <span className='mb-3 text-primary fw-bold '>CRITERIA FOR REJECTION OF SAMPLES</span>
-                  <div className='col-auto'>
-                    <div className='row g-1'>
+                    <div className='col-auto'>
+                      <span className='text-primary fw-bold border-primary col-auto' style={{ fontSize: 17 }}>1. Sample Labeling</span>
                       <div className='row g-1'>
-                        {rejectionOfSamples.map((rejection, index) => (
+                        {sampleLabel.map((label, index) => (
+                          <div className='form-check col-5 mt-0' key={index}>
+                            <div className='d-flex align-items-center gap-2'>
+                              <input type='checkbox' className='form-check-input border border-dark' name='sampleLabel' value={label} onChange={checkboxHandler} checked={(request.data.sampleLabel || []).includes(label)} />
+                              <label className='form-check-label' htmlFor={`label-${index}`}>{label}</label>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className='col-auto mt-2'>
+                      <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>2. Quantity of Sample</span>
+                      <div className='row g-1'>
+                        {quantityOfSample.map((quantity, index) => (
                           <div className='form-check mt-0' key={index}>
                             <div className='d-flex align-items-center gap-2'>
-                              <input type='checkbox' className='form-check-input border border-dark' name='rejectionOfSamples' value={rejection} onChange={checkboxHandler} checked={(request.data.rejectionOfSamples || []).includes(rejection)} />
-                              <label className='form-check-label' htmlFor={`rejection-${index}`}>{rejection}</label>
+                              <input type='checkbox' className='form-check-input border border-dark' name='quantityOfSample' value={quantity} onChange={checkboxHandler} checked={(request.data.quantityOfSample || []).includes(quantity)} />
+                              <label className='form-check-label' htmlFor={`quantity-${index}`}>{quantity}</label>
+                              {quantity === 'Others' && (
+                                <input type='text' className='col-4 border-0 border-bottom border-dark' name='sampleQuantityOthers' value={request.data.sampleQuantityOthers} onChange={inputHandler} />
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className='col-auto mt-2'>
+                      <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>3. Proper preservation used for sample Type</span>
+                      <div className='row g-1'>
+                        {preservationUsed.map((preservation, index) => (
+                          <div className='form-check mt-0' key={index}>
+                            <div className='d-flex align-items-center gap-2'>
+                              <input type='checkbox' className='form-check-input border border-dark' name='preservationUsed' value={preservation} onChange={checkboxHandler} checked={(request.data.preservationUsed || []).includes(preservation)} />
+                              <label className='form-check-label' htmlFor={`preservation-${index}`}>{preservation}</label>
+                              {preservation === 'Other' && (
+                                <input type='text' className='col-4 border-0 border-bottom border-dark' name='preserveOthers' value={request.data.preserveOthers} onChange={inputHandler} />
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className='col-auto mt-2'>
+                      <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>4. Proper transport</span>
+                      <div className='row g-1'>
+                        {transport.map((transport, index) => (
+                          <div className='form-check mt-0' key={index}>
+                            <div className='d-flex align-items-center gap-2'>
+                              <input type='checkbox' className='form-check-input border border-dark' name='transport' value={transport} onChange={checkboxHandler} checked={(request.data.transport || []).includes(transport)} />
+                              <label className='form-check-label' htmlFor={`transport-${index}`}>{transport}</label>
+                              {transport === 'Other' && (
+                                <input type='text' className='col-4 border-0 border-bottom border-dark' name='tranportOthers' value={request.data.tranportOthers} onChange={inputHandler} />
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className='col-auto mt-2'>
+                      <span className='text-primary fw-bold border-primary col-auto ' style={{ fontSize: 17 }}>5. State of sample when it reached the laboratory</span>
+                      <div className='row g-1'>
+                        {stateOfSample.map((state, index) => (
+                          <div className='form-check mt-0' key={index}>
+                            <div className='d-flex align-items-center gap-2'>
+                              <input type='checkbox' className='form-check-input border border-dark' name='stateOfSample' value={state} onChange={checkboxHandler} checked={(request.data.stateOfSample || []).includes(state)} />
+                              <label className='form-check-label' htmlFor={`state-${index}`}>{state}</label>
                             </div>
                           </div>
                         ))}
@@ -916,29 +906,48 @@ function UpdateRGeneral({ request, setRequest }) {
                     </div>
                   </div>
                 </div>
-
-                <div className='card p-4 mb-3 shadow-sm border'>
-                  <span className='mb-3 text-primary fw-bold '>REVIEW OF REQUEST</span>
-                  <div className='col-auto'>
-                    <div className='row g-1'>
-                      <label className='form-label mb-0' style={{ fontSize: 17 }}>1. Sample Storage</label>
-                      {sampleStorage.map((storage, index) => (
-                        <div className='form-check mt-0 mb-2' key={index}>
-                          <div className='d-flex align-items-center gap-2 ps-3'>
-                            <input type='checkbox' className='form-check-input border border-dark' name='sampleStorage' value={storage} onChange={checkboxHandler} checked={(request.data.sampleStorage || []).includes(storage)} />
-                            <label className='form-check-label' htmlFor={`storage-${index}`}>{storage}</label>
-                          </div>
+                <div className='col'>
+                  <div className='p-4 mb-3'>
+                    <span className='mb-3 text-primary fw-bold '>CRITERIA FOR REJECTION OF SAMPLES</span>
+                    <div className='col-auto'>
+                      <div className='row g-1'>
+                        <div className='row g-1'>
+                          {rejectionOfSamples.map((rejection, index) => (
+                            <div className='form-check mt-0' key={index}>
+                              <div className='d-flex align-items-center gap-2'>
+                                <input type='checkbox' className='form-check-input border border-dark' name='rejectionOfSamples' value={rejection} onChange={checkboxHandler} checked={(request.data.rejectionOfSamples || []).includes(rejection)} />
+                                <label className='form-check-label' htmlFor={`rejection-${index}`}>{rejection}</label>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </div>
+                    </div>
+                  </div>
 
-                      <label className='form-label mb-0' style={{ fontSize: 17 }}>2. Sample retention (days, months, years)</label>
-                      <input type='text' className='form-control border border-dark mb-2' id='sampleRetentionDate' name='sampleRetentionDate' value={request.data.sampleRetentionDate} onChange={inputHandler} />
+                  <div className='p-4 mb-3'>
+                    <span className='mb-3 text-primary fw-bold '>REVIEW OF REQUEST</span>
+                    <div className='col-auto'>
+                      <div className='row g-1'>
+                        <label className='form-label mb-0' style={{ fontSize: 17 }}>1. Sample Storage</label>
+                        {sampleStorage.map((storage, index) => (
+                          <div className='form-check mt-0 mb-2' key={index}>
+                            <div className='d-flex align-items-center gap-2 ps-3'>
+                              <input type='checkbox' className='form-check-input border border-dark' name='sampleStorage' value={storage} onChange={checkboxHandler} checked={(request.data.sampleStorage || []).includes(storage)} />
+                              <label className='form-check-label' htmlFor={`storage-${index}`}>{storage}</label>
+                            </div>
+                          </div>
+                        ))}
 
-                      <label className='form-label mb-0' style={{ fontSize: 17 }}>3. Sample storage location</label>
-                      <input type='text' className='form-control border border-dark mb-2' id='sampleStorageLocation' name='sampleStorageLocation' value={request.data.sampleStorageLocation} onChange={inputHandler} />
+                        <label className='form-label mb-0' style={{ fontSize: 17 }}>2. Sample retention (days, months, years)</label>
+                        <input type='text' className='form-control border border-dark mb-2' id='sampleRetentionDate' name='sampleRetentionDate' value={request.data.sampleRetentionDate} onChange={inputHandler} />
 
-                      <label className='form-label mb-0' style={{ fontSize: 17 }}>4. Sample disposal date</label>
-                      <input type='date' className='form-control border border-dark mb-4' id='sampleDisposalDate' name='sampleDisposalDate' value={request.data.sampleDisposalDate} onChange={inputHandler} />
+                        <label className='form-label mb-0' style={{ fontSize: 17 }}>3. Sample storage location</label>
+                        <input type='text' className='form-control border border-dark mb-2' id='sampleStorageLocation' name='sampleStorageLocation' value={request.data.sampleStorageLocation} onChange={inputHandler} />
+
+                        <label className='form-label mb-0' style={{ fontSize: 17 }}>4. Sample disposal date</label>
+                        <input type='date' className='form-control border border-dark mb-4' id='sampleDisposalDate' name='sampleDisposalDate' value={request.data.sampleDisposalDate} onChange={inputHandler} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -946,10 +955,86 @@ function UpdateRGeneral({ request, setRequest }) {
             </div>
 
 
+            <div className="row">
+              <div className="col-6">
+                <div className="d-flex container-fluid w-100 justify-content-center">
+                  <div className='card p-4 mb-3 shadow-sm border' style={{ width: '600px' }}>
+                    <div className="row justify-content-center">
+                      <h4>Receiving Staff</h4>
+                      <div
+                        className='border-2 border-opacity-25 border-dark align-items-center d-flex justify-content-center'
+                        style={{ height: '200px', borderStyle: 'dashed' }}
+                      >
+                        {request.data.signature && (
+                          <img src={request.data.signature} className='object-fit-contain w-75 h-75' />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='d-flex mt-3'>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setReceivedModal(true);
+                        }}>
+                        <i className="bi bi-plus-lg"></i>Add Signature
+                      </button>
+                    </div>
+                    <ReceivedBySignature
+                      setRequest={setRequest}
+                      request={request}
+                      show={receviedModal}
+                      closeModal={() => { setReceivedModal(false) }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-6">
+                <div className="d-flex container-fluid w-100 justify-content-center">
+                  <div className='card p-4 mb-3 shadow-sm border' style={{ width: '600px' }}>
+                    <div className="row justify-content-center">
+                      <h4>Customer Signature</h4>
+                      <div
+                        className='border-2 border-opacity-25 border-dark align-items-center d-flex justify-content-center'
+                        style={{ height: '200px', borderStyle: 'dashed' }}
+                      >
+                        {request.data.customerSignature && (
+                          <img src={request.data.customerSignature} className='object-fit-contain w-75 h-75' />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='d-flex mt-3'>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setCustomerModal(true);
+                        }}>
+                        <i className="bi bi-plus-lg"></i>Add Signature
+                      </button>
+                    </div>
+                    <CustomerSignaturePad
+                      setRequest={setRequest}
+                      request={request}
+                      show={customerModal}
+                      closeModal={() => { setCustomerModal(false) }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
 
             <div className='col-md-6 gap-3 offset-md-6 d-flex justify-content-end pe-3'>
-              <button type='button' className="btn btn-primary col-md-2" onClick={() => navigate(backRoute)}>Back</button>
-              <button type="button" className="btn btn-primary col-md-3 fw-bold" onClick={submitForm}>Update Request</button>
+              <button type='button' className="btn btn-primary col-md-2 fw-bold" onClick={() => navigate(backRoute)}>Back</button>
+              <button type="button" className="btn btn-primary col-md-3 fw-bold" onClick={submitForm}>Approve Request</button>
             </div>
           </form>
         </div>
@@ -959,4 +1044,4 @@ function UpdateRGeneral({ request, setRequest }) {
   )
 }
 
-export default UpdateRGeneral
+export default ApproveGeneral

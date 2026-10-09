@@ -264,7 +264,7 @@ function Arf() {
 
                 <div className='position-absolute end-0 pe-4 '>
                     <div className='d-inline-block  pe-3'>
-                        <Link to='/Dco/Home/' className='text-white'>
+                        <Link to='/CustomerForm' className='text-white'>
                             <i class="bi bi-house-fill fs-5"></i>
                         </Link>
 
@@ -287,14 +287,8 @@ function Arf() {
 
                     <form className='mt-5 mb-4' onSubmit={submitForm}>
 
-                        {step === 1 &&
-                            <Page1
-                                request={request}
-                                inputHandler={inputHandler}
-                            />
-                        }
 
-                        {step === 2 &&
+                        {step === 1 &&
                             <Page2
                                 request={request}
                                 inputHandler={inputHandler}
@@ -302,7 +296,7 @@ function Arf() {
                             />
                         }
 
-                        {step === 3 &&
+                        {step === 2 &&
                             <Page3
                                 request={request}
                                 inputHandler={inputHandler}
@@ -310,24 +304,18 @@ function Arf() {
                             />
                         }
 
-                        {step === 4 &&
-                            <Page4
-                                request={request}
-                                inputHandler={inputHandler}
-                                checkboxHandler={checkboxHandler}
-                            />
-                        }
 
-                        {step === 5 &&
+
+                        {step === 3 &&
                             <Page5
                                 setRequest={setRequest}
-                                request={request} 
+                                request={request}
                             />
                         }
 
                         <div className='col d-flex align-item-center justify-content-end gap-3'>
                             <button type="button" className='btn btn-primary px-5' onClick={handleBack} disabled={step === 1}>Back</button>
-                            {step === 5 ?
+                            {step === 3 ?
                                 <button type="button" className="btn btn-success px-5" onClick={submitForm}>Submit</button>
                                 :
                                 <button type="button" className="btn btn-primary px-5" onClick={handleNext}>Next</button>

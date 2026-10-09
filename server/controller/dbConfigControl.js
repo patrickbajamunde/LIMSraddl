@@ -100,3 +100,12 @@ export const getReleased = async (req, res) =>{
         res.status(500).json({ error: error.message });
     }
 }
+
+export const getForapproval = async (req, res) =>{
+    try {
+        const forApproval = await Client.find({status: ['approved', 'for approval']});
+        res.status(200).json(forApproval);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}

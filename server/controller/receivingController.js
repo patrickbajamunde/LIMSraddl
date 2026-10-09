@@ -9,13 +9,14 @@ export const createClient = async (req, res) => {
         const newClient = new Client({
             ...req.body,
             user: req.user.id,
-            userName: userExist.name
+            userName: userExist.name,
+            status: 'for approval'
         });
         const savedData = await newClient.save();
         const newActivity = new Activities({
             user: req.user.id,
-            action: "Create new",
-            fileType: req.body.type === 'GENERAL' ? 'ARF' : 'Rabies',
+            action: "For Approval",
+            fileType: req.body.type === 'GENERAL' ? 'General' : 'Rabies',
             itemId: savedData.requestId,
             userName: userExist.name
         })
@@ -90,7 +91,7 @@ export const deleteRequest = async (req, res) => {
         const newActivity = new Activities({
             user: req.user.id,
             action: "Deleted",
-            fileType: requestExist.type === 'GENERAL' ? 'ARF' : 'Rabies',
+            fileType: requestExist.type === 'GENERAL' ? 'General' : 'Rabies',
             itemId: deletedRequest.requestId,
             userName: userExist.name
         })
@@ -121,7 +122,38 @@ export const updateRequest = async (req, res) => {
         const newActivity = new Activities({
             user: userId,
             action: "Updated",
-            fileType: requestExist.type === 'GENERAL' ? 'ARF' : 'Rabies',
+            fileType: requestExist.type === 'GENERAL' ? 'General' : 'Rabies',
+            itemId: newRequestData.requestId,
+            userName: userExist.name
+        })
+        await newActivity.save();
+
+        res.status(200).json(newActivity)
+    } catch (error) {
+        res.status(500).json({ errorMessage: error.message })
+    }
+}
+
+export const approveRequest = async (req, res) => {
+    try {
+        const requestId = req.params.id;
+        const userId = req.user.id;
+        const userExist = await User.findOne({ name: req.user.name })
+
+        const requestExist = await Client.findById(requestId)
+
+        if (!requestExist) {
+            return res.status(404).json({ message: "Arf data not found" })
+        }
+
+        const newRequestData = await Client.findByIdAndUpdate(requestId, { ...req.body, 'data': req.body.data }, {
+            new: true
+        })
+
+        const newActivity = new Activities({
+            user: userId,
+            action: "Approved",
+            fileType: requestExist.type === 'GENERAL' ? 'General' : 'Rabies',
             itemId: newRequestData.requestId,
             userName: userExist.name
         })

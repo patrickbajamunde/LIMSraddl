@@ -351,6 +351,7 @@ const Page3 = ({ request, }) => {
                             <Text style={[styles.boldFont, { fontSize: 8 }]}>Receiving Staff</Text>
                         </View>
                         <View style={[styles.cellTwo, { width: '52%', borderLeftWidth: 0, alignItems: 'center', paddingTop: 4 }]}>
+                            <Image src={request.data.customerSignature} style={{ width: 90, height: 90, position: 'absolute', objectFit:'contain', bottom: -24 }} />
                             {request && request.clientName !== '' ? (
                                 <Text style={{ borderBottomWidth: 0.5, width: '85%', fontSize: 8, textAlign: 'center' }}>{request.clientName}</Text>
                             ) : (

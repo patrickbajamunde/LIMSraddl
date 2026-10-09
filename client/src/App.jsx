@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -31,10 +31,14 @@ import GApage from './interfaces/dco/pages/GApage';
 import GenerateReport from './interfaces/dco/forms/GenerateReport';
 import UpdateRequest from './interfaces/dco/pages/UpdateRequest';
 import RequestData from './interfaces/dco/viewData/RequestData';
+import ForApprovalPage from './interfaces/dco/pages/ForApprovalPage';
+import ApproveRequest from './interfaces/dco/forms/ForApproval/ApproveRequest';
+import WelcomePage from './interfaces/customer/welcomePage';
 const router = createBrowserRouter([
 
   {
-    path: "/", element: <Login />,
+    path: "/", 
+    element: <Login />,
   },
 
   {
@@ -61,6 +65,8 @@ const router = createBrowserRouter([
       { path: "GenerateReport/:id", element: <GenerateReport /> },
       { path: "updateRequest/:id", element: <UpdateRequest/>},
       { path: "requestData/:id", element: <RequestData/>},
+      { path: "AnalysisRequestForms", element: <ForApprovalPage /> },
+      { path: "approveRequest/:id", element: <ApproveRequest /> },
     ],
   },
 
@@ -75,6 +81,11 @@ const router = createBrowserRouter([
       { path: "AddReport", element: <AddReport /> },
       { path: "Roa", element: <Roa /> }
     ]
+  },
+
+  {
+    path: '/CustomerForm',
+    element: <WelcomePage/>,
   }
 
 

@@ -2,10 +2,10 @@ import React, { use, useEffect, useState, useRef } from 'react'
 import '../styles/arf.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ReceivedBySignature } from '../../components/modal/SignaturePad';
+import { CustomerSignaturePad } from '../../components/modal/SignaturePad';
 
 function Page5({ setRequest, request }) {
-    const [receviedModal, setReceivedModal] = useState(false);
+    const [customerModal, setCustomerModal] = useState(false);
 
     return (
         <div className="d-flex container-fluid w-100 justify-content-center">
@@ -16,8 +16,8 @@ function Page5({ setRequest, request }) {
                         className='border-2 border-opacity-25 border-dark align-items-center d-flex justify-content-center' 
                         style={{ height: '200px', borderStyle: 'dashed' }}
                     >
-                        {request.data.signature && (
-                            <img src={request.data.signature} className='object-fit-contain w-75 h-75' />
+                        {request.data.customerSignature && (
+                            <img src={request.data.customerSignature} className='object-fit-contain w-75 h-75' />
                         )}
                     </div>
                 </div>
@@ -27,16 +27,16 @@ function Page5({ setRequest, request }) {
                         type="button"
                         className="btn btn-primary"
                         onClick={() => {
-                            setReceivedModal(true);
+                            setCustomerModal(true);
                         }}>
                         <i className="bi bi-plus-lg"></i>Add Signature
                     </button>
                 </div>
-                <ReceivedBySignature
+                <CustomerSignaturePad
                     setRequest={setRequest}
                     request={request}
-                    show={receviedModal}
-                    closeModal={() => { setReceivedModal(false) }}
+                    show={customerModal}
+                    closeModal={() => { setCustomerModal(false) }}
                 />
             </div>
         </div>

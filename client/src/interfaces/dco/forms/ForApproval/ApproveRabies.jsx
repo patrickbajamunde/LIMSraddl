@@ -1,13 +1,13 @@
 import React, { use, useEffect, useState } from 'react'
-import '../forms/styles/arf.css'
+import '../../forms/styles/arf.css'
 import axios from 'axios';
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
-import Page2 from '../forms/rabies/Page2';
-import Page3 from '../forms/rabies/Page3';
-import Page1 from '../forms/rabies/Page1';
-import Page5 from '../forms/rabies/Page5'
+import Page4 from './rabies/Page4';
+import Page3 from './rabies/Page3';
+import Page2 from './rabies/Page2';
+import Page1 from './rabies/Page1';
 
-function UpdateRabies({ request, setRequest, common }) {
+function ApproveRabies({ request, setRequest, common }) {
 
 
     const generalData = {
@@ -303,11 +303,15 @@ function UpdateRabies({ request, setRequest, common }) {
 
     const submitForm = async (e) => {
         e.preventDefault();
-        const form = { ...request };
-        await axios.put(`http://localhost:8003/api/client/update/arf/${id}`, form,
+        const confirmUpdate = window.confirm(`Do you want to approve ${id}?`);
+        if (!confirmUpdate) return;
+
+        const form = { ...request, status: 'approved' };
+        await axios.put(`http://localhost:8003/api/client/approve/arf/${id}`, form,
             {
                 withCredentials: true,
-            }
+
+            },
         )
             .then((response) => {
                 setRequest({
@@ -350,11 +354,6 @@ function UpdateRabies({ request, setRequest, common }) {
                     </div>
 
                     <form className='mt-3 mb-4' onSubmit={submitForm}>
-                        <Page5
-                            request={request}
-                            inputHandler={inputHandler}
-                            checkboxHandler={checkboxHandler}
-                        />
 
                         <Page1
                             request={request}
@@ -374,9 +373,14 @@ function UpdateRabies({ request, setRequest, common }) {
                             checkboxHandler={checkboxHandler}
                         />
 
+                        <Page4
+                            setRequest={setRequest}
+                            request={request}
+                        />
+
                         <div className='col-md-6 gap-3 offset-md-6 d-flex justify-content-end pe-3'>
-                            <button type='button' className="btn btn-primary col-md-2" onClick={() => navigate(backRoute)}>Back</button>
-                            <button type="button" className="btn btn-primary col-md-3 fw-bold" onClick={submitForm}>Update Request</button>
+                            <button type='button' className="btn btn-primary col-md-2 fw-bold" onClick={() => navigate(backRoute)}>Back</button>
+                            <button type="button" className="btn btn-primary col-md-3 fw-bold" onClick={submitForm}>Approve Request</button>
                         </div>
                     </form>
                 </div>
@@ -386,4 +390,4 @@ function UpdateRabies({ request, setRequest, common }) {
     )
 }
 
-export default UpdateRabies
+export default ApproveRabies

@@ -515,8 +515,8 @@ const GenerateRoa = ({ roaId, icon, disabledIcon, copyType, fileType, copyCode }
 
                     <View style={[styles.footer, { position: 'absolute', bottom: 20, left: 20, }]} fixed>
                         <View style={[styles.font]}>
-                            <Text>ILD5-RADDL-FR-005-0</Text>
-                            <Text>Effectivity Date: March 17, 2026</Text>
+                            <Text>ILD5-RADDL-FR-005-2</Text>
+                            <Text>Effectivity Date: June 30, 2026</Text>
                         </View>
                     </View>
 

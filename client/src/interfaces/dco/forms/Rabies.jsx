@@ -372,7 +372,7 @@ function Rabies() {
 
         <div className='position-absolute end-0 pe-4 '>
           <div className='d-inline-block  pe-3'>
-            <Link to='/Dco/Home/' className='text-white'>
+            <Link to='/CustomerForm' className='text-white'>
               <i class="bi bi-house-fill fs-5"></i>
             </Link>
 
@@ -413,26 +413,16 @@ function Rabies() {
               />
             }
 
-
             {page === 3 &&
-              <Page3
-                request={request}
-                inputHandler={inputHandler}
-                checkboxHandler={checkboxHandler}
-              />
-            }
-
-            {page === 4 &&
               <Page4
                 setRequest={setRequest}
                 request={request}
               />
             }
 
-
             <div className='col d-flex align-item-center justify-content-end gap-3'>
               <button type="button" className='btn btn-primary px-5' onClick={previousPage} disabled={page === 1}>Back</button>
-              {page === 4 ?
+              {page === 3 ?
                 <button type="button" className="btn btn-success px-5" onClick={submitForm}>Submit</button>
                 :
                 <button type="button" className="btn btn-primary px-5" onClick={nextPage}>Next</button>

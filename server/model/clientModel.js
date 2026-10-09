@@ -43,6 +43,12 @@ const clientSchema = new mongoose.Schema({
         type: String,
     },
 
+    status: {
+        type: String,
+        enum: ['for approval', 'approved', 'rejected'],
+        default: 'for approval'
+    }
+
 })
 
 export default mongoose.model("Client", clientSchema, "clients");

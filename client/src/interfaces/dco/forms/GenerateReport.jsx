@@ -45,6 +45,7 @@ function GenerateReport() {
         labCode: '',
         testMethod: '',
         sampleType: '',
+        status:'for approval'
     }
 
 

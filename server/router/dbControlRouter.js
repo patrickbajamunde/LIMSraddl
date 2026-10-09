@@ -1,5 +1,5 @@
 import express from 'express';
-import { countCorn, countRegulatory, countLgu, countResearch, countWalkin, countHVC, countRice, countGovtAgency, getForRelease, getReleased} from '../controller/dbConfigControl.js';
+import { countCorn, countRegulatory, countLgu, countResearch, countWalkin, countHVC, countRice, countGovtAgency, getForRelease, getReleased, getForapproval } from '../controller/dbConfigControl.js';
 import { authMiddleware } from "../controller/authController.js"
 
 const dbControlRouter = express.Router();
@@ -14,5 +14,6 @@ dbControlRouter.get('/countRice', countRice);
 dbControlRouter.get('/countGovtAgency', countGovtAgency);
 dbControlRouter.get('/forRelease',getForRelease)
 dbControlRouter.get('/released', getReleased)
-
+dbControlRouter.get('/forApproval', getForapproval)
+  
 export default dbControlRouter;

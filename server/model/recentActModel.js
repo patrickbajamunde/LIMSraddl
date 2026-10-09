@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const activitiesSchema = new mongoose.Schema({
     action: {
         type: String,
-        enum: ['Create new', 'Updated', 'Deleted'],
+        enum: ['Create new', 'Updated', 'Deleted', 'Approved', 'For Approval'],
     },
 
     fileType: {
         type: String,
-        enum: ['ARF', 'ROA', 'Rabies']
+        enum: ['General', 'ROA', 'Rabies']
     },
 
     itemId: {

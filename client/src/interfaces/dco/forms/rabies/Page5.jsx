@@ -3,7 +3,7 @@ import '../styles/arf.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Page1({request, inputHandler}) {
+function Page5({request, inputHandler}) {
     return (
         <div className='card p-4 mb-3 shadow-sm border'>
             <h5 className='mb-4 text-primary fw-bold'>Request Details</h5>
@@ -64,4 +64,4 @@ function Page1({request, inputHandler}) {
     )
 }
 
-export default Page1
+export default Page5

@@ -24,9 +24,9 @@ function Sidebar() {
             })
     }
 
-    if(hiddenRoutes.includes(location.pathname)) return null;
+    if (hiddenRoutes.includes(location.pathname)) return null;
 
-     
+
 
     return (
         <div>
@@ -54,6 +54,15 @@ function Sidebar() {
                                 <span className='ms-2'>Home</span>
                             </Link>
                         </li>
+
+                        <li className='nav-item'>
+                            <Link to="/CustomerForm" className='nav-link text-white sidebar-link'>
+                                <i className='bi bi-archive-fill text-white fs-5 ms-2 me-2' />
+                                <span className='ms-2'>Customer Form</span>
+                            </Link>
+                        </li>
+                        {/*
+                        
                         <li className='nav-item mt-2'>
                             <button className='btn btn-link sidebar-link ms-2 text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#receivingForm' aria-expanded='false' aria-controls='receivingForm'>
                                 <i className='bi bi-archive-fill text-white fs-5 me-3 ms-1' />
@@ -71,12 +80,22 @@ function Sidebar() {
                                 </ul>
                             </div>
                         </li>
+                        
+                        */}
+
                         <li className='nav-item'>
                             <Link to="RoaForm/" className='nav-link text-white sidebar-link'>
                                 <i className='bi bi-file-earmark-text-fill text-white fs-5 ms-2 me-3' />
                                 <span>ROA Form</span>
                             </Link>
                         </li>
+                        <li className='nav-item'>
+                            <Link to="AnalysisRequestForms/" className='nav-link text-white sidebar-link'>
+                                <i className='bi bi-archive-fill text-white fs-5 ms-2 me-3' />
+                                <span>ARF</span>
+                            </Link>
+                        </li>
+                        {/*
                         <li className='nav-item mt-2'>
                             <button className='btn btn-link sidebar-link ms-2 text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#homeSubmenu' aria-expanded='false' aria-controls='homeSubmenu'>
                                 <i className='bi bi-archive-fill text-white fs-5 me-3 ms-1' />
@@ -112,6 +131,9 @@ function Sidebar() {
                                 </ul>
                             </div>
                         </li>
+                        
+                        */}
+
                         <li className='nav-item mt-2'>
                             <button className='btn btn-link sidebar-link text-white text-decoration-none w-100 text-start' type='button' data-bs-toggle='collapse' data-bs-target='#roaList' aria-expanded='false' aria-controls='roaList'>
                                 <i className='bi bi-journal-text text-white fs-5 me-3 ms-3' />
@@ -129,6 +151,7 @@ function Sidebar() {
                                 </ul>
                             </div>
                         </li>
+
                         {/*
                         <li className='nav-item'>
                             <Link to="TestForm/" className='nav-link text-white sidebar-link'>
@@ -155,3 +178,4 @@ function Sidebar() {
 }
 
 export default Sidebar
+
